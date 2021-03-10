@@ -1,0 +1,2050 @@
+
+<html ng-app="InVision" ng-controller="AppController" inv-key-combos lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="initial-scale=1.0"/>
+	<title ng-bind="windowTitle">
+		InVision
+	</title>
+
+	<!-- Custom webfonts -->
+	<style>
+	@font-face {
+		font-family: 'Open Sans';
+		font-style: normal;
+		font-weight: 300;
+		src: local('Open Sans Light'), local('OpenSans-Light'), url(assets/fonts/open_sans/OpenSans-light.woff) format('woff');
+	}
+	@font-face {
+		font-family: 'Open Sans';
+		font-style: normal;
+		font-weight: 400;
+		src: local('Open Sans'), local('OpenSans'), url(assets/fonts/open_sans/OpenSans.woff) format('woff');
+	}
+	@font-face {
+		font-family: 'Open Sans';
+		font-style: normal;
+		font-weight: 600;
+		src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(assets/fonts/open_sans/OpenSans-semibold.woff) format('woff');
+	}
+	@font-face {
+		font-family: 'Open Sans';
+		font-style: normal;
+		font-weight: 700;
+		src: local('Open Sans Bold'), local('OpenSans-Bold'), url(assets/fonts/open_sans/OpenSans-bold.woff) format('woff');
+	}
+	</style>
+	<!-- Interface styles -->
+	<link type="text/css" rel="stylesheet" href="assets/jquery-ui-1.9.2.custom/css/no-theme/jquery-ui-1.9.2.custom.min.css">
+	<link type="text/css" rel="stylesheet" href="assets/apps/share/css-static/uniform.default.css">
+	<link type="text/css" rel="stylesheet" href="assets/apps/share/css-static/bootstrap.css">
+	<link type="text/css" rel="stylesheet" href="assets/apps/share/css-static/intlTelInput.css">
+	<link type="text/css" rel="stylesheet" href="assets/apps/share/css/share-offline.css">
+</head>
+<body
+	class="branding-invision"
+	ng-class="bodyClass"
+	ng-style="bodyStyle">
+
+
+	<!--
+		This is the initial loading sequence. We need to be able to display this BEFORE the AngularJS
+		framework loads in order to give the user some sence of activity. But, when the framework kicks
+		in, it will be able to use the bound ng-controller.
+	-->
+	<!-- BEGIN: Loading Sequence. -->
+	<div ng-if="isLoadingOpen" ng-controller="loading.LoadingController" inv-loading-sequence class="m-loading">
+
+		<!-- BEGIN: Loading Indicator. -->
+		
+
+			<div class="loading-backdrop">
+
+				<div class="loading-container">
+
+					<div class="status-container">
+
+						<div class="status"></div>
+						<div class="logo"></div>
+
+					</div> <!-- status-container -->
+
+					<h2>Loading Experience</h2>
+
+					<p>
+						Powered by <a href="http://www.InVisionApp.com/" target="_blank">InVision</a>
+
+						
+							, the best way to share and collaborate on design.
+						
+
+					</p>
+
+				</div> <!-- loading-container -->
+
+				<div class="loading-footer">
+
+					<div class="logo"></div>
+
+					<h3><a href="http://www.InVisionApp.com/" target="_blank">Powered by InVision</a></h3>
+
+					
+						<p><em>Prototyping, Collaboration &amp; Workflow for Designers</em></p>
+					
+
+				</div> <!-- loading-footer -->
+
+			</div> <!-- loading-backdrop -->
+
+		
+		<!-- END: Loading Indicator. -->
+
+	</div>
+	<!-- END: Loading Sequence. -->
+
+	<div ng-include=" '/assets/apps/share/views/partials/preload.htm' "></div>
+	<div ng-include=" '/assets/apps/share/views/layouts/modal.htm' "></div>
+	<div ng-include=" '/assets/apps/share/views/toolbar/toolbar.htm' "></div>
+	<div ng-include=" '/assets/apps/share/views/powered-by/powered-by.htm' "></div>
+
+	<div
+		ng-if="isBrowseOpen"
+		ng-include=" '/assets/apps/share/views/browse/browse.htm' "></div>
+
+	<!-- In order to be able to disable horizontal scrolling for some screens, we need to wrap the view in order to be able to maintain screen alignment -->
+
+	<div class="desktop-wrapper">
+
+		<!-- Tour Points -->
+		<div
+			ng-if=" subview == 'preview' "
+			ng-include=" '/assets/apps/share/views/preview/preview-tour-comments.htm' "></div>
+
+		<div
+			ng-if="subview == 'comments'"
+			ng-include=" '/assets/apps/share/views/comments/comments.htm' "></div>
+
+		<div
+			ng-if="subview == 'preview'"
+			is-share-loaded="{{!isLoadingOpen}}"
+			inv-preview-auto-redirect-listener
+			ng-include=" '/assets/apps/share/views/preview/preview.htm' "></div>
+
+		<!-- Screens for comment mode -->
+		<div
+			ng-show="subview == 'comments'"
+			ng-include=" '/assets/apps/share/views/screens/screens.htm' "c></div>
+
+	</div>
+
+	<div
+		ng-if="browserCompatibility.isNotCompatible"
+		class="m-browser-compatibility ng-cloak"></div>
+
+	
+	
+		<script type="text/javascript" src="assets/scripts.js"></script>
+	
+
+	
+	
+
+		<script type="text/javascript">
+
+			(function( ng, app ){
+
+				"use strict";
+
+				app.value(
+					"config",
+					{
+						user: { // RAIN-1419 - anonymize the exported user data
+							id: 0,
+							name: "export",
+							email: "export@generic-user.com",
+							avatarID: "00000000-0000-0000-0000000000000001",
+							isAccountAuthenticated: true, // flagged as authenticated to avoid prompts to login and other nonsense
+							isAnonymous: false,
+							hasSeenCommentToolTip: true
+						},
+						shouldShowPoweredBy: false,
+						share: {"isLoadAllScreens":true,"showToolbarIntroduction":false,"hasClosedShareIntro":true,"screenID":0,"isNavigateAllowed":true},
+						project: {"defaultbackgroundautostretch":"0","defaultZoomScrollBehavior":1,"isArchived":false,"homeScreenID":446666647,"createdAt":1615064178000,"mobileStatusbarFontColor":"black","isProcessed":true,"sortTypeID":1,"name":"Alberta2","platform":"iOS","defaultbackgroundimageposition":"","isMobile":true,"defaultBackgroundImageID":"","isSample":false,"deviceType":"phone","userID":541138061,"mobileDeviceID":49,"mobileStatusbarBackgroundColor":"#FFFFFF","isOverQuota":false,"defaultBackgroundColor":"","isInGracePeriod":false,"defaultAlignment":"center","updatedAt":1615222369000,"companyID":0,"id":21176307,"isSnap":false,"lastAccessedAt":1615064178000,"mobileStatusbarIsOpaque":true,"defaultbackgroundframe":"0","mobileDeviceWidth":375,"isAdvanced":false,"orientation":"portrait","mobileStatusbarIsVisible":true},
+						screens: [{"thumbnailUrl":"images/thumbnails/6s-wireframe-login.png","extended":{"fixedHeaderBackground":"ffffff","fixedFooterBackground":"ffffff"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615065042000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-Login.png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":464,"unreadCommentCount":0,"name":"Login","screenUploadState":3,"backgroundColor":"ffffff","fixedHeaderHeight":0,"imageUrl":"images/screens/68-wireframe-login.png","height":882,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446666647.png","sort":1,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615065616000,"id":446666647,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":1,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6z-wireframe-my-classes.png","extended":{"fixedHeaderBackground":"ffffff","fixedFooterBackground":"ffffff"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615220585000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-My classes.png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":464,"unreadCommentCount":0,"name":"My Classes","screenUploadState":3,"backgroundColor":"ffffff","fixedHeaderHeight":0,"imageUrl":"images/screens/6f-wireframe-my-classes.png","height":1124,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446749887.png","sort":2,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615220878000,"id":446749887,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":3,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6i-wireframe-my-classes--edit-.png","extended":{"fixedHeaderBackground":"000000","fixedFooterBackground":"000000"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615220585000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-My classes (edit).png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":466,"unreadCommentCount":0,"name":"My Classes (edit)","screenUploadState":3,"backgroundColor":"000000","fixedHeaderHeight":0,"imageUrl":"images/screens/5x-wireframe-my-classes--edit-.png","height":1122,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446749886.png","sort":3,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615220600000,"id":446749886,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":1,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6k-wireframe-class-details-enrolling.png","extended":{"fixedHeaderBackground":"000000","fixedFooterBackground":"000000"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615220585000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-class details enrolling.png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":462,"unreadCommentCount":0,"name":"Class Details (Enrolling)","screenUploadState":3,"backgroundColor":"000000","fixedHeaderHeight":0,"imageUrl":"images/screens/5z-wireframe-class-details-enrolling.png","height":1102,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446749888.png","sort":4,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615220616000,"id":446749888,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":1,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6x-wireframe-class-details-enrolled.png","extended":{"fixedHeaderBackground":"000000","fixedFooterBackground":"000000"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615220576000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-class details enrolled.png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":462,"unreadCommentCount":0,"name":"Class Details (Enrolled)","screenUploadState":3,"backgroundColor":"000000","fixedHeaderHeight":0,"imageUrl":"images/screens/6d-wireframe-class-details-enrolled.png","height":942,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446749876.png","sort":5,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615220627000,"id":446749876,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":2,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6m-wireframe-class-details--confirmation-after-enrolling-.png","extended":{"fixedHeaderBackground":"000000","fixedFooterBackground":"000000"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615221155000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-class details (confirmation after enrolling).png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":462,"unreadCommentCount":0,"name":"Class Details (confirmation After Enrolling)","screenUploadState":3,"backgroundColor":"000000","fixedHeaderHeight":0,"imageUrl":"images/screens/62-wireframe-class-details--confirmation-after-enrolling-.png","height":942,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446751523.png","sort":6,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615221190000,"id":446751523,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":1,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6h-wireframe-swap2.png","extended":{"fixedHeaderBackground":"ffffff","fixedFooterBackground":"ffffff"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615220585000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-swap2.png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":468,"unreadCommentCount":0,"name":"Swap (Select)","screenUploadState":3,"backgroundColor":"ffffff","fixedHeaderHeight":0,"imageUrl":"images/screens/5y-wireframe-swap2.png","height":1196,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446749884.png","sort":7,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615220661000,"id":446749884,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":1,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6j-wireframe-swap1.png","extended":{"fixedHeaderBackground":"ffffff","fixedFooterBackground":"ffffff"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615220585000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-swap1.png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":468,"unreadCommentCount":0,"name":"Swap (Start)","screenUploadState":3,"backgroundColor":"ffffff","fixedHeaderHeight":0,"imageUrl":"images/screens/60-wireframe-swap1.png","height":882,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446749885.png","sort":8,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615220665000,"id":446749885,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":1,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6l-wireframe-page-20.png","extended":{"fixedHeaderBackground":"f6f6f6","fixedFooterBackground":"f6f6f6"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615221964000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-Page-20.png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":468,"unreadCommentCount":0,"name":"Drop","screenUploadState":3,"backgroundColor":"f6f6f6","fixedHeaderHeight":0,"imageUrl":"images/screens/61-wireframe-page-20.png","height":882,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446753154.png","sort":9,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615221970000,"id":446753154,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":1,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6w-wireframe-catalog-filter.png","extended":{"fixedHeaderBackground":"000000","fixedFooterBackground":"000000"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615065042000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-Catalog filter.png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":462,"unreadCommentCount":0,"name":"Catalog Filter","screenUploadState":3,"backgroundColor":"000000","fixedHeaderHeight":0,"imageUrl":"images/screens/6c-wireframe-catalog-filter.png","height":882,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446666642.png","sort":10,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615065658000,"id":446666642,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":1,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6r-wireframe-catalog.png","extended":{"fixedHeaderBackground":"000000","fixedFooterBackground":"000000"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615065042000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-Catalog.png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":462,"unreadCommentCount":0,"name":"Catalog","screenUploadState":3,"backgroundColor":"000000","fixedHeaderHeight":0,"imageUrl":"images/screens/67-wireframe-catalog.png","height":882,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446666643.png","sort":11,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615067426000,"id":446666643,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":1,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6y-wireframe-shopping-cart.png","extended":{"fixedHeaderBackground":"000000","fixedFooterBackground":"000000"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615065042000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-Shopping cart.png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":462,"unreadCommentCount":0,"name":"Shopping Cart","screenUploadState":3,"backgroundColor":"000000","fixedHeaderHeight":0,"imageUrl":"images/screens/6e-wireframe-shopping-cart.png","height":942,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446666636.png","sort":12,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615220585000,"id":446666636,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":2,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6v-wireframe-shopping-cart--confirmation-.png","extended":{"fixedHeaderBackground":"ffffff","fixedFooterBackground":"ffffff"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615065042000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-Shopping cart (confirmation).png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":502,"unreadCommentCount":0,"name":"Shopping Cart (confirmation)","screenUploadState":3,"backgroundColor":"ffffff","fixedHeaderHeight":0,"imageUrl":"images/screens/6b-wireframe-shopping-cart--confirmation-.png","height":942,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446666635.png","sort":13,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615221148000,"id":446666635,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":3,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6q-wireframe-grades.png","extended":{"fixedHeaderBackground":"000000","fixedFooterBackground":"000000"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615065042000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-Grades.png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":462,"unreadCommentCount":0,"name":"Grades","screenUploadState":3,"backgroundColor":"000000","fixedHeaderHeight":0,"imageUrl":"images/screens/66-wireframe-grades.png","height":882,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446666644.png","sort":14,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615065600000,"id":446666644,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":1,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/70-wireframe-financial.png","extended":{"fixedHeaderBackground":"000000","fixedFooterBackground":"000000"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615065042000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-Financial.png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":462,"unreadCommentCount":0,"name":"Financial","screenUploadState":3,"backgroundColor":"000000","fixedHeaderHeight":0,"imageUrl":"images/screens/6g-wireframe-financial.png","height":902,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446666640.png","sort":15,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615065649000,"id":446666640,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":1,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6u-wireframe-financial--award-info-.png","extended":{"fixedHeaderBackground":"000000","fixedFooterBackground":"000000"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615065042000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-Financial (award info).png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":462,"unreadCommentCount":0,"name":"Financial (award Info)","screenUploadState":3,"backgroundColor":"000000","fixedHeaderHeight":0,"imageUrl":"images/screens/6a-wireframe-financial--award-info-.png","height":902,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446666638.png","sort":16,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615065638000,"id":446666638,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":1,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6o-wireframe-financial--mng.-awards-.png","extended":{"fixedHeaderBackground":"010101","fixedFooterBackground":"010101"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615065042000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-Financial (mng. awards).png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":490,"unreadCommentCount":0,"name":"Financial (mng. Awards)","screenUploadState":3,"backgroundColor":"010101","fixedHeaderHeight":0,"imageUrl":"images/screens/64-wireframe-financial--mng.-awards-.png","height":1042,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446666639.png","sort":17,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615065644000,"id":446666639,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":1,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6p-wireframe-personal.png","extended":{"fixedHeaderBackground":"000000","fixedFooterBackground":"000000"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615065042000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-Personal.png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":462,"unreadCommentCount":0,"name":"Personal","screenUploadState":3,"backgroundColor":"000000","fixedHeaderHeight":0,"imageUrl":"images/screens/65-wireframe-personal.png","height":1202,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446666641.png","sort":18,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615065654000,"id":446666641,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":1,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6t-wireframe-page-21.png","extended":{"fixedHeaderBackground":"000000","fixedFooterBackground":"000000"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615222359000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-Page-21.png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":462,"unreadCommentCount":0,"name":"Profile (edit)","screenUploadState":3,"backgroundColor":"000000","fixedHeaderHeight":0,"imageUrl":"images/screens/69-wireframe-page-21.png","height":1202,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446753883.png","sort":19,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615222367000,"id":446753883,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":1,"backgroundImageClientFilename":""},{"thumbnailUrl":"images/thumbnails/6n-wireframe-overlay.png","extended":{"fixedHeaderBackground":"010101","fixedFooterBackground":"010101"},"isArchived":false,"screenTypeID":1,"backgroundImageWidth":"","createdAt":1615065192000,"zoomScrollBehavior":1,"updatedByUserName":"Maggie Pierce","backgroundImageUrl":"","backgroundImageHeight":"","clientFilename":"Wireframe-Overlay.png","backgroundFrame":false,"backgroundImagePosition":"tile-horizontally","isProcessed":true,"screenGroupId":0,"width":282,"unreadCommentCount":0,"name":"Menu","screenUploadState":3,"backgroundColor":"010101","fixedHeaderHeight":0,"imageUrl":"images/screens/63-wireframe-overlay.png","height":882,"backgroundAutostretch":false,"userID":541138061,"backgroundimageserverfilename":"","serverFileName":"446666651.png","sort":20,"fixedFooterHeight":0,"alignment":"center","commentCount":0,"updatedAt":1615067503000,"id":446666651,"backgroundimageversion":"1","isPlaceholder":false,"projectID":21176307,"backgroundImageID":0,"imageVersion":1,"backgroundImageClientFilename":""}],
+						dividers: [{"position":0,"sort":0,"type":"divider","projectID":21176307,"label":"","dividerID":0,"expanded":true},{"position":0,"sort":1,"type":"divider","projectID":21176307,"label":"New Section","dividerID":19204759}],
+						metaScreens: {"icon":{"imageUrl":"","sameOriginImageUrl":"","relation":"apple-touch-icon-precomposed"},"splash":{"imageUrl":"","sameOriginImageUrl":"","relation":"apple-touch-startup-image","backgroundColor":""}},
+						hotspots: [{"metaData":{},"height":57,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666643,"y":704,"screenID":446666642,"transitionTypeID":1,"targetTypeID":1,"width":188,"x":125,"id":1276178670,"isScrollTo":false},{"metaData":{},"height":795,"isBottomAligned":false,"templateID":"","eventTypeID":4,"targetScreenID":0,"y":80,"screenID":446666643,"transitionTypeID":2,"targetTypeID":2,"width":458,"x":0,"id":1276210312,"isScrollTo":false},{"metaData":{},"height":43,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666636,"y":809,"screenID":446666643,"transitionTypeID":1,"targetTypeID":1,"width":163,"x":272,"id":1275928587,"isScrollTo":false},{"metaData":{},"height":70,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666642,"y":109,"screenID":446666643,"transitionTypeID":1,"targetTypeID":1,"width":149,"x":282,"id":1275928582,"isScrollTo":false},{"metaData":{},"height":59,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749888,"y":798,"screenID":446666643,"transitionTypeID":1,"targetTypeID":1,"width":247,"x":9,"id":1276201110,"isScrollTo":false},{"metaData":{},"height":67,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749887,"y":234,"screenID":446751523,"transitionTypeID":1,"targetTypeID":1,"width":52,"x":351,"id":1276199935,"isScrollTo":false},{"metaData":{},"height":856,"isBottomAligned":false,"templateID":"","eventTypeID":4,"targetScreenID":0,"y":81,"screenID":446749876,"transitionTypeID":2,"targetTypeID":2,"width":458,"x":0,"id":1276210035,"isScrollTo":false},{"metaData":{},"height":917,"isBottomAligned":false,"templateID":"","eventTypeID":4,"targetScreenID":0,"y":82,"screenID":446749888,"transitionTypeID":2,"targetTypeID":2,"width":452,"x":3,"id":1276210025,"isScrollTo":false},{"metaData":{},"height":92,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666636,"y":1005,"screenID":446749888,"transitionTypeID":1,"targetTypeID":1,"width":222,"x":4,"id":1276199875,"isScrollTo":false},{"metaData":{},"height":92,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446751523,"y":1005,"screenID":446749888,"transitionTypeID":1,"targetTypeID":1,"width":222,"x":235,"id":1276199902,"isScrollTo":false},{"metaData":{},"height":818,"isBottomAligned":false,"templateID":"","eventTypeID":4,"targetScreenID":0,"y":81,"screenID":446666638,"transitionTypeID":2,"targetTypeID":2,"width":454,"x":2,"id":1275969137,"isScrollTo":false},{"metaData":{},"height":60,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666639,"y":330,"screenID":446666638,"transitionTypeID":1,"targetTypeID":1,"width":219,"x":19,"id":1275963889,"isScrollTo":false},{"metaData":{},"height":49,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666640,"y":560,"screenID":446666638,"transitionTypeID":1,"targetTypeID":1,"width":195,"x":22,"id":1275963873,"isScrollTo":false},{"metaData":{},"height":953,"isBottomAligned":false,"templateID":"","eventTypeID":4,"targetScreenID":0,"y":81,"screenID":446666639,"transitionTypeID":2,"targetTypeID":2,"width":456,"x":28,"id":1275969143,"isScrollTo":false},{"metaData":{},"height":54,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666638,"y":676,"screenID":446666639,"transitionTypeID":1,"targetTypeID":1,"width":198,"x":48,"id":1275963871,"isScrollTo":false},{"metaData":{},"height":50,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666640,"y":330,"screenID":446666639,"transitionTypeID":1,"targetTypeID":1,"width":378,"x":48,"id":1275963867,"isScrollTo":false},{"metaData":{},"height":819,"isBottomAligned":false,"templateID":"","eventTypeID":4,"targetScreenID":0,"y":80,"screenID":446666640,"transitionTypeID":2,"targetTypeID":2,"width":455,"x":2,"id":1275969015,"isScrollTo":false},{"metaData":{},"height":57,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666638,"y":561,"screenID":446666640,"transitionTypeID":1,"targetTypeID":1,"width":195,"x":22,"id":1275963909,"isScrollTo":false},{"metaData":{},"height":57,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666639,"y":331,"screenID":446666640,"transitionTypeID":1,"targetTypeID":1,"width":218,"x":22,"id":1275963859,"isScrollTo":false},{"metaData":{},"height":797,"isBottomAligned":false,"templateID":"","eventTypeID":4,"targetScreenID":0,"y":80,"screenID":446666644,"transitionTypeID":2,"targetTypeID":2,"width":458,"x":0,"id":1276210415,"isScrollTo":false},{"metaData":{},"height":63,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749887,"y":499,"screenID":446666647,"transitionTypeID":1,"targetTypeID":1,"width":247,"x":107,"id":1276198532,"isScrollTo":false},{"metaData":{},"height":955,"isBottomAligned":false,"templateID":"","eventTypeID":4,"targetScreenID":0,"y":79,"screenID":446749886,"transitionTypeID":2,"targetTypeID":2,"width":458,"x":3,"id":1276209999,"isScrollTo":false},{"metaData":{},"height":58,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749885,"y":694,"screenID":446749886,"transitionTypeID":1,"targetTypeID":1,"width":217,"x":242,"id":1276199138,"isScrollTo":false},{"metaData":{},"height":37,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749887,"y":165,"screenID":446749886,"transitionTypeID":1,"targetTypeID":1,"width":94,"x":354,"id":1276199008,"isScrollTo":false},{"metaData":{},"height":36,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749888,"y":277,"screenID":446749886,"transitionTypeID":1,"targetTypeID":1,"width":93,"x":344,"id":1276199082,"isScrollTo":false},{"metaData":{},"height":28,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749888,"y":398,"screenID":446749886,"transitionTypeID":1,"targetTypeID":1,"width":91,"x":344,"id":1276199093,"isScrollTo":false},{"metaData":{},"height":39,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749888,"y":514,"screenID":446749886,"transitionTypeID":1,"targetTypeID":1,"width":96,"x":342,"id":1276199098,"isScrollTo":false},{"metaData":{},"height":33,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749888,"y":638,"screenID":446749886,"transitionTypeID":1,"targetTypeID":1,"width":96,"x":344,"id":1276199111,"isScrollTo":false},{"metaData":{},"height":62,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446753154,"y":693,"screenID":446749886,"transitionTypeID":1,"targetTypeID":1,"width":223,"x":8,"id":1276202059,"isScrollTo":false},{"metaData":{},"height":949,"isBottomAligned":false,"templateID":"","eventTypeID":4,"targetScreenID":0,"y":80,"screenID":446749887,"transitionTypeID":2,"targetTypeID":2,"width":454,"x":3,"id":1276209961,"isScrollTo":false},{"metaData":{},"height":58,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666636,"y":762,"screenID":446749887,"transitionTypeID":1,"targetTypeID":1,"width":289,"x":90,"id":1276198791,"isScrollTo":false},{"metaData":{},"height":55,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666643,"y":697,"screenID":446749887,"transitionTypeID":1,"targetTypeID":1,"width":290,"x":87,"id":1276198781,"isScrollTo":false},{"metaData":{},"height":44,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749876,"y":254,"screenID":446749887,"transitionTypeID":1,"targetTypeID":1,"width":95,"x":339,"id":1276198926,"isScrollTo":false},{"metaData":{},"height":51,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749876,"y":363,"screenID":446749887,"transitionTypeID":1,"targetTypeID":1,"width":85,"x":346,"id":1276198945,"isScrollTo":false},{"metaData":{},"height":35,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749876,"y":496,"screenID":446749887,"transitionTypeID":1,"targetTypeID":1,"width":90,"x":342,"id":1276198948,"isScrollTo":false},{"metaData":{},"height":40,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749876,"y":613,"screenID":446749887,"transitionTypeID":1,"targetTypeID":1,"width":89,"x":341,"id":1276198975,"isScrollTo":false},{"metaData":{},"height":37,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749886,"y":164,"screenID":446749887,"transitionTypeID":1,"targetTypeID":1,"width":174,"x":270,"id":1276198862,"isScrollTo":false},{"metaData":{},"height":47,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":0,"y":8,"screenID":446666651,"transitionTypeID":1,"targetTypeID":2,"width":53,"x":218,"id":1275926817,"isScrollTo":false},{"metaData":{},"height":49,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666640,"y":393,"screenID":446666651,"transitionTypeID":1,"targetTypeID":1,"width":273,"x":3,"id":1275926811,"isScrollTo":false},{"metaData":{},"height":54,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666641,"y":450,"screenID":446666651,"transitionTypeID":1,"targetTypeID":1,"width":270,"x":5,"id":1275926812,"isScrollTo":false},{"metaData":{},"height":58,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666644,"y":326,"screenID":446666651,"transitionTypeID":1,"targetTypeID":1,"width":272,"x":6,"id":1275926810,"isScrollTo":false},{"metaData":{},"height":48,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666647,"y":815,"screenID":446666651,"transitionTypeID":1,"targetTypeID":1,"width":121,"x":80,"id":1275926815,"isScrollTo":false},{"metaData":{},"height":54,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749887,"y":266,"screenID":446666651,"transitionTypeID":1,"targetTypeID":1,"width":270,"x":6,"id":1276200267,"isScrollTo":false},{"metaData":{},"height":798,"isBottomAligned":false,"templateID":"","eventTypeID":4,"targetScreenID":0,"y":79,"screenID":446753154,"transitionTypeID":2,"targetTypeID":2,"width":461,"x":1,"id":1276210286,"isScrollTo":false},{"metaData":{},"height":91,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749886,"y":787,"screenID":446753154,"transitionTypeID":1,"targetTypeID":1,"width":227,"x":8,"id":1276202082,"isScrollTo":false},{"metaData":{},"height":89,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749886,"y":789,"screenID":446753154,"transitionTypeID":1,"targetTypeID":1,"width":218,"x":242,"id":1276202091,"isScrollTo":false},{"metaData":{},"height":36,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749888,"y":356,"screenID":446753154,"transitionTypeID":1,"targetTypeID":1,"width":96,"x":355,"id":1276202103,"isScrollTo":false},{"metaData":{},"height":34,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749888,"y":184,"screenID":446753154,"transitionTypeID":1,"targetTypeID":1,"width":86,"x":354,"id":1276202130,"isScrollTo":false},{"metaData":{},"height":61,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666641,"y":88,"screenID":446753883,"transitionTypeID":1,"targetTypeID":1,"width":88,"x":353,"id":1276204313,"isScrollTo":false},{"metaData":{},"height":1037,"isBottomAligned":false,"templateID":"","eventTypeID":4,"targetScreenID":0,"y":81,"screenID":446666641,"transitionTypeID":2,"targetTypeID":2,"width":455,"x":2,"id":1276210490,"isScrollTo":false},{"metaData":{},"height":36,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446753883,"y":123,"screenID":446666641,"transitionTypeID":1,"targetTypeID":1,"width":75,"x":359,"id":1276204294,"isScrollTo":false},{"metaData":{},"height":65,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666636,"y":204,"screenID":446666635,"transitionTypeID":1,"targetTypeID":1,"width":69,"x":330,"id":1276198722,"isScrollTo":false},{"metaData":{},"height":859,"isBottomAligned":false,"templateID":"","eventTypeID":4,"targetScreenID":0,"y":80,"screenID":446666636,"transitionTypeID":2,"targetTypeID":2,"width":454,"x":2,"id":1276210327,"isScrollTo":false},{"metaData":{},"height":86,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666635,"y":507,"screenID":446666636,"transitionTypeID":1,"targetTypeID":1,"width":227,"x":227,"id":1275928630,"isScrollTo":false},{"metaData":{},"height":39,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446666643,"y":612,"screenID":446666636,"transitionTypeID":1,"targetTypeID":1,"width":192,"x":17,"id":1276200999,"isScrollTo":false},{"metaData":{},"height":798,"isBottomAligned":false,"templateID":"","eventTypeID":4,"targetScreenID":0,"y":81,"screenID":446749885,"transitionTypeID":2,"targetTypeID":2,"width":464,"x":0,"id":1276210269,"isScrollTo":false},{"metaData":{},"height":64,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749884,"y":313,"screenID":446749885,"transitionTypeID":1,"targetTypeID":1,"width":224,"x":7,"id":1276200463,"isScrollTo":false},{"metaData":{},"height":63,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749884,"y":315,"screenID":446749885,"transitionTypeID":1,"targetTypeID":1,"width":224,"x":238,"id":1276200689,"isScrollTo":false},{"metaData":{},"height":88,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749886,"y":787,"screenID":446749885,"transitionTypeID":1,"targetTypeID":1,"width":456,"x":6,"id":1276205021,"isScrollTo":false},{"metaData":{},"height":960,"isBottomAligned":false,"templateID":"","eventTypeID":4,"targetScreenID":0,"y":79,"screenID":446749884,"transitionTypeID":2,"targetTypeID":2,"width":460,"x":2,"id":1276210079,"isScrollTo":false},{"metaData":{},"height":94,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749886,"y":1094,"screenID":446749884,"transitionTypeID":1,"targetTypeID":1,"width":461,"x":2,"id":1276205570,"isScrollTo":false},{"metaData":{},"height":32,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749888,"y":185,"screenID":446749884,"transitionTypeID":1,"targetTypeID":1,"width":83,"x":354,"id":1276205606,"isScrollTo":false},{"metaData":{},"height":47,"isBottomAligned":false,"templateID":"","eventTypeID":1,"targetScreenID":446749888,"y":363,"screenID":446749884,"transitionTypeID":1,"targetTypeID":1,"width":87,"x":349,"id":1276205647,"isScrollTo":false},{"metaData":{},"height":76,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":0,"y":1,"screenID":446666642,"transitionTypeID":1,"targetTypeID":1,"width":177,"x":1,"id":1275926883,"isScrollTo":false},{"metaData":{"overlay":{"positionID":4,"positionOffset":{"y":0,"x":0},"closeOnOutsideClick":true,"isFixedPosition":true,"transitionID":4,"bgOpacity":0,"reverseTransitionOnClose":true},"stayOnScreen":true},"height":67,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":446666651,"y":4,"screenID":446666642,"transitionTypeID":1,"targetTypeID":7,"width":76,"x":378,"id":1275926886,"isScrollTo":false},{"metaData":{},"height":76,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":0,"y":1,"screenID":446666643,"transitionTypeID":1,"targetTypeID":1,"width":177,"x":1,"id":1275926883,"isScrollTo":false},{"metaData":{"overlay":{"positionID":4,"positionOffset":{"y":0,"x":0},"closeOnOutsideClick":true,"isFixedPosition":true,"transitionID":4,"bgOpacity":0,"reverseTransitionOnClose":true},"stayOnScreen":true},"height":67,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":446666651,"y":4,"screenID":446666643,"transitionTypeID":1,"targetTypeID":7,"width":76,"x":378,"id":1275926886,"isScrollTo":false},{"metaData":{},"height":76,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":0,"y":1,"screenID":446749876,"transitionTypeID":1,"targetTypeID":1,"width":177,"x":1,"id":1275926883,"isScrollTo":false},{"metaData":{"overlay":{"positionID":4,"positionOffset":{"y":0,"x":0},"closeOnOutsideClick":true,"isFixedPosition":true,"transitionID":4,"bgOpacity":0,"reverseTransitionOnClose":true},"stayOnScreen":true},"height":67,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":446666651,"y":4,"screenID":446749876,"transitionTypeID":1,"targetTypeID":7,"width":76,"x":378,"id":1275926886,"isScrollTo":false},{"metaData":{},"height":76,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":0,"y":1,"screenID":446749888,"transitionTypeID":1,"targetTypeID":1,"width":177,"x":1,"id":1275926883,"isScrollTo":false},{"metaData":{"overlay":{"positionID":4,"positionOffset":{"y":0,"x":0},"closeOnOutsideClick":true,"isFixedPosition":true,"transitionID":4,"bgOpacity":0,"reverseTransitionOnClose":true},"stayOnScreen":true},"height":67,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":446666651,"y":4,"screenID":446749888,"transitionTypeID":1,"targetTypeID":7,"width":76,"x":378,"id":1275926886,"isScrollTo":false},{"metaData":{},"height":76,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":0,"y":1,"screenID":446666638,"transitionTypeID":1,"targetTypeID":1,"width":177,"x":1,"id":1275926883,"isScrollTo":false},{"metaData":{"overlay":{"positionID":4,"positionOffset":{"y":0,"x":0},"closeOnOutsideClick":true,"isFixedPosition":true,"transitionID":4,"bgOpacity":0,"reverseTransitionOnClose":true},"stayOnScreen":true},"height":67,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":446666651,"y":4,"screenID":446666638,"transitionTypeID":1,"targetTypeID":7,"width":76,"x":378,"id":1275926886,"isScrollTo":false},{"metaData":{},"height":76,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":0,"y":1,"screenID":446666639,"transitionTypeID":1,"targetTypeID":1,"width":177,"x":1,"id":1275926883,"isScrollTo":false},{"metaData":{"overlay":{"positionID":4,"positionOffset":{"y":0,"x":0},"closeOnOutsideClick":true,"isFixedPosition":true,"transitionID":4,"bgOpacity":0,"reverseTransitionOnClose":true},"stayOnScreen":true},"height":67,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":446666651,"y":4,"screenID":446666639,"transitionTypeID":1,"targetTypeID":7,"width":76,"x":378,"id":1275926886,"isScrollTo":false},{"metaData":{},"height":76,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":0,"y":1,"screenID":446666640,"transitionTypeID":1,"targetTypeID":1,"width":177,"x":1,"id":1275926883,"isScrollTo":false},{"metaData":{"overlay":{"positionID":4,"positionOffset":{"y":0,"x":0},"closeOnOutsideClick":true,"isFixedPosition":true,"transitionID":4,"bgOpacity":0,"reverseTransitionOnClose":true},"stayOnScreen":true},"height":67,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":446666651,"y":4,"screenID":446666640,"transitionTypeID":1,"targetTypeID":7,"width":76,"x":378,"id":1275926886,"isScrollTo":false},{"metaData":{},"height":76,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":0,"y":1,"screenID":446666644,"transitionTypeID":1,"targetTypeID":1,"width":177,"x":1,"id":1275926883,"isScrollTo":false},{"metaData":{"overlay":{"positionID":4,"positionOffset":{"y":0,"x":0},"closeOnOutsideClick":true,"isFixedPosition":true,"transitionID":4,"bgOpacity":0,"reverseTransitionOnClose":true},"stayOnScreen":true},"height":67,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":446666651,"y":4,"screenID":446666644,"transitionTypeID":1,"targetTypeID":7,"width":76,"x":378,"id":1275926886,"isScrollTo":false},{"metaData":{},"height":76,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":0,"y":1,"screenID":446749886,"transitionTypeID":1,"targetTypeID":1,"width":177,"x":1,"id":1275926883,"isScrollTo":false},{"metaData":{"overlay":{"positionID":4,"positionOffset":{"y":0,"x":0},"closeOnOutsideClick":true,"isFixedPosition":true,"transitionID":4,"bgOpacity":0,"reverseTransitionOnClose":true},"stayOnScreen":true},"height":67,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":446666651,"y":4,"screenID":446749886,"transitionTypeID":1,"targetTypeID":7,"width":76,"x":378,"id":1275926886,"isScrollTo":false},{"metaData":{},"height":76,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":0,"y":1,"screenID":446749887,"transitionTypeID":1,"targetTypeID":1,"width":177,"x":1,"id":1275926883,"isScrollTo":false},{"metaData":{"overlay":{"positionID":4,"positionOffset":{"y":0,"x":0},"closeOnOutsideClick":true,"isFixedPosition":true,"transitionID":4,"bgOpacity":0,"reverseTransitionOnClose":true},"stayOnScreen":true},"height":67,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":446666651,"y":4,"screenID":446749887,"transitionTypeID":1,"targetTypeID":7,"width":76,"x":378,"id":1275926886,"isScrollTo":false},{"metaData":{},"height":76,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":0,"y":1,"screenID":446753154,"transitionTypeID":1,"targetTypeID":1,"width":177,"x":1,"id":1275926883,"isScrollTo":false},{"metaData":{"overlay":{"positionID":4,"positionOffset":{"y":0,"x":0},"closeOnOutsideClick":true,"isFixedPosition":true,"transitionID":4,"bgOpacity":0,"reverseTransitionOnClose":true},"stayOnScreen":true},"height":67,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":446666651,"y":4,"screenID":446753154,"transitionTypeID":1,"targetTypeID":7,"width":76,"x":378,"id":1275926886,"isScrollTo":false},{"metaData":{},"height":76,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":0,"y":1,"screenID":446666641,"transitionTypeID":1,"targetTypeID":1,"width":177,"x":1,"id":1275926883,"isScrollTo":false},{"metaData":{"overlay":{"positionID":4,"positionOffset":{"y":0,"x":0},"closeOnOutsideClick":true,"isFixedPosition":true,"transitionID":4,"bgOpacity":0,"reverseTransitionOnClose":true},"stayOnScreen":true},"height":67,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":446666651,"y":4,"screenID":446666641,"transitionTypeID":1,"targetTypeID":7,"width":76,"x":378,"id":1275926886,"isScrollTo":false},{"metaData":{},"height":76,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":0,"y":1,"screenID":446666636,"transitionTypeID":1,"targetTypeID":1,"width":177,"x":1,"id":1275926883,"isScrollTo":false},{"metaData":{"overlay":{"positionID":4,"positionOffset":{"y":0,"x":0},"closeOnOutsideClick":true,"isFixedPosition":true,"transitionID":4,"bgOpacity":0,"reverseTransitionOnClose":true},"stayOnScreen":true},"height":67,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":446666651,"y":4,"screenID":446666636,"transitionTypeID":1,"targetTypeID":7,"width":76,"x":378,"id":1275926886,"isScrollTo":false},{"metaData":{},"height":76,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":0,"y":1,"screenID":446749885,"transitionTypeID":1,"targetTypeID":1,"width":177,"x":1,"id":1275926883,"isScrollTo":false},{"metaData":{"overlay":{"positionID":4,"positionOffset":{"y":0,"x":0},"closeOnOutsideClick":true,"isFixedPosition":true,"transitionID":4,"bgOpacity":0,"reverseTransitionOnClose":true},"stayOnScreen":true},"height":67,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":446666651,"y":4,"screenID":446749885,"transitionTypeID":1,"targetTypeID":7,"width":76,"x":378,"id":1275926886,"isScrollTo":false},{"metaData":{},"height":76,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":0,"y":1,"screenID":446749884,"transitionTypeID":1,"targetTypeID":1,"width":177,"x":1,"id":1275926883,"isScrollTo":false},{"metaData":{"overlay":{"positionID":4,"positionOffset":{"y":0,"x":0},"closeOnOutsideClick":true,"isFixedPosition":true,"transitionID":4,"bgOpacity":0,"reverseTransitionOnClose":true},"stayOnScreen":true},"height":67,"isBottomAligned":false,"templateID":27318964,"eventTypeID":1,"targetScreenID":446666651,"y":4,"screenID":446749884,"transitionTypeID":1,"targetTypeID":7,"width":76,"x":378,"id":1275926886,"isScrollTo":false}],
+						branding: {
+							stub: "invision",
+							url: "http://www.InVisionApp.com/"
+						},
+						mobileDevices: [{"iconResolution":"","mobileSkinFilename":"","deviceWidth":0,"loadScreenResolution":"","deviceHeight":0,"mobileDeviceID":0,"mobileSkin":"any","statusbar":{"height":0,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":0,"viewportHeight":"0","isDefaultDeviceType":true,"embediframeheight":"0","platform":"any","mobileSkinColor":"","className":"desktop","orientation":"any","viewportWidth":"0","embediframewidth":"0","description":"desktop","deviceType":"desktop"},{"iconResolution":"120 x 120","mobileSkinFilename":"iphone-portrait.png","deviceWidth":374,"loadScreenResolution":"640 x 1096","deviceHeight":778,"mobileDeviceID":1,"mobileSkin":"iPhone","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":10,"viewportHeight":"568","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":2,"mobileSkinColor":"black","className":"iphone-portrait","orientation":"portrait","viewportWidth":"320","embediframewidth":"0","description":"iPhone 5 (Black)","deviceType":"phone"},{"iconResolution":"120 x 120","mobileSkinFilename":"iphone-landscape.png","deviceWidth":778,"loadScreenResolution":"640 x 1096","deviceHeight":374,"mobileDeviceID":2,"mobileSkin":"iPhone","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":20,"viewportHeight":"320","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":1,"mobileSkinColor":"black","className":"iphone-landscape","orientation":"landscape","viewportWidth":"568","embediframewidth":"0","description":"iPhone 5 (Black)","deviceType":"phone"},{"iconResolution":"152 x 152","mobileSkinFilename":"ipad-portrait.png","deviceWidth":640,"loadScreenResolution":"1536 x 2048","deviceHeight":950,"mobileDeviceID":3,"mobileSkin":"iPad","statusbar":{"height":15,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":30,"viewportHeight":"768","isDefaultDeviceType":true,"embediframeheight":"0","platform":"iOS","inverseOrientationID":4,"mobileSkinColor":"black","className":"ipad-portrait","orientation":"portrait","viewportWidth":"576","embediframewidth":"0","description":"iPad - Black","deviceType":"tablet"},{"iconResolution":"152 x 152","mobileSkinFilename":"ipad-landscape.png","deviceWidth":950,"loadScreenResolution":"2048 x 1496","deviceHeight":640,"mobileDeviceID":4,"mobileSkin":"iPad","statusbar":{"height":15,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":40,"viewportHeight":"576","isDefaultDeviceType":true,"embediframeheight":"0","platform":"iOS","inverseOrientationID":3,"mobileSkinColor":"black","className":"ipad-landscape","orientation":"landscape","viewportWidth":"768","embediframewidth":"0","description":"iPad - Black","deviceType":"tablet"},{"iconResolution":"120 x 120","mobileSkinFilename":"iphone4-portrait.png","deviceWidth":374,"loadScreenResolution":"640 x 920","deviceHeight":690,"mobileDeviceID":5,"mobileSkin":"iPhone","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":50,"viewportHeight":"480","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":6,"mobileSkinColor":"black","className":"iphone4-portrait","orientation":"portrait","viewportWidth":"320","embediframewidth":"0","description":"iPhone 4 (Black)","deviceType":"phone"},{"iconResolution":"120 x 120","mobileSkinFilename":"iphone4-landscape.png","deviceWidth":690,"loadScreenResolution":"640 x 920","deviceHeight":374,"mobileDeviceID":6,"mobileSkin":"iPhone","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":60,"viewportHeight":"320","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":5,"mobileSkinColor":"black","className":"iphone4-landscape","orientation":"landscape","viewportWidth":"480","embediframewidth":"0","description":"iPhone 4 (Black)","deviceType":"phone"},{"iconResolution":"192 x 192","mobileSkinFilename":"htcOne-portrait.png","deviceWidth":402,"loadScreenResolution":"1080 x 1920","deviceHeight":836,"mobileDeviceID":7,"mobileSkin":"HTC One","statusbar":{"height":24,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":70,"viewportHeight":"640","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":8,"mobileSkinColor":"black","className":"htcOne-portrait","orientation":"portrait","viewportWidth":"360","embediframewidth":"0","description":"HTC One - Black","deviceType":"phone"},{"iconResolution":"192 x 192","mobileSkinFilename":"htcOne-landscape.png","deviceWidth":836,"loadScreenResolution":"1920 x 1080","deviceHeight":402,"mobileDeviceID":8,"mobileSkin":"HTC One","statusbar":{"height":24,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":80,"viewportHeight":"360","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":7,"mobileSkinColor":"black","className":"htcOne-landscape","orientation":"landscape","viewportWidth":"640","embediframewidth":"0","description":"HTC One - Black","deviceType":"phone"},{"iconResolution":"192 x 192","mobileSkinFilename":"samsungS4-portrait.png","deviceWidth":406,"loadScreenResolution":"1080 x 1920","deviceHeight":786,"mobileDeviceID":9,"mobileSkin":"Samsung Galaxy S4","statusbar":{"height":24,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":90,"viewportHeight":"640","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":10,"mobileSkinColor":"black","className":"samsungS4-portrait","orientation":"portrait","viewportWidth":"360","embediframewidth":"0","description":"Samsung Galaxy S4 - Black","deviceType":"phone"},{"iconResolution":"192 x 192","mobileSkinFilename":"samsungS4-landscape.png","deviceWidth":786,"loadScreenResolution":"1920 x 1080","deviceHeight":406,"mobileDeviceID":10,"mobileSkin":"Samsung Galaxy S4","statusbar":{"height":24,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":100,"viewportHeight":"360","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":9,"mobileSkinColor":"black","className":"samsungS4-landscape","orientation":"landscape","viewportWidth":"640","embediframewidth":"0","description":"Samsung Galaxy S4 - Black","deviceType":"phone"},{"iconResolution":"120 x 120","mobileSkinFilename":"iphone-portrait-white.png","deviceWidth":374,"loadScreenResolution":"640 x 1096","deviceHeight":778,"mobileDeviceID":11,"mobileSkin":"iPhone","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":110,"viewportHeight":"568","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":12,"mobileSkinColor":"white","className":"iphone-portrait","orientation":"portrait","viewportWidth":"320","embediframewidth":"0","description":"iPhone 5 (White)","deviceType":"phone"},{"iconResolution":"120 x 120","mobileSkinFilename":"iphone-landscape-white.png","deviceWidth":778,"loadScreenResolution":"640 x 1096","deviceHeight":374,"mobileDeviceID":12,"mobileSkin":"iPhone","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":120,"viewportHeight":"320","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":11,"mobileSkinColor":"white","className":"iphone-landscape","orientation":"landscape","viewportWidth":"568","embediframewidth":"0","description":"iPhone 5 (White)","deviceType":"phone"},{"iconResolution":"152 x 152","mobileSkinFilename":"ipad-portrait-white.png","deviceWidth":640,"loadScreenResolution":"1536 x 2048","deviceHeight":950,"mobileDeviceID":13,"mobileSkin":"iPad","statusbar":{"height":15,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":130,"viewportHeight":"768","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":14,"mobileSkinColor":"white","className":"ipad-portrait","orientation":"portrait","viewportWidth":"576","embediframewidth":"0","description":"iPad - White","deviceType":"tablet"},{"iconResolution":"152 x 152","mobileSkinFilename":"ipad-landscape-white.png","deviceWidth":950,"loadScreenResolution":"2048 x 1496","deviceHeight":640,"mobileDeviceID":14,"mobileSkin":"iPad","statusbar":{"height":15,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":140,"viewportHeight":"576","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":13,"mobileSkinColor":"white","className":"ipad-landscape","orientation":"landscape","viewportWidth":"768","embediframewidth":"0","description":"iPad - White","deviceType":"tablet"},{"iconResolution":"120 x 120","mobileSkinFilename":"iphone4-portrait-white.png","deviceWidth":374,"loadScreenResolution":"640 x 920","deviceHeight":690,"mobileDeviceID":15,"mobileSkin":"iPhone","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":150,"viewportHeight":"480","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":16,"mobileSkinColor":"white","className":"iphone4-portrait","orientation":"portrait","viewportWidth":"320","embediframewidth":"0","description":"iPhone 4 (White)","deviceType":"phone"},{"iconResolution":"120 x 120","mobileSkinFilename":"iphone4-landscape-white.png","deviceWidth":690,"loadScreenResolution":"640 x 920","deviceHeight":374,"mobileDeviceID":16,"mobileSkin":"iPhone","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":160,"viewportHeight":"320","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":15,"mobileSkinColor":"white","className":"iphone4-landscape","orientation":"landscape","viewportWidth":"480","embediframewidth":"0","description":"iPhone 4 (White)","deviceType":"phone"},{"iconResolution":"192 x 192","mobileSkinFilename":"htcOne-portrait-white.png","deviceWidth":402,"loadScreenResolution":"1080 x 1920","deviceHeight":836,"mobileDeviceID":17,"mobileSkin":"HTC One","statusbar":{"height":24,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":81,"viewportHeight":"640","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":18,"mobileSkinColor":"white","className":"htcOne-portrait","orientation":"portrait","viewportWidth":"360","embediframewidth":"0","description":"HTC One - White","deviceType":"phone"},{"iconResolution":"192 x 192","mobileSkinFilename":"htcOne-landscape-white.png","deviceWidth":836,"loadScreenResolution":"1920 x 1080","deviceHeight":402,"mobileDeviceID":18,"mobileSkin":"HTC One","statusbar":{"height":24,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":82,"viewportHeight":"360","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":17,"mobileSkinColor":"white","className":"htcOne-landscape","orientation":"landscape","viewportWidth":"640","embediframewidth":"0","description":"HTC One - White","deviceType":"phone"},{"iconResolution":"192 x 192","mobileSkinFilename":"samsungS4-portrait-white.png","deviceWidth":406,"loadScreenResolution":"1080 x 1920","deviceHeight":786,"mobileDeviceID":19,"mobileSkin":"Samsung Galaxy S4","statusbar":{"height":24,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":190,"viewportHeight":"640","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":20,"mobileSkinColor":"white","className":"samsungS4-portrait","orientation":"portrait","viewportWidth":"360","embediframewidth":"0","description":"Samsung Galaxy S4 - White","deviceType":"phone"},{"iconResolution":"192 x 192","mobileSkinFilename":"samsungS4-landscape-white.png","deviceWidth":786,"loadScreenResolution":"1920 x 1080","deviceHeight":406,"mobileDeviceID":20,"mobileSkin":"Samsung Galaxy S4","statusbar":{"height":24,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":200,"viewportHeight":"360","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":19,"mobileSkinColor":"white","className":"samsungS4-landscape","orientation":"landscape","viewportWidth":"640","embediframewidth":"0","description":"Samsung Galaxy S4 - White","deviceType":"phone"},{"iconResolution":"192 x 192","mobileSkinFilename":"nexus7-portrait.png","deviceWidth":532,"loadScreenResolution":"1080 x 1920","deviceHeight":870,"mobileDeviceID":21,"mobileSkin":"Nexus 7","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":210,"viewportHeight":"685","isDefaultDeviceType":true,"embediframeheight":"0","platform":"Android","inverseOrientationID":22,"mobileSkinColor":"black","className":"nexus7-portrait","orientation":"portrait","viewportWidth":"450","embediframewidth":"0","description":"Nexus 7","deviceType":"tablet"},{"iconResolution":"192 x 192","mobileSkinFilename":"nexus7-landscape.png","deviceWidth":870,"loadScreenResolution":"1920 x 1080","deviceHeight":532,"mobileDeviceID":22,"mobileSkin":"Nexus 7","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":220,"viewportHeight":"415","isDefaultDeviceType":true,"embediframeheight":"0","platform":"Android","inverseOrientationID":21,"mobileSkinColor":"black","className":"nexus7-landscape","orientation":"landscape","viewportWidth":"720","embediframewidth":"0","description":"Nexus 7","deviceType":"tablet"},{"iconResolution":"192 x 192","mobileSkinFilename":"nexus10-portrait.png","deviceWidth":776,"loadScreenResolution":"1080 x 1920","deviceHeight":1112,"mobileDeviceID":23,"mobileSkin":"Nexus 10","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":230,"viewportHeight":"925","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":24,"mobileSkinColor":"black","className":"nexus10-portrait","orientation":"portrait","viewportWidth":"600","embediframewidth":"0","description":"Nexus 10","deviceType":"tablet"},{"iconResolution":"192 x 192","mobileSkinFilename":"nexus10-landscape.png","deviceWidth":1112,"loadScreenResolution":"1920 x 1080","deviceHeight":776,"mobileDeviceID":24,"mobileSkin":"Nexus 10","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":240,"viewportHeight":"565","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":23,"mobileSkinColor":"black","className":"nexus10-landscape","orientation":"landscape","viewportWidth":"960","embediframewidth":"0","description":"Nexus 10","deviceType":"tablet"},{"iconResolution":"120 x 120","mobileSkinFilename":"iphone6-portrait.png","deviceWidth":416,"loadScreenResolution":"750 x 1294","deviceHeight":850,"mobileDeviceID":25,"mobileSkin":"iPhone","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":250,"viewportHeight":"667","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":26,"mobileSkinColor":"black","className":"iphone6-portrait","orientation":"portrait","viewportWidth":"375","embediframewidth":"0","description":"iPhone 6-8 (Black)","deviceType":"phone"},{"iconResolution":"120 x 120","mobileSkinFilename":"iphone6-landscape.png","deviceWidth":850,"loadScreenResolution":"750 x 1294","deviceHeight":416,"mobileDeviceID":26,"mobileSkin":"iPhone","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":260,"viewportHeight":"375","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":25,"mobileSkinColor":"black","className":"iphone6-landscape","orientation":"landscape","viewportWidth":"667","embediframewidth":"0","description":"iPhone 6-8 (Black)","deviceType":"phone"},{"iconResolution":"120 x 120","mobileSkinFilename":"iphone6-portrait-white.png","deviceWidth":416,"loadScreenResolution":"750 x 1294","deviceHeight":850,"mobileDeviceID":27,"mobileSkin":"iPhone","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":270,"viewportHeight":"667","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":28,"mobileSkinColor":"white","className":"iphone6-portrait","orientation":"portrait","viewportWidth":"375","embediframewidth":"0","description":"iPhone 6-8 (White)","deviceType":"phone"},{"iconResolution":"120 x 120","mobileSkinFilename":"iphone6-landscape-white.png","deviceWidth":850,"loadScreenResolution":"750 x 1294","deviceHeight":416,"mobileDeviceID":28,"mobileSkin":"iPhone","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":280,"viewportHeight":"375","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":27,"mobileSkinColor":"white","className":"iphone6-landscape","orientation":"landscape","viewportWidth":"667","embediframewidth":"0","description":"iPhone 6-8 (White)","deviceType":"phone"},{"iconResolution":"180 x 180","mobileSkinFilename":"iphone6plus-portrait.png","deviceWidth":454,"loadScreenResolution":"1242 x 2148","deviceHeight":920,"mobileDeviceID":29,"mobileSkin":"iPhone","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":290,"viewportHeight":"734","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":30,"mobileSkinColor":"black","className":"iphone6plus-portrait","orientation":"portrait","viewportWidth":"412","embediframewidth":"0","description":"iPhone 6-8 Plus (Black)","deviceType":"phone"},{"iconResolution":"180 x 180","mobileSkinFilename":"iphone6plus-landscape.png","deviceWidth":920,"loadScreenResolution":"1242 x 2148","deviceHeight":454,"mobileDeviceID":30,"mobileSkin":"iPhone","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":300,"viewportHeight":"412","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":29,"mobileSkinColor":"black","className":"iphone6plus-landscape","orientation":"landscape","viewportWidth":"734","embediframewidth":"0","description":"iPhone 6-8 Plus (Black)","deviceType":"phone"},{"iconResolution":"180 x 180","mobileSkinFilename":"iphone6plus-portrait-white.png","deviceWidth":454,"loadScreenResolution":"1242 x 2148","deviceHeight":920,"mobileDeviceID":31,"mobileSkin":"iPhone","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":310,"viewportHeight":"734","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":32,"mobileSkinColor":"white","className":"iphone6plus-portrait","orientation":"portrait","viewportWidth":"412","embediframewidth":"0","description":"iPhone 6-8 Plus (White)","deviceType":"phone"},{"iconResolution":"180 x 180","mobileSkinFilename":"iphone6plus-portrait-white.png","deviceWidth":920,"loadScreenResolution":"1242 x 2148","deviceHeight":454,"mobileDeviceID":32,"mobileSkin":"iPhone","statusbar":{"height":20,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":320,"viewportHeight":"412","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":31,"mobileSkinColor":"white","className":"iphone6plus-landscape","orientation":"landscape","viewportWidth":"734","embediframewidth":"0","description":"iPhone 6-8 Plus (White)","deviceType":"phone"},{"iconResolution":"144 x 144","mobileSkinFilename":"apple-watch-38mm-roseGold.png","deviceWidth":209,"loadScreenResolution":"272px x 340px","deviceHeight":378,"mobileDeviceID":33,"mobileSkin":"apple-watch","statusbar":{"height":0},"sortIndex":330,"viewportHeight":"170","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","mobileSkinColor":"roseGold","className":"apple-watch-38mm-roseGold","orientation":"portrait","viewportWidth":"136","embediframewidth":"0","description":"38mm - Rose Gold","deviceType":"watch"},{"iconResolution":"144 x 144","mobileSkinFilename":"apple-watch-38mm-silverAluminum.png","deviceWidth":209,"loadScreenResolution":"272px x 340px","deviceHeight":378,"mobileDeviceID":34,"mobileSkin":"apple-watch","statusbar":{"height":0},"sortIndex":340,"viewportHeight":"170","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","mobileSkinColor":"silverAluminum","className":"apple-watch-38mm-silverAluminum","orientation":"portrait","viewportWidth":"136","embediframewidth":"0","description":"38mm - Silver Aluminum","deviceType":"watch"},{"iconResolution":"144 x 144","mobileSkinFilename":"apple-watch-38mm-spaceBlackStainlessSteel.png","deviceWidth":209,"loadScreenResolution":"272px x 340px","deviceHeight":378,"mobileDeviceID":35,"mobileSkin":"apple-watch","statusbar":{"height":0},"sortIndex":350,"viewportHeight":"170","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","mobileSkinColor":"spaceBlackStainlessSteel","className":"apple-watch-38mm-spaceBlackStainlessSteel","orientation":"portrait","viewportWidth":"136","embediframewidth":"0","description":"38mm - Space Black Stainless Steel","deviceType":"watch"},{"iconResolution":"144 x 144","mobileSkinFilename":"apple-watch-38mm-spaceGrayAluminum.png","deviceWidth":472,"loadScreenResolution":"272px x 340px","deviceHeight":764,"mobileDeviceID":36,"mobileSkin":"apple-watch","statusbar":{"height":0},"sortIndex":360,"viewportHeight":"340","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","mobileSkinColor":"spaceGrayAluminum","className":"apple-watch-38mm-spaceGrayAluminum","orientation":"portrait","viewportWidth":"272","embediframewidth":"0","description":"38mm - Space Gray Aluminum","deviceType":"watch"},{"iconResolution":"144 x 144","mobileSkinFilename":"apple-watch-38mm-stainlessSteel.png","deviceWidth":209,"loadScreenResolution":"272px x 340px","deviceHeight":378,"mobileDeviceID":37,"mobileSkin":"apple-watch","statusbar":{"height":0},"sortIndex":370,"viewportHeight":"170","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","mobileSkinColor":"stainlessSteel","className":"apple-watch-38mm-stainlessSteel","orientation":"portrait","viewportWidth":"136","embediframewidth":"0","description":"38mm - Stainless Steel","deviceType":"watch"},{"iconResolution":"144 x 144","mobileSkinFilename":"apple-watch-38mm-yellowGold.png","deviceWidth":209,"loadScreenResolution":"272px x 340px","deviceHeight":378,"mobileDeviceID":38,"mobileSkin":"apple-watch","statusbar":{"height":0},"sortIndex":380,"viewportHeight":"170","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","mobileSkinColor":"yellowGold","className":"apple-watch-38mm-yellowGold","orientation":"portrait","viewportWidth":"136","embediframewidth":"0","description":"38mm - Yellow Gold","deviceType":"watch"},{"iconResolution":"144 x 144","mobileSkinFilename":"apple-watch-42mm-roseGold.png","deviceWidth":240,"loadScreenResolution":"312px x 390px","deviceHeight":438,"mobileDeviceID":39,"mobileSkin":"apple-watch","statusbar":{"height":0},"sortIndex":390,"viewportHeight":"195","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","mobileSkinColor":"roseGold","className":"apple-watch-42mm-roseGold","orientation":"portrait","viewportWidth":"156","embediframewidth":"0","description":"42mm - Rose Gold","deviceType":"watch"},{"iconResolution":"144 x 144","mobileSkinFilename":"apple-watch-42mm-silverAluminum.png","deviceWidth":240,"loadScreenResolution":"312px x 390px","deviceHeight":438,"mobileDeviceID":40,"mobileSkin":"apple-watch","statusbar":{"height":0},"sortIndex":400,"viewportHeight":"195","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","mobileSkinColor":"silverAluminum","className":"apple-watch-42mm-silverAluminum","orientation":"portrait","viewportWidth":"156","embediframewidth":"0","description":"42mm - Silver Aluminum","deviceType":"watch"},{"iconResolution":"144 x 144","mobileSkinFilename":"apple-watch-42mm-spaceBlackStainlessSteel.png","deviceWidth":240,"loadScreenResolution":"312px x 390px","deviceHeight":438,"mobileDeviceID":41,"mobileSkin":"apple-watch","statusbar":{"height":0},"sortIndex":410,"viewportHeight":"195","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","mobileSkinColor":"spaceBlackStainlessSteel","className":"apple-watch-42mm-spaceBlackStainlessSteel","orientation":"portrait","viewportWidth":"156","embediframewidth":"0","description":"42mm - Space Black Stainless Steel","deviceType":"watch"},{"iconResolution":"144 x 144","mobileSkinFilename":"apple-watch-42mm-spaceGrayAluminum.png","deviceWidth":240,"loadScreenResolution":"312px x 390px","deviceHeight":438,"mobileDeviceID":42,"mobileSkin":"apple-watch","statusbar":{"height":0},"sortIndex":420,"viewportHeight":"195","isDefaultDeviceType":true,"embediframeheight":"0","platform":"iOS","mobileSkinColor":"spaceGrayAluminum","className":"apple-watch-42mm-spaceGrayAluminum","orientation":"portrait","viewportWidth":"156","embediframewidth":"0","description":"42mm - Space Gray Aluminum","deviceType":"watch"},{"iconResolution":"144 x 144","mobileSkinFilename":"apple-watch-42mm-stainlessSteel.png","deviceWidth":240,"loadScreenResolution":"312px x 390px","deviceHeight":438,"mobileDeviceID":43,"mobileSkin":"apple-watch","statusbar":{"height":0},"sortIndex":430,"viewportHeight":"195","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","mobileSkinColor":"stainlessSteel","className":"apple-watch-42mm-stainlessSteel","orientation":"portrait","viewportWidth":"156","embediframewidth":"0","description":"42mm - Stainless Steel","deviceType":"watch"},{"iconResolution":"144 x 144","mobileSkinFilename":"apple-watch-42mm-yellowGold.png","deviceWidth":240,"loadScreenResolution":"312px x 390px","deviceHeight":438,"mobileDeviceID":44,"mobileSkin":"apple-watch","statusbar":{"height":0},"sortIndex":440,"viewportHeight":"195","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","mobileSkinColor":"yellowGold","className":"apple-watch-42mm-yellowGold","orientation":"portrait","viewportWidth":"156","embediframewidth":"0","description":"42mm - Yellow Gold","deviceType":"watch"},{"iconResolution":"144 x 144","mobileSkinFilename":"android-round-dark.png","deviceWidth":185,"loadScreenResolution":"320px x 320px","deviceHeight":310,"mobileDeviceID":45,"mobileSkin":"android-watch","statusbar":{"height":0},"sortIndex":450,"viewportHeight":"160","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","mobileSkinColor":"round-dark","className":"android-round-dark","orientation":"portrait","viewportWidth":"160","embediframewidth":"0","description":"Round - Dark","deviceType":"watch"},{"iconResolution":"144 x 144","mobileSkinFilename":"android-round-light.png","deviceWidth":185,"loadScreenResolution":"320px x 320px","deviceHeight":310,"mobileDeviceID":46,"mobileSkin":"android-watch","statusbar":{"height":0},"sortIndex":460,"viewportHeight":"160","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","mobileSkinColor":"round-light","className":"android-round-light","orientation":"portrait","viewportWidth":"160","embediframewidth":"0","description":"Round - Light","deviceType":"watch"},{"iconResolution":"144 x 144","mobileSkinFilename":"android-square-dark.png","deviceWidth":223,"loadScreenResolution":"320px x 320px","deviceHeight":377,"mobileDeviceID":47,"mobileSkin":"android-watch","statusbar":{"height":0},"sortIndex":470,"viewportHeight":"160","isDefaultDeviceType":true,"embediframeheight":"0","platform":"Android","mobileSkinColor":"square-dark","className":"android-square-dark","orientation":"portrait","viewportWidth":"160","embediframewidth":"0","description":"Square - Dark","deviceType":"watch"},{"iconResolution":"144 x 144","mobileSkinFilename":"android-square-light.png","deviceWidth":223,"loadScreenResolution":"320px x 320px","deviceHeight":377,"mobileDeviceID":48,"mobileSkin":"android-watch","statusbar":{"height":0},"sortIndex":480,"viewportHeight":"160","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","mobileSkinColor":"square-light","className":"android-square-light","orientation":"portrait","viewportWidth":"160","embediframewidth":"0","description":"Square - Light","deviceType":"watch"},{"iconResolution":"180 x 180","mobileSkinFilename":"iphoneX-portrait.png","deviceWidth":420,"loadScreenResolution":"1242 x 2148","deviceHeight":855,"mobileDeviceID":49,"mobileSkin":"iPhoneX","statusbar":{"height":44,"defaultBackgroundColor":"","defaultfontcolor":"black"},"sortIndex":490,"viewportHeight":"812","isDefaultDeviceType":true,"embediframeheight":"0","platform":"iOS","inverseOrientationID":50,"mobileSkinColor":"black","className":"iphoneX-portrait","orientation":"portrait","viewportWidth":"375","embediframewidth":"0","description":"iPhone X","deviceType":"phone"},{"iconResolution":"180 x 180","mobileSkinFilename":"iphoneX-landscape.png","deviceWidth":856,"loadScreenResolution":"2148 x 1242","deviceHeight":421,"mobileDeviceID":50,"mobileSkin":"iPhoneX","statusbar":{"height":44,"defaultBackgroundColor":"","defaultfontcolor":"black"},"sortIndex":500,"viewportHeight":"375","isDefaultDeviceType":true,"embediframeheight":"0","platform":"iOS","inverseOrientationID":49,"mobileSkinColor":"black","className":"iphoneX-landscape","orientation":"landscape","viewportWidth":"812","embediframewidth":"0","description":"iPhone X","deviceType":"phone"},{"iconResolution":"NULL","mobileSkinFilename":"samsungS8-portrait-midnightBlack.png","deviceWidth":384,"loadScreenResolution":"NULL","deviceHeight":849,"mobileDeviceID":51,"mobileSkin":"Samsung","statusbar":{"height":48,"defaultBackgroundColor":"","defaultfontcolor":"black"},"sortIndex":510,"viewportHeight":"693","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":52,"mobileSkinColor":"black","className":"samsungS8-portrait","orientation":"portrait","viewportWidth":"338","embediframewidth":"0","description":"Samsung Galaxy S8","deviceType":"phone"},{"iconResolution":"NULL","mobileSkinFilename":"samsungS8-landscape-midnightBlack.png","deviceWidth":849,"loadScreenResolution":"NULL","deviceHeight":384,"mobileDeviceID":52,"mobileSkin":"Samsung","statusbar":{"height":48,"defaultBackgroundColor":"","defaultfontcolor":"black"},"sortIndex":520,"viewportHeight":"338","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":51,"mobileSkinColor":"black","className":"samsungS8-landscape","orientation":"landscape","viewportWidth":"693","embediframewidth":"0","description":"Samsung Galaxy S8","deviceType":"phone"},{"iconResolution":"NULL","mobileSkinFilename":"samsungS9-portrait-midnightBlack.png","deviceWidth":384,"loadScreenResolution":"NULL","deviceHeight":849,"mobileDeviceID":53,"mobileSkin":"Samsung","statusbar":{"height":48,"defaultBackgroundColor":"","defaultfontcolor":"black"},"sortIndex":530,"viewportHeight":"693","isDefaultDeviceType":true,"embediframeheight":"0","platform":"Android","inverseOrientationID":54,"mobileSkinColor":"black","className":"samsungS9-portrait","orientation":"portrait","viewportWidth":"338","embediframewidth":"0","description":"Samsung Galaxy S9","deviceType":"phone"},{"iconResolution":"NULL","mobileSkinFilename":"samsungS9-landscape-midnightBlack.png","deviceWidth":806,"loadScreenResolution":"NULL","deviceHeight":384,"mobileDeviceID":54,"mobileSkin":"Samsung","statusbar":{"height":48,"defaultBackgroundColor":"","defaultfontcolor":"black"},"sortIndex":540,"viewportHeight":"338","isDefaultDeviceType":true,"embediframeheight":"0","platform":"Android","inverseOrientationID":53,"mobileSkinColor":"black","className":"samsungS9-landscape","orientation":"landscape","viewportWidth":"693","embediframewidth":"0","description":"Samsung Galaxy S9","deviceType":"phone"},{"iconResolution":"NULL","mobileSkinFilename":"samsungS10-portrait.png","deviceWidth":410,"loadScreenResolution":"NULL","deviceHeight":835,"mobileDeviceID":55,"mobileSkin":"Samsung","statusbar":{"height":48,"defaultBackgroundColor":"","defaultfontcolor":"black"},"sortIndex":550,"viewportHeight":"760","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":56,"mobileSkinColor":"black","className":"samsungS10-portrait","orientation":"portrait","viewportWidth":"360","embediframewidth":"0","description":"Samsung Galaxy S10","deviceType":"phone"},{"iconResolution":"NULL","mobileSkinFilename":"samsungS10-landscape.png","deviceWidth":835,"loadScreenResolution":"NULL","deviceHeight":410,"mobileDeviceID":56,"mobileSkin":"Samsung","statusbar":{"height":48,"defaultBackgroundColor":"","defaultfontcolor":"black"},"sortIndex":560,"viewportHeight":"360","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":55,"mobileSkinColor":"black","className":"samsungS10-landscape","orientation":"landscape","viewportWidth":"760","embediframewidth":"0","description":"Samsung Galaxy S10","deviceType":"phone"},{"iconResolution":"NULL","mobileSkinFilename":"googlePixel3-portrait.png","deviceWidth":415,"loadScreenResolution":"NULL","deviceHeight":849,"mobileDeviceID":57,"mobileSkin":"Pixel","statusbar":{"height":48,"defaultBackgroundColor":"","defaultfontcolor":"black"},"sortIndex":570,"viewportHeight":"728","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":58,"mobileSkinColor":"black","className":"googlePixel3-portrait","orientation":"portrait","viewportWidth":"359","embediframewidth":"0","description":"Google Pixel 3","deviceType":"phone"},{"iconResolution":"NULL","mobileSkinFilename":"googlePixel3-landscape.png","deviceWidth":849,"loadScreenResolution":"NULL","deviceHeight":415,"mobileDeviceID":58,"mobileSkin":"Pixel","statusbar":{"height":48,"defaultBackgroundColor":"","defaultfontcolor":"black"},"sortIndex":580,"viewportHeight":"359","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":57,"mobileSkinColor":"black","className":"googlePixel3-landscape","orientation":"landscape","viewportWidth":"728","embediframewidth":"0","description":"Google Pixel 3","deviceType":"phone"},{"iconResolution":"NULL","mobileSkinFilename":"googlePixel3XL-portrait.png","deviceWidth":478,"loadScreenResolution":"NULL","deviceHeight":937,"mobileDeviceID":59,"mobileSkin":"Pixel","statusbar":{"height":48,"defaultBackgroundColor":"","defaultfontcolor":"black"},"sortIndex":590,"viewportHeight":"814","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":60,"mobileSkinColor":"black","className":"googlePixel3XL-portrait","orientation":"portrait","viewportWidth":"396","embediframewidth":"0","description":"Google Pixel 3 XL","deviceType":"phone"},{"iconResolution":"NULL","mobileSkinFilename":"googlePixel3XL-landscape.png","deviceWidth":937,"loadScreenResolution":"NULL","deviceHeight":478,"mobileDeviceID":60,"mobileSkin":"Pixel","statusbar":{"height":48,"defaultBackgroundColor":"","defaultfontcolor":"black"},"sortIndex":600,"viewportHeight":"396","isDefaultDeviceType":false,"embediframeheight":"0","platform":"Android","inverseOrientationID":59,"mobileSkinColor":"black","className":"googlePixel3XL-landscape","orientation":"landscape","viewportWidth":"814","embediframewidth":"0","description":"Google Pixel 3 XL","deviceType":"phone"},{"iconResolution":"NULL","mobileSkinFilename":"ipad-pro-13-portrait.png","deviceWidth":1224,"loadScreenResolution":"NULL","deviceHeight":1566,"mobileDeviceID":61,"mobileSkin":"iPad Pro 13","statusbar":{"height":27,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":610,"viewportHeight":"1366","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":62,"mobileSkinColor":"black","className":"ipad-pro-13-portrait","orientation":"portrait","viewportWidth":"1024","embediframewidth":"0","description":"iPad Pro 13","deviceType":"tablet"},{"iconResolution":"NULL","mobileSkinFilename":"ipad-pro-13-landscape.png","deviceWidth":1566,"loadScreenResolution":"NULL","deviceHeight":1224,"mobileDeviceID":62,"mobileSkin":"iPad Pro","statusbar":{"height":27,"defaultBackgroundColor":"#000000","defaultfontcolor":"white"},"sortIndex":620,"viewportHeight":"1024","isDefaultDeviceType":false,"embediframeheight":"0","platform":"iOS","inverseOrientationID":61,"mobileSkinColor":"black","className":"ipad-pro-13-landscape","orientation":"landscape","viewportWidth":"1366","embediframewidth":"0","description":"iPad Pro 13","deviceType":"tablet"}]
+					}
+				);
+
+			})( angular, InVision );
+
+		</script>
+
+	
+
+
+	
+	
+		<script type="text/ng-template" id="/assets/apps/share/views/powered-by/powered-by.htm"><!--
+Hide this object for a specific customer project shares and settings. Everyone else
+should see it.
+-->
+<a
+ng-if="( ! share.isEmbed && ! hideNavBar && ( project.companyID != 71 ) )"
+ng-class="{
+off: ( isBrowseOpen || isFlowOpen ),
+'initialized': $parent.UILoaded
+}"
+class="powered-by"
+ng-click="goToWWW()"
+target="_blank">
+<img src="assets/apps/share/img/logo-icon-v2.png" />
+<p>Made in InVision</p>
+</a>
+</script><script type="text/ng-template" id="/assets/apps/share/views/screens/screens.htm">
+<!-- desktop projects -->
+<div
+ng-if=" !project.isMobile || subview == 'comments' "
+ng-controller="screens.ScreensController"
+inv-screens
+inv-add-padding-on-scroll
+class="m-screens desktop"
+ng-class="{ isScaledCommentMode: project.isMobile }">
+<div
+ng-repeat="screen in screens track by screen.id"
+data-distance="{{ screen.distanceFromStartScreen }}"
+class="screen {{ screen.alignment }}"
+ng-class="{ visible: (screen.id == selectedScreen.id) }"
+ng-style="{ 
+width: ( Math.round(screen.width * screen.displayScale) + 'px' ), 
+height: ( Math.round(screen.height * screen.displayScale) + 'px' ) 
+}"
+data-displayScale="{{screen.displayScale}}">
+<img
+inv-screen
+ng-src="{{ screen.imageUrl }}"
+ng-style="{ 
+width: ( Math.round(screen.width * screen.displayScale) + 'px' ), 
+height: ( Math.round(screen.height * screen.displayScale) + 'px' ) 
+}" />
+</div>
+</div>
+<!-- mobile projects-->
+<div
+ng-if=" project.isMobile && subview == 'preview' "
+ng-controller="screens.ScreensController"
+inv-screens
+data-distance="{{ screen.distanceFromStartScreen }}"
+class="m-screens" >
+<div
+ng-repeat="screen in screens track by screen.id"
+class="screen mobile {{ screen.alignment }}"
+ng-class="{ visible: (screen.id == selectedScreen.id) }">
+<img inv-screen ng-src="{{ screen.imageUrl }}" />
+</div>
+</div>
+</script><script type="text/ng-template" id="/assets/apps/share/views/browse/thumbnails.htm">
+<div class="thumbnail-list" ng-class="{ 'without-comments': excludeComments }">
+<div class="header">
+<h2>
+{{ project.name }}
+</h2>
+<a class="btnClose" href="javascript:;" ng-click=" toggleBrowse() ">x</a>
+</div>
+<div ng-repeat="displayItem in displayObjects" 
+class="{{displayItem.type}}" 
+ng-class="{ 'invisible-group': displayItem.type == 'divider' && displayItem.sort == 0}" >
+<div ng-if=" shouldDividerDisplay(displayItem) " class="divider">
+<p class="dividerLabel">
+<span class="title">{{ displayItem.label }}</span>
+<span class="count">({{ displayItem.screenCount }})</span>
+</p>
+</div>
+<a  ng-if="displayItem.type == 'screenObj' "
+ng-click="applyScreenNavigation( displayItem )"
+class="item"
+ng-class="{ selected: ( displayItem == selectedScreen ) }">
+<span class="thumbnail-viewport " style="background: #{{displayItem.backgroundColor}}">
+<span class="thumbnail-overlay"></span>
+<img ng-src="{{ displayItem.thumbnailUrl }}" />
+<div class="name-container">
+<span class="name">
+{{ displayItem.name }}
+</span>
+</div>
+</span>
+<span class="hasComments" ng-if=" displayItem.unreadCommentCount">{{ displayItem.unreadCommentCount }}</span>
+</a>
+</div>
+</div>
+</script><script type="text/ng-template" id="/assets/apps/share/views/browse/browse.htm">
+<div
+ng-controller="browse.BrowseController"
+inv-browse-key-combos
+class="m-browse"
+ng-class="{
+mobile: project.isMobile,
+phone: deviceTemplate.deviceType == 'phone',
+tablet: isTabletPortrait
+} ">
+<!-- BEGIN: Screens. -->
+<div class="screens">
+<div ng-include=" '/assets/apps/share/views/browse/thumbnails.htm' "></div>
+</div>
+<!-- END: Screens. -->
+</div>
+</script><script type="text/ng-template" id="/assets/apps/share/views/modal/error.htm"><div ng-controller="modal.ErrorController" inv-modal class="modal errorModal">
+<div class="modal-header">
+<a ng-click="closeModalWindow()" class="close" aria-hidden="true">&times;</a>
+<h3>
+Oops!
+</h3>
+</div>
+<div class="modal-body">
+{{ errorMessage }}
+</div>
+<div class="modal-footer">
+<a ng-click="closeModalWindow()" class="btn btn-primary">Close</a>
+</div>
+</div></script><script type="text/ng-template" id="/assets/apps/share/views/modal/auth.htm"><div ng-controller="modal.Auth" inv-modal class="modal animate auth-modal" id="auth"
+ng-class="{
+'full-screen-auth': isFullScreenMode
+}">
+<div class="auth-modal__content modal-body">
+<form
+ng-controller="comments.FormController"
+ng-keydown="$event.which === 13 && handleKeyDownAuth($event)">
+<a ng-if="!isFullScreenMode" ng-click="!isSigningUp && closeModal()" class="close-x"></a>
+<a ng-if="isFullScreenMode" ng-click="!isSigningUp && closeModal()" class="nav-back">BACK</a>
+<div ng-if="isFullScreenMode" class="main-panel__switch">
+<!-- top right switch to sign up trigger -->
+<div ng-if="showLogin">
+<span class="main-panel__switch__text">
+Don't have an account?
+</span>
+<a ng-click="!isSigningUp && switchPrompt()" class="main-panel__switch__button">
+Get Started
+</a>
+</div>
+<!-- top right switch to sign in trigger -->
+<div ng-if="showSignup">
+<span class="main-panel__switch__text">
+Already have an account?
+</span>
+<a ng-click="!isSigningUp && switchPrompt()" class="main-panel__switch__button">
+Sign In
+</a>
+</div>
+</div>
+<div class="main-panel__table">
+<div class="main-panel__table-cell">
+<div class="main-panel__content">
+<!-- Login Form -->
+<div class="overlay login" ng-if="showLogin">
+<div class="form">
+<h2 ng-if="!isFullScreenMode" class="main-panel__heading">
+Sign in to InVision to post <br />your comment
+</h2>
+<h2 ng-if="isFullScreenMode" class="main-panel__heading">
+Sign in to InVision. <br />
+<span>Enter your details below.</span>
+</h2>
+<div class="form__group" ng-class="{ 'defined': identity.email.length }">
+<label class="form__label" for="identity.login-email">Email</label>
+<input
+type="email"
+inv-autofocus
+id="identity.login-email"
+ng-model="identity.email"
+tabindex="302"
+class="form__input"
+placeholder="julie@widgetco.com"
+/>
+</div>
+<div
+class="form__group"
+ng-class="{ 'defined': identity.password.length }"
+>
+<label class="form__label" for="identity.login-password">Password</label>
+<input
+type="password"
+id="identity.login-password"
+ng-model="identity.password"
+tabindex="303"
+class="form__input"
+placeholder="Enter your password"
+/>
+<a class="form__help" href="/d/password/requestReset" target="_blank" class="forgot-password">Forgot password?</a>
+</div>
+<div
+ng-show="errorMessage"
+class="alert alert-error"
+ng-bind-html="errorMessage"
+>
+</div>
+<div class="text--center">
+<button
+class="form__button"
+type="button"
+ng-click="submitLoginForm()"
+ng-disabled="isSigningIn"
+>
+{{ isSigningIn ? "Signing In" : "Sign In" }}
+</button>
+</div>
+<div class="footer-actions">
+<div class="switch-prompt" ng-if="!isFullScreenMode" >
+Don't have an account? <a ng-click="!isSigningUp && switchPrompt()">Get Started</a>
+</div>
+</div>
+</div>
+<div ng-if="( ssoEnabled || ssoOnly )" class="sso">
+<div class="sso__content footer-actions">
+<img class="sso__company--image" ng-if="companyImage" src="{{companyImage}}" />
+Existing member of the {{companyName}} InVision account? <a class="sso__signin-link" ng-click="ssoLinkClick()" href="{{ssoURL}}">Sign in with SSO</a>
+</div>
+</div>
+</div>
+<!-- Sign Up Form -->
+<div class="overlay signup" ng-if="showSignup">
+<div class="form">
+<h2 ng-if="!isFullScreenMode" class="main-panel__heading">
+Create a free InVision account to <br /> post your comment
+</h2>
+<h2 ng-if="isFullScreenMode" class="main-panel__heading">
+Get started absolutely free. <br />
+<span>Free forever. No credit card needed.</span>
+</h2>
+<div class="form__group" ng-class="{ 'defined': identity.email.length }">
+<label class="form__label" for="identity.signup-email">Work email</label>
+<input
+type="email"
+inv-autofocus
+id="identity.signup-email"
+ng-model="identity.email"
+tabindex="302"
+class="form__input"
+/>
+</div>
+<div class="form__group" ng-class="{ 'defined': identity.email.length }">
+<label class="form__label" for="identity.signup-name">Name</label>
+<input
+type="text"
+id="identity.signup-name"
+ng-model="identity.name"
+tabindex="303"
+class="form__input"
+/>
+</div>
+<div
+class="form__group"
+ng-class="{ 'defined': identity.password.length }"
+>
+<label class="form__label" for="identity.signup-password">Password</label>
+<input
+type="password"
+id="identity.signup-password"
+ng-model="identity.password"
+tabindex="304"
+class="form__input"
+placeholder="{{config.companySettings.passwordPlaceholder}}"
+/>
+</div>
+<div
+ng-show="errorMessage"
+class="alert alert-error"
+ng-bind-html="errorMessage"
+>
+</div>
+<div ng-if="gdprOptOutEnabled" class="form__legal">
+<div class="opt-out">
+<p class="text--left">
+Thanks for signing up to InVision! Based on your sign up, we would love to keep you posted
+with product news and tips for getting the most of InVision. You can opt out at any time.
+See our <a class="form__link--legal" href="https://www.invisionapp.com/privacy" ng-style="{ 'text-decoration': 'none', 'font-weight': '700', 'color': 'inherit' }" target="_blank">Privacy Policy</a>
+for more information.
+</p>
+<label class="text--left" ng-style="{ 'display': 'block', 'cursor': 'pointer' }" for="identity.signup-opt-out">
+<input
+ng-style="{ 'margin': '0px 6px 0px 3px' }"
+type="checkbox"
+id="identity.signup-opt-out"
+ng-model="identity.optout" />
+No thanks, please do not send me marketing emails.
+</label>
+</div>
+By clicking "Sign up free", I agree to InVision's <a href="https://www.invisionapp.com/terms_of_service" ng-style="{ 'text-decoration': 'none', 'font-weight': '700', 'color': 'inherit' }" target="_blank">Terms of Service</a>.
+</div>
+<div ng-if="!gdprOptOutEnabled" class="form__legal">
+By clicking "Sign up free" I agree to InVision's
+<a href="https://www.invisionapp.com/terms_of_service" target="_blank">Terms of Service</a> and
+<a href="https://www.invisionapp.com/privacy" target="_blank">Privacy Policy</a>.
+</div>
+<div class="text--center">
+<button
+class="form__button"
+type="button"
+ng-disabled="isSigningUp"
+ng-click="submitFormSignup()"
+>
+{{ isSigningUp ? "Signing Up" : "Sign Up Free" }}
+</button>
+</div>
+<div class="footer-actions">
+<div class="switch-prompt" ng-if="!isFullScreenMode">
+Already have an account? <a ng-click="!isSigningUp && switchPrompt()">Sign In</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</form>
+</div>
+</div>
+</script><script type="text/ng-template" id="/assets/apps/share/views/modal/welcome-user.htm"><div ng-controller="modal.WelcomeUser" inv-modal class="modal animate welcome-user-modal" id="welcome-user">
+<div class="welcome-user-modal__content modal-body">
+<a ng-click="closeModal()" class="close-x"></a>
+<div class="welcome-user__avatar">
+<div class="m-avatar" ng-class="{ 'system-avatar': user.hasSystemAvatar }">
+<span class="rendering">{{ user.initials }}</span>
+<img class="rendering" ng-src="/avatars/{{ user.avatarID }}" />
+</div>
+</div>
+<h2 class="welcome-user__header">
+{{ signedUp ? 'Welcome to InVision' : 'Welcome back'}}{{user.name ? ', ' + user.name : ''}}!
+</h2>
+<div class="welcome-user__secondary-text">
+Click anywhere to leave a comment
+</div>
+</div>
+</div>
+</script><script type="text/ng-template" id="/assets/apps/share/views/directives/toggle.htm">
+<div class="m-toggle off">	
+<!-- BEGIN: Labels Track. -->
+<div class="toggle-labels-track">
+<div class="toggle-labels">
+<div class="toggle-label on">
+<span class="text">On</span>
+</div>
+<div class="toggle-label off">
+<span class="text">Off</span>
+</div>
+</div>
+</div>
+<!-- END: Labels Track. -->
+<!-- BEGIN: Thumb Track. -->
+<div class="toggle-thumb-track">
+<a href="" class="toggle-thumb">
+<span class="toggle-end">
+<br />
+</span>
+</a>
+</div>
+<!-- END: Thumb Track. -->
+</div></script><script type="text/ng-template" id="/assets/apps/share/views/directives/share-sketch-viewer.htm"><div id="shareSketchViewer"  ng-show=" isShowingSketchViewer ">
+<div class="modalOverlay">
+<div  class="sketchViewer">
+<div class="closeViewer" ng-click=" closeSketchViewer() "></div>
+<div ng-show=" sketchImageIsProcessing " class="isProcessing">
+<p>
+<img src="assets/apps/share/img/draw.png"/><br/>
+This sketch is currently being processed.<br/>
+<span class="sub">It'll be available shortly!</span>
+</p>
+</div>
+<!-- Non-Temporaray sketches here -->
+<div class="imageContainer">
+<img ng-src="/api/comments/{{sketchViewerSketch.commentID}}/sketch/{{sketchViewerSketch.id}}"
+inv-console-sketch-viewer-image
+ng-style="{	width: screen.width * screen.displayScale + 'px',
+height: screen.height * screen.displayScale + 'px'
+}"/>
+</div>
+</div>
+</div>
+</div></script><script type="text/ng-template" id="/assets/apps/share/views/partials/preload.htm">	<!--
+BEGIN: HACKY CSS PRELOAD. 
+Until we have better sprite technology, let's at least pre-load the images this way so that 
+the parallel loading of Screen images is less likely to conflict. 
+-->
+<div style="height: 1px ; left: -100px ; overflow: hidden ; position: absolute ; top: -100px ; width: 1px ;">
+<img src="assets/apps/share/img/app-switch.png" />
+<img src="assets/apps/share/img/browse-background.png" />
+<img src="assets/apps/share/img/browse-pillnav-icons.png" />
+<img src="assets/apps/share/img/browse-pillnav.png" />
+<img src="assets/apps/share/img/close3.png" />
+<img src="assets/apps/share/img/comments-context-tab.png" />
+<img src="assets/apps/share/img/comments-vrule.png" />
+<img src="assets/apps/share/img/grey-screen-divider.png" />
+<img src="assets/apps/share/img/loader-sprite.png?v=06112014" />
+<img src="assets/apps/share/img/marker.png?v=2" />
+<img src="assets/apps/share/img/screens-search.png" />
+<img src="assets/apps/share/img/scrollbar-mid.png" />
+<img src="assets/apps/share/img/sketch-viewer-close.png" />
+<img src="assets/apps/share/img/sketch_tools.png" />
+<img src="assets/apps/share/img/share-lite-sprites.png" />
+<img src="assets/apps/share/img/share-lite-sprites@2x.png" />
+<img src="assets/apps/share/img/share-loading-sprites.png" />
+<img src="assets/apps/share/img/share-loading-sprites@2x.png" />
+</div>
+<!-- END: Hacky CSS Preload. </script><script type="text/ng-template" id="/assets/apps/share/views/preview/browser-compatibility.htm"><a ng-click="closeBrowserCompatibilityAlert()" class="browser-overlay">
+<br />
+</a>
+<div class="browser-alert">
+<a ng-click="closeBrowserCompatibilityAlert()" class="close-alert">x</a>
+<h1>
+We're sorry, your browser isn't fully supported to display this content properly.
+</h1>
+<div ng-switch="browserCompatibility.reason">
+<p ng-switch-when="version">
+We encourage you to <a href="http://browsehappy.com" target="updateBrowser">upgrade to a modern web browser</a>.
+</p>
+<p ng-switch-when="mode">
+Looks like you're running in &quot;compatibility mode&quot;, simply follow these
+<a href="https://www.youtube.com/results?search_query=ie+turn+off+compatibility+mode" target="updateBrowser">instructions to switch back to &quot;normal view&quot;</a>.
+</p>
+</div>
+<a ng-click="closeBrowserCompatibilityAlert()" class="no-thanks">
+No thanks, continue...
+</a>
+</div></script><script type="text/ng-template" id="/assets/apps/share/views/preview/preview-tour-comments.htm"><div ng-controller="preview.TourCommentsController">
+<div ng-if=" tourPoints.length > 0 " ng-controller="comments.CommentsController">
+<div
+inv-comments-markers
+ng-controller="comments.MarkersController">
+<div
+ng-if=" tooltipTourPoint "
+class="tour-point-tooltip left"
+ng-class=" tooltipClass() "
+ng-mouseenter=" clearTooltipTimeout() "
+ng-mouseleave=" clearTooltipTourPoint() "
+ng-click=" selectTourPoint(tooltipTourPoint) "
+inv-tour-point-tooltip>
+<div class="m-avatar" ng-class="{ 'system-avatar': tooltipTourPoint.comment.userHasSystemAvatar }">
+<span class="rendering">{{ tooltipTourPoint.comment.userInitials }}</span>
+<img
+ng-if=" ! tooltipTourPoint.comment.userHasSystemAvatar "
+ng-src="/avatars/{{ tooltipTourPoint.comment.userAvatarID }}"
+class="rendering" />
+</div>
+<div class="excerpt" ng-bind-html="tooltipExcerpt()"></div>
+</div>
+<!-- Only include the form if a tour point has been selected.-->
+<div
+class="comments-mentions"
+ng-if="selectedConversation"
+ng-include=" '/assets/apps/share/views/preview/tour-point-form.htm' ">
+</div>
+<!-- Sketch viewer modal-->
+<div inv-share-sketch-viewer
+ng-if=" isShowingSketchViewer ">
+</div>
+</div>
+</div>
+</script><script type="text/ng-template" id="/assets/apps/share/views/preview/preview.htm"><div
+ng-controller="preview.PreviewController"
+inv-preview-helper
+class="m-preview {{ screen.alignment }}"
+mobile-skin-name="{{ project.mobileTemplate.mobileSkin }}"
+ng-class="{ mobile: project.isMobile, 'is-watch': project.isWatch }">
+<div
+ng-if="project.isMobile"
+inv-mobile-transition-layer
+id="mobile_transition_layer"
+class="{{ deviceTemplate.className }} {{ chromeClass }}"></div>
+<inv-share-screen-viewer></inv-share-screen-viewer>
+<div class="slideshow-nav">
+<div class="slideshow-status" ng-show=" ! project.isMobile " >{{ currentScreenIndex }} of {{ screenCount }}</div>
+</div>
+</div>
+</script><script type="text/ng-template" id="/assets/apps/share/views/preview/tour-point-form.htm"><form
+ng-controller="comments.FormController"
+ng-submit="submitForm({ comment: newComment })"
+inv-comments-tour-form-key-combos
+inv-tour-comments-form
+class="conversation comment-thread-container tour-point-form">
+<div class="comment-thread tour-point">
+<header>
+<button
+class="close"
+type="button"
+ng-click="clearTourPointForm()">
+&times;
+</button>
+</header>
+<section class="primary-comment">
+<div class="m-avatar" ng-class="{ 'system-avatar': comments[0].userHasSystemAvatar }">
+<span class="rendering">{{ comments[0].userInitials }}</span>
+<img
+ng-if=" ! comments[0].userHasSystemAvatar "
+ng-src="/avatars/{{ comments[0].userAvatarID }}"
+class="rendering" />
+</div>
+<div class="post-content">
+<div
+class="post-comment"
+ng-bind-html="comments[0].html">
+</div>
+</div>
+<footer ng-if=" ! commentsExpanded ">
+<div
+ng-click="toggleCommentsExpanded()"
+ng-class="{ 'no-comments': comments.length == 1 }"
+class="reply-section">
+Reply <span ng-if="comments.length > 1" class="comment-count">{{ comments.length - 1 }}</span>
+</div>
+<nav class="tour-point-nav">
+<a
+ng-click="previousTourPoint()"
+ng-show="hasPreviousTourPoint()"
+class="prev">Prev
+</a>
+<a
+ng-click="nextTourPoint()"
+ng-show="hasNextTourPoint()"
+class="next">Next
+</a>
+</nav>
+</footer>
+</section>
+<section
+class="comments-expanded"
+ng-class="{
+visible: !! commentsExpanded}"
+>
+<div class="comments-expanded-inner">
+<!-- BEGIN: Comments. -->
+<div
+ng-repeat="comment in comments"
+ng-init=" showDeleteCommentConfirmation = false ; "
+class="comment-item comment"
+ng-class="{
+first: $first,
+unread: comment.isUnread,
+collapsed: comment.isCollapsed,
+'first-collapsed': comment.isFirstCollapsed,
+last: $last
+}"
+inv-fade-show="!comment.isCollapsed || ( comment.isCollapsed && comment.isFirstCollapsed )">
+<span ng-if=" ! $first ">
+<!-- Special section for collapsed area -->
+<div ng-if=" comment.isCollapsed " class="collapsed-comments">
+<span ng-click="expandComments( )">View All {{ comments.length }} Comments</span>
+</div>
+<div class="m-avatar" ng-class="{ 'system-avatar': comment.userHasSystemAvatar }">
+<span class="rendering">{{ comment.userInitials }}</span>
+<img
+ng-if=" ! comment.userHasSystemAvatar "
+ng-src="/avatars/{{ comment.userAvatarID }}"
+class="rendering" />
+<!-- Status -->
+<span
+class="online-status"
+ng-class="{ online: ( comment.userOnlineStatus == 'Online' ), away: ( comment.userOnlineStatus == 'Away' ) }">
+{{ comment.userOnlineStatus }}
+</span>
+</div>
+<div class="post-content post-emojis">
+<h2 ng-hide="$first && conversation.isTourPoint">
+<span>{{ comment.userName }}</span>
+<span class="created-at">{{ comment.dateLabel }}</span>
+</h2>
+<div
+class="post-options"
+ng-show=" !comment.isEditing "
+ng-class="{'is-collapsed': comment.isCollapsed}">
+<ul class="tools">
+<!-- RAIN-4598: Temporarily disabled while it is broken. -->
+<li
+ng-if="false"
+class="view-history hidden"
+ng-show="( ! comment.isEditing && ( comment.screenImageVersion != screen.imageVersion ) && comment.imageUrl )">
+<a>View History</a>
+</li>
+<li
+class="edit-comment hidden"
+ng-show=" comment.isOwnedByUser || project.isOwnedByUser ">
+<a
+ng-click="editComment( comment )"
+inv-tooltip="Edit comment">
+Edit
+</a>
+</li>
+<li
+class="delete-comment hidden"
+ng-show=" comment.isOwnedByUser || project.isOwnedByUser ">
+<a
+ng-click="showDeleteConfirmation( comment, $first )"
+inv-tooltip="Delete comment">
+Delete
+</a>
+</li>
+</ul>
+<!-- RAIN-4598: Temporarily disabled while it is broken. -->
+<div inv-history-overlay class="history-overlay" ng-if="false && ( ( comment.screenImageVersion != screen.imageVersion ) && comment.imageUrl )">
+<div class="history-overlay-image-container">
+<img 	inv-screen-version-image-scaler
+ng-src="{{ comment.imageUrl }}"
+ng-style="{
+top: - ( ( conversation.y * screen.displayScale ) - 130 ) + 'px',
+left: - ( ( conversation.x * screen.displayScale ) - 270 )+ 'px'
+}" />
+</div>
+<div class="hover-buffer"></div>
+</div> <!-- history-overlay -->
+</div> <!-- post-options -->
+<a class="thumbs-up"
+ng-show=" canLike "
+ng-hide=" $first && conversation.isTourPoint "
+ng-class="{ 'liked': comment.numberOfLikes, 'by-user': comment.hasUserLiked  }"
+ng-click="toggleLike( comment )"
+inv-tooltip="{{ comment.likedByList }}">
+<i class="icon thumbs up"></i>
+{{comment.numberOfLikes}}
+</a>
+<div
+ng-show="! comment.isEditing"
+ng-bind-html="comment.html"
+class="post-comment">
+</div>
+<div ng-if="comment.isEditing" class="editing-mode">
+<div
+inv-comment
+comment="comment.comment"
+name="post-comment"
+screen-id="screen.id"
+class-string="{{ getClassesString('existing') }}"
+tab-index="101"
+has-emojis="true"
+has-who-is-notified="false">
+</div>
+</div>
+<div
+class="sketchList"
+ng-show="comment.sketches.length > 0 && ( ! $first || ! conversation.isTourPoint )">
+<div
+ng-repeat="sketch in comment.sketches"
+class="sketch">
+<a
+class="text"
+ng-click=" startSketchViewer( sketch , conversation ) "
+ng-class="{
+editing: comment.isEditing
+}">
+<strong>{{ comment.userFirstName }}&rsquo;s attached a sketch.</strong> View?
+<span inv-tooltip="delete" class="delete" ng-show="comment.isEditing" ng-click=" deleteSketch( sketch.id )">x</span>
+</a>
+</div> <!-- sketch -->
+</div> <!-- sketchList -->
+<div class="post-buttons" ng-show="( comment.isEditing )">
+<button
+type="button"
+class="save"
+ng-show="comment.isEditing"
+tabindex="102"
+ng-click="saveComment( comment, false )">
+Save
+</button>
+<button
+type="button"
+class="cancel"
+ng-show="comment.isEditing"
+tabindex="103"
+ng-click="stopEditingComments( comment )">
+Cancel
+</button>
+</div>
+</div> <!-- post-content -->
+<!-- Delete confirmation for single comment. -->
+<div inv-fade-show="comment.isDeleting" class="delete-confirmation">
+<p>Delete this comment?</p>
+<div class="action">
+<a ng-click="deleteComment( comment )" class="confirm">Yes, Delete</a>
+<a ng-click="hideDeleteConfirmation( comment )" class="cancel">Cancel</a>
+</div>
+</div>
+</span>
+</div>
+<!-- END: Comments. -->
+<div class="comment-item post-new-comment">
+<div class="post post-emojis">
+<div class="post-comment">
+<div
+inv-comment
+comment="newComment"
+name="post-comment"
+screen-id="screen.id"
+class-string="{{ getClassesString('existing') }}"
+placeholder="Leave a comment..."
+tab-index="201"
+on-focus-callback="showCommentInput()"
+has-emojis="true"
+has-who-is-notified="true">
+</div>
+<div class="comment-item footer submit actions">
+<button
+class="button"
+tabindex="202"
+ng-click="submitForm({ comment: newComment })"
+type="button"
+inv-success-button
+after-success="onReplyFinished()"
+delay="0">Reply</button>
+<button class="close" type="button" ng-click="toggleCommentsExpanded()">cancel</button>
+</div> <!-- footer -->
+</div> <!-- post-comment -->
+</div> <!-- post -->
+</div>
+<!-- Delete confirmation for entire conversation. -->
+<div inv-fade-show="isDeleting" class="delete-confirmation delete-conversation">
+<p>Delete this <strong>entire</strong> conversation?</p>
+<div class="action">
+<a ng-click="deleteConversation( conversation )" class="btn btn-small flat dkgray">Yes, Delete</a>
+<a ng-click="hideDeleteConfirmation()" class="cancel">Cancel</a>
+</div>
+</div>
+<!-- Identification Form -->
+<div inv-fade-show="isIdentifying" class="overlay identification">
+<div class="form">
+<h2>Let us know who you are</h2>
+<h3>In order to leave a comment, we need to know who you are.</h3>
+<div ng-show="errorMessage" class="alert alert-error">
+{{ errorMessage }}
+</div>
+<div class="field" ng-class="{ 'defined': identity.name.length }">
+<input
+type="text"
+id="identity.name"
+ng-model="identity.name"
+inv-autofocus
+tabindex="301"
+/>
+<label for="identity.name">
+Your name
+</label>
+</div>
+<div class="field" ng-class="{ 'defined': identity.email.length }">
+<input
+type="text"
+id="identity.email"
+ng-model="identity.email"
+tabindex="302"
+/>
+<label for="identity.email">Email address</label>
+</div>
+<div class="actions">
+<button
+class="close"
+type="button"
+ng-click="selectTourPoint(null)"
+>
+Cancel
+</button>
+<button
+class="button"
+type="button"
+ng-click="submitForm({ comment: newComment })"
+tabindex="303"
+>
+Submit
+</button>
+</div>
+</div> <!-- /form -->
+</div> <!-- /identification -->
+<div inv-fade-show="isAuthenticating" class="overlay authentication">
+<div class="form">
+<h2>We've recognized that account, what's the password?</h2>
+<h3>Enter your password to leave a comment</h3>
+<div class="field" ng-class="{ 'defined': identity.name.length }">
+<input
+type="password"
+id="identity.password"
+ng-model="identity.password"
+inv-autofocus
+tabindex="301"
+/>
+<label for="identity.name">
+Password
+</label>
+</div>
+<div
+ng-show="errorMessage"
+class="alert alert-error"
+ng-bind-html="errorMessage"
+>
+</div>
+<div class="actions">
+<button
+class="close"
+type="button"
+ng-click="selectTourPoint(null)"
+>
+Cancel
+</button>
+<button
+class="button"
+type="button"
+ng-click="submitFormPassword()"
+tabindex="302"
+>
+Post Comment
+</button>
+</div>
+</div> <!-- form -->
+</div> <!-- authentication -->
+</div>
+</section>
+</div> <!-- comment-thread-container -->
+</form>
+</script><script type="text/ng-template" id="/assets/apps/share/views/comments/comments.htm"><div
+ng-controller="comments.CommentsController" 
+inv-comments-key-combos 
+class="m-comments" 
+ng-class="{ mobile: project.isMobile }">
+<!-- Context. -->
+<div ng-include=" '/assets/apps/share/views/comments/context.htm' "></div>
+<!-- Markers. -->
+<div ng-include=" '/assets/apps/share/views/comments/markers.htm' "></div>
+<!-- Sketch viewer modal-->
+<div inv-share-sketch-viewer
+ng-if=" isShowingSketchViewer ">
+</div>
+<div id="cursor-tooltip"
+inv-comments-cursor-tooltip
+ng-show="isHoveringViewport && !( isHoveringHotspot || isShowingConversationMenu)"
+>
+Click to leave a comment
+</div>
+</div></script><script type="text/ng-template" id="/assets/apps/share/views/comments/context.htm"><!-- BEGIN: Context. -->
+<div class="context">
+<a ng-class="{ active: $parent.commentControl.isBorderExpanded }" ng-click="closeCommentMode($event)">
+<span>x</span>
+</a>
+<!-- Borders. -->
+<div ng-class="{ active: $parent.commentControl.isBorderExpanded }" class="border n"></div>
+<div ng-class="{ active: $parent.commentControl.isBorderExpanded }" class="border e"></div>
+<div ng-class="{ active: $parent.commentControl.isBorderExpanded }" class="border s"></div>
+<div ng-class="{ active: $parent.commentControl.isBorderExpanded }" class="border w"></div>
+</div>
+<!-- END: Context. --></script><script type="text/ng-template" id="/assets/apps/share/views/comments/markers.htm"><div
+ng-controller="comments.MarkersController"
+inv-comments-markers
+class="markers" >
+<div
+ng-class="{ mobile: project.isMobile }"
+class="viewport {{ viewport.alignment }}"
+ng-style="{
+width: ( viewport.width + 'px' ),
+height: ( viewport.height + 'px' )
+}"
+ng-mouseenter=" setIsHoveringViewport(true) "
+ng-mouseleave=" setIsHoveringViewport(false) ">
+<!-- Output the conversation markers. -->
+<a
+ng-repeat="conversation in conversations track by conversation.id"
+ng-href="#/screens/{{ screenID }}/comments/{{ conversation.id }}"
+class="marker"
+ng-class="{
+complete: conversation.isComplete,
+unread: conversation.isUnread,
+active: ( conversation == selectedConversation ),
+comment: ! conversation.isForDevelopment && ! conversation.isTourPoint && ! conversation.isPrivate,
+'dev-note': conversation.isForDevelopment,
+'tour-point': conversation.isTourPoint,
+'private-comment': conversation.isPrivate && ! conversation.isForDevelopment,
+read: ! conversation.isUnread && userAuthenticated,
+'move-disabled': !isUserACollaborator,
+'no-label': conversation.label == ''
+}"
+ng-style="{
+left: ( conversation.x * screen.displayScale + 'px' ),
+top: ( conversation.y * screen.displayScale + 'px' )
+}"
+unselectable="on"
+ng-mouseenter=" setIsHoveringHotspot(true) "
+ng-mouseleave=" setIsHoveringHotspot(false) "
+ng-show=" conversation.isShown || (conversation.id == selectedConversation.id )">
+{{ conversation.label }}
+<span ng-if=" conversation.isComplete " class="complete-icon"></span>
+</a>
+<!-- Show the new conversation marker, if necessary. -->
+<a
+ng-show="newConversation"
+ng-href="#/screens/{{ screenID }}/comments"
+class="marker new-marker active"
+ng-class="{
+comment: ! newConversation.isForDevelopment && ! newConversation.isTourPoint && ! newConversation.isPrivate,
+'dev-note': newConversation.isForDevelopment,
+'tour-point': newConversation.isTourPoint,
+'private-comment': newConversation.isPrivate && ! newConversation.isForDevelopment,
+'no-label': newConversation.label == ''
+}"
+ng-style="{
+left: ( newConversation.x * screen.displayScale + 'px' ),
+top: ( newConversation.y * screen.displayScale + 'px' )
+}"
+unselectable="on"
+ng-mouseenter=" setIsHoveringHotspot(true) "
+ng-mouseleave=" setIsHoveringHotspot(false) ">
+{{ newConversation.label }}
+</a>
+<!-- Only include the form if a conversation has been selected. -->
+<div
+class="comments-mentions"
+ng-if="selectedConversation || newConversation"
+ng-include=" '/assets/apps/share/views/comments/form.htm' "></div>
+</div>
+</div>
+</script><script type="text/ng-template" id="/assets/apps/share/views/comments/form.htm"><form
+ng-controller="comments.FormController"
+inv-comments-form
+class="conversation comment-thread-container mentions emoji-root"
+ng-class="{ teaser: isShowingTeaser }"
+ng-style="{
+left: ( conversation.x * screen.displayScale + 'px' ),
+top: ( ( conversation.y * screen.displayScale ) + 9 + 'px' )
+}"
+ng-keydown="$event.which === 13 && handleKeyDown($event)"
+>
+<div class="emoji-placeholder"></div>
+<div
+ng-class="{
+'comment-thread': true,
+'comment': ! conversation.isForDevelopment && ! conversation.isTourPoint && ! conversation.isPrivate,
+'dev-note': conversation.isForDevelopment,
+'tour-point': conversation.isTourPoint,
+'private-comment': conversation.isPrivate,
+'signup-required': (isIdentifying || isAuthenticating) && signupRequiredForComment,
+'authenticating': isAuthenticating,
+'is-identifying': (isIdentifying || isAuthenticating) && !signupRequiredForComment,
+'is-logging-in': isLoggingIn
+}"
+>
+<header>
+<span ng-hide=" conversation.id == 0 ">
+<input
+id="conversationIsComplete"
+type="checkbox"
+ng-model="conversation.isComplete"
+ng-change="updateConversationStatus( conversation )"
+ng-disabled="( conversation.id == 0 )"
+inv-uniform
+/>
+<label
+ng-show="! marker.isComplete"
+for="commentIsComplete"
+class="mark-label"
+ng-class="{ disabled: marker.isSaved == false }"
+>
+Mark as resolved
+</label>
+<label
+ng-show="marker.isComplete"
+for="commentIsComplete"
+class="complete mark-label"
+ng-class="{ disabled: marker.isSaved == false }"
+>
+Marked resolved
+</label>
+</span>
+<!-- conversationIsComplete -->
+<div
+class="dropdown type-dropdown"
+ng-class="{ saved: !! conversation.id }"
+ng-show="showInternalOptions">
+<a data-toggle="dropdown" class="dropdown-toggle" ng-hide="!! conversation.id">
+<span class="text comment" ng-show="!conversation.isForDevelopment && !conversation.isPrivate && !conversation.isTourPoint">
+<span class="dot"></span>
+<span>Leave a Comment</span>
+</span>
+<span class="text private-comment" ng-show="!conversation.isForDevelopment && conversation.isPrivate">
+<span class="dot"></span>
+<span>Private Comment</span>
+</span>
+<span class="text dev-note" ng-show="conversation.isForDevelopment">
+<span class="dot"></span>
+<span>Note</span>
+</span>
+<span class="text tour-point" ng-show="conversation.isTourPoint">
+<span class="dot"></span>
+<span>Tour Point</span>
+</span>
+<span class="drop" ng-hide=" !! conversation.id "></span>
+</a>
+<a data-toggle="dropdown" class="dropdown-toggle dots" ng-hide="! conversation.id">
+<span class="small-dot"></span>
+<span class="small-dot"></span>
+<span class="small-dot"></span>
+</a>
+<ul class="dropdown-menu">
+<li>
+<a ng-click="setTypeAsComment()" class="comment">
+<span class="dot"></span> Comment
+</a>
+</li>
+<li ng-hide="!user.canViewPrivateComments">
+<a ng-click="setTypeAsPrivateComment()" class="private-comment">
+<span class="dot"></span> Private Comment
+</a>
+</li>
+<li ng-hide="!user.canViewPrivateComments">
+<a ng-click="setTypeAsDevNote()" class="dev-note">
+<span class="dot"></span> Note
+</a>
+</li>
+<li>
+<a ng-click="setTypeAsTourPoint()" class="tour-point">
+<span class="dot"></span> Tour Point
+</a>
+</li>
+</ul>
+</div>
+<span
+class="non-collaborator-label"
+ng-show=" !showInternalOptions"
+ng-class="{ saved: !! conversation.id }"
+>
+<span class="dot"></span> Leave a Comment
+</span>
+<button
+class="close"
+type="button"
+ng-click="closeConversation()"
+ng-hide="!! conversation.id ">
+&times;
+</button>
+</header>
+<section class="comment-content">
+<!-- BEGIN: Comments. -->
+<div
+ng-repeat="comment in comments"
+ng-init=" showDeleteCommentConfirmation = false ; "
+class="comment-item comment"
+ng-class="{
+first: $first,
+unread: comment.isUnread,
+collapsed: comment.isCollapsed,
+'first-collapsed': comment.isFirstCollapsed,
+last: $last
+}"
+inv-fade-show="!comment.isCollapsed || ( comment.isCollapsed && comment.isFirstCollapsed )">
+<!-- Special section for collapsed area -->
+<div ng-if=" comment.isCollapsed " class="collapsed-comments">
+<span ng-click="expandComments( )">View Previous Replies</span>
+</div>
+<!-- show new comment indicator -->
+<div
+ng-if=" $first && conversation.isTourPoint && comments.length > 1 "
+class="new-hrule">
+<span
+ng-pluralize
+count=" comments.length - 1 "
+when="{
+'0': '0 Replies',
+'one': '1 Reply',
+'other': '{} Replies'
+}">
+</span>
+</div>
+<div class="m-avatar" ng-class="{ 'system-avatar': comment.userHasSystemAvatar }">
+<span class="rendering">{{ comment.userInitials }}</span>
+<img ng-src="/avatars/{{ comment.userAvatarID }}" class="rendering" />
+</div>
+<div class="post-content post-emojis">
+<h2 ng-hide="$first && conversation.isTourPoint">
+<span class="name">{{ comment.userName }}</span>
+<span class="created-at">{{ comment.dateLabel }}</span>
+</h2>
+<h2 ng-show="$first && conversation.isTourPoint && comment.isEditing">
+<!-- we need to keep the spacing consistent for editing mode -->
+</h2>
+<div class="comment-item-options"
+ng-show=" !comment.isEditing "
+ng-if=" !comment.isPlaceholder "
+ng-class="{'is-collapsed': comment.isCollapsed}">
+<ul class="comment-item-options__tools">
+<!-- RAIN-4598: Temporarily disabled while it is broken. -->
+<li ng-if="false" class="view-history hidden">
+<a
+inv-history-overlay
+overlay-image="{{comment.imageUrl}}"
+overlay-marker-pos="{{getMarkerPos(conversation, screen.displayScale)}}"
+overlay-screen-data="{{getScreenDisplayData(screen)}}"
+ng-if="( ! comment.isEditing && ( comment.screenImageVersion != screen.imageVersion ) && comment.imageUrl )">
+View History
+</a>
+</li>
+<li
+class="edit-comment hidden"
+ng-show="canEdit && ( comment.isOwnedByUser || project.isOwnedByUser )"
+>
+<a ng-click="editComment( comment )">
+Edit
+</a>
+</li>
+<li
+class="delete-comment hidden"
+ng-show="canEdit && ( comment.isOwnedByUser || project.isOwnedByUser )"
+>
+<a ng-click="showDeleteConfirmation( comment, $first )">
+Delete
+</a>
+</li>
+</ul>
+<a class="comment-item-options__thumbs-up"
+ng-if=" !comment.isPlaceholder "
+ng-show=" canLike "
+ng-hide=" $first && conversation.isTourPoint "
+ng-class="{ 'liked': comment.numberOfLikes, 'by-user': comment.hasUserLiked  }"
+ng-click="toggleLike( comment )"
+inv-tooltip="{{ comment.likedByList }}">
+<i class="icon thumbs up"></i>
+{{comment.numberOfLikes}}
+</a>
+</div> <!-- post-options -->
+<div class="post-comment"
+ng-show="! comment.isEditing"
+ng-class="{'is-owner': comment.isOwnedByUser || project.isOwnedByUser}"
+ng-bind-html="comment.html"
+>
+</div>
+<div ng-if="comment.isEditing" class="editing-mode">
+<div
+inv-comment
+inv-cmd-enter="saveComment(comment)"
+comment="comment.comment"
+name="post-comment"
+screen-id="screen.id"
+class-string="{{ getClassesString('existing') }}"
+tab-index="101"
+has-emojis="true"
+has-mentions="hasInitialMentions"
+has-mention-shortcut="true"
+has-who-is-notified="false"
+></div>
+</div>
+<div
+class="sketchList"
+ng-show="comment.sketches.length > 0 && ( ! $first || ! conversation.isTourPoint )">
+<div
+ng-repeat="sketch in comment.sketches"
+class="sketch">
+<a
+class="text"
+ng-click=" startSketchViewer( sketch , conversation ) "
+ng-class="{
+editing: comment.isEditing
+}">
+<strong>{{ comment.userFirstName }}&rsquo;s attached a sketch.</strong> View?
+<span inv-tooltip="delete" class="delete" ng-show="comment.isEditing" ng-click=" deleteSketch( sketch.id )">x</span>
+</a>
+</div> <!-- sketch -->
+</div> <!-- sketchList -->
+<div class="post-buttons" ng-show="( comment.isEditing )">
+<button
+type="button"
+class="save"
+ng-show="comment.isEditing"
+tabindex="102"
+ng-click="saveComment(comment)">
+Save
+</button>
+<button
+type="button"
+class="cancel"
+ng-show="comment.isEditing"
+tabindex="103"
+ng-click="stopEditingComments( comment )">
+Cancel
+</button>
+</div>
+</div> <!-- post-content -->
+<!-- Delete confirmation for single comment. -->
+<div inv-fade-show="comment.isDeleting" class="delete-confirmation">
+<p>Delete this comment?</p>
+<div class="action">
+<a ng-click="deleteComment( comment )" class="confirm">Yes, Delete</a>
+<a ng-click="hideDeleteConfirmation( comment )" class="cancel">Cancel</a>
+</div>
+</div>
+</div>
+<!-- END: Comments. -->
+</section>
+<div class="comment-item post-new-comment">
+<div
+inv-comment-teaser
+ng-show="isShowingTeaser"
+is-shown="isShowingTeaser"
+has-initial-mentions="hasInitialMentions"
+ng-click="showNewCommentForm()"
+screen-id="screen.id"
+conversation="comments"
+>
+</div>
+<div
+ng-if="! isShowingTeaser"
+class="post post-emojis"
+>
+<div class="post-comment">
+<div
+inv-comment
+inv-cmd-enter="submitForm({ comment: newComment })"
+ng-hide="hideCommentInput"
+comment="newComment"
+conversation="conversation"
+name="post-comment"
+screen-id="screen.id"
+class-string="{{ getClassesString('existing') }}"
+placeholder="Leave a comment..."
+tab-index="201"
+on-focus-callback="showCommentInput()"
+has-emojis="true"
+has-who-is-notified="true"
+has-mentions="hasInitialMentions"
+has-mention-shortcut="true"
+></div>
+<span
+class="footer actions"
+ng-class="{
+'new-tour-point': !conversation.id && conversation.isTourPoint,
+'no-teaser': !hasInitialMentions
+}"
+>
+<button
+class="button submitComment"
+type="button"
+tabindex="202"
+delay="1400"
+ng-if="signupRequiredForComment"
+ng-click="submitForm({ comment: newComment })"
+inv-success-button
+after-success="closeCommentFormOnSave(conversation.id)"
+>
+Post
+</button>
+<button
+class="button submitComment"
+type="button"
+tabindex="202"
+delay="1400"
+ng-if="!signupRequiredForComment"
+ng-click="submitForm({ comment: newComment })"
+inv-success-button
+after-success="closeCommentFormOnSave(conversation.id)"
+>
+Send
+</button>
+</span> <!-- footer -->
+</div> <!-- post-comment -->
+</div> <!-- post -->
+</div>
+<!-- Delete confirmation for entire conversation. -->
+<div inv-fade-show="isDeleting" class="delete-confirmation delete-conversation">
+<p>Delete this <strong>entire</strong> conversation?</p>
+<div class="action">
+<a ng-click="deleteConversation( conversation )" class="btn btn-small flat dkgray">Yes, Delete</a>
+<a ng-click="hideDeleteConfirmation()" class="cancel">Cancel</a>
+</div>
+</div>
+<!-- Identification Form -->
+<div
+inv-fade-show="isIdentifying"
+class="overlay identification"
+ng-class="{ 'signup-required': signupRequiredForComment }"
+>
+<div class="form">
+<div ng-if="!signupRequiredForComment">
+<h2>Let us know who you are</h2>
+<h3>In order to leave a comment, we need to know who you are.</h3>
+</div>
+<div ng-if="signupRequiredForComment">
+<h2>Sign Up and Post Your Comment</h2>
+<h3>To send your comment, create a free InVision account.</h3>
+</div>
+<div class="field" ng-class="{ 'defined': identity.name.length }">
+<input
+type="text"
+id="identity.name"
+ng-disabled="isSigningUp"
+ng-model="identity.name"
+inv-autofocus
+tabindex="301"
+/>
+<label for="identity.name">
+Your name
+</label>
+</div>
+<div class="field" ng-class="{ 'defined': identity.email.length }">
+<input
+type="text"
+id="identity.email"
+ng-disabled="isSigningUp"
+ng-model="identity.email"
+tabindex="302"
+/>
+<label for="identity.email">Email address</label>
+</div>
+<div
+ng-if="signupRequiredForComment"
+class="field"
+ng-class="{ 'defined': identity.password.length }"
+>
+<input
+type="password"
+id="identity.password"
+ng-disabled="isSigningUp"
+ng-model="identity.password"
+tabindex="303"
+/>
+<label for="identity.password">Password</label>
+</div>
+<div ng-show="errorMessage" class="alert alert-error">
+{{ errorMessage }}
+</div>
+<div class="actions">
+<button
+class="close"
+type="button"
+ng-click="closeIdentifyForm()"
+>
+Cancel
+</button>
+<!-- only one of the two buttons below will be shown; they have the same tab index -->
+<button
+class="button"
+type="button"
+ng-if="!signupRequiredForComment"
+ng-click="submitForm({ comment: newComment })"
+tabindex="304"
+>
+Submit
+</button>
+<button
+class="button"
+type="button"
+ng-disabled="isSigningUp"
+ng-if="signupRequiredForComment"
+ng-click="submitFormSignup({ comment: newComment })"
+tabindex="304"
+>
+{{ isSigningUp ? "Signing Up" : "Sign Up" }}
+</button>
+</div>
+</div> <!-- form -->
+<div class="terms" ng-if="signupRequiredForComment">
+By creating an account I agree to InVision's<br>
+<a href="http://www.invisionapp.com/terms_of_service" target="_blank">Terms of Service</a> and
+<a href="https://www.invisionapp.com/privacy" target="_blank">Privacy Policy</a>.
+</div>
+<div ng-if="signupRequiredForComment" class="login-prompt">
+Already have an account? <a ng-click="openLoginForm()">Sign in</a>
+</div>
+</div> <!-- identification -->
+<div inv-fade-show="isLoggingIn" class="overlay login">
+<div class="form">
+<h2 class="login-header">Sign in and post your comment</h2>
+<h3>To send your comment, sign in to InVision</h3>
+<div class="field" ng-class="{ 'defined': identity.email.length }">
+<input
+type="text"
+inv-autofocus
+id="identity.login-email"
+ng-model="identity.email"
+tabindex="302"
+/>
+<label for="identity.login-email">Email address</label>
+</div>
+<div
+class="field"
+ng-class="{ 'defined': identity.password.length }"
+>
+<input
+type="password"
+id="identity.login-password"
+ng-model="identity.password"
+tabindex="303"
+/>
+<label for="identity.login-password">Password</label>
+<a href="/d/password/requestReset" class="forgot-password">Forgot password?</a>
+</div>
+<div
+ng-show="errorMessage"
+class="alert alert-error"
+ng-bind-html="errorMessage"
+>
+</div>
+<button
+class="button big-login"
+type="button"
+ng-click="submitLoginForm()"
+>
+Sign In
+</button>
+</div>
+<div class="login-prompt">
+Don't have an account? <a ng-click="closeLoginForm()">Sign up</a>
+</div>
+</div>
+<div inv-fade-show="isAuthenticating" class="overlay authentication">
+<div class="form">
+<div class="m-avatar" ng-class="{ 'system-avatar': user.hasSystemAvatar }">
+<span class="rendering">{{ user.tempInitials }}</span>
+<img class="rendering" ng-src="/avatars/{{ user.tempAvatar }}" />
+</div>
+<h2>We've recognized that account, what's the password?</h2>
+<h3>Enter your password to leave a comment</h3>
+<div class="field" ng-class="{ 'defined': identity.name.length }">
+<input
+type="password"
+id="identity.password"
+ng-model="identity.password"
+inv-autofocus
+tabindex="301"
+/>
+<label for="identity.name">
+Password
+</label>
+</div>
+<div
+ng-show="errorMessage"
+class="alert alert-error"
+ng-bind-html="errorMessage"
+>
+</div>
+<div class="actions">
+<button
+class="close"
+type="button"
+ng-click="closeIdentifyForm()"
+>
+Cancel
+</button>
+<button
+class="button"
+type="button"
+ng-click="submitFormPassword()"
+tabindex="302"
+>
+Post Comment
+</button>
+</div>
+</div> <!-- form -->
+</div> <!-- authentication -->
+<div class="comment-thread__footer">
+<!-- placeholder to avoid that the bottom toolbar overlaps the comment-content -->
+</div>
+</div> <!-- comment-thread -->
+</form>
+</script><script type="text/ng-template" id="/assets/apps/share/views/svg-sprite.htm"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<symbol id="svg-sprite-modal-close" viewBox="0 0 39.123 39.123">
+<path fill-rule="evenodd" d="M2.06045532.2926941L.2926941 2.06048583c-.39025879.39025879-.39025879 1.02392578 0 1.41418457l16.08666992 16.08670044L.2926941 35.64804077c-.39025879.3902588-.39025879 1.0239563 0 1.41421509l1.76776123 1.76776123c.3902588.39025879 1.0239563.3902893 1.41421509 0l16.08670044-16.08666992 16.08666992 16.08666992c.3902588.39025879 1.02392578.39025879 1.41421509 0l1.76776123-1.76776123c.39025879-.39025879.39025879-1.0239563 0-1.41421509L22.74334717 19.56137085 38.83001709 3.47470093c.39025879-.3902893.39025879-1.0239563 0-1.41421509L37.06222534.29269409c-.39025879-.39025879-1.02392578-.39025879-1.41418457 0L19.56137085 16.37936401 3.47467041.2926941c-.39025879-.39025879-1.0239563-.39025879-1.41421509 0z" />
+</symbol>
+</svg>
+</script><script type="text/ng-template" id="/assets/apps/share/views/layouts/modal.htm"><div ng-controller="layouts.ModalController" class="l-modal">
+<div ng-if="subview == 'error'" ng-include=" '/assets/apps/share/views/modal/error.htm' "></div>
+<div ng-if="subview == 'auth'" ng-include=" '/assets/apps/share/views/modal/auth.htm' "></div>
+<div ng-if="subview == 'welcomeUser'" ng-include=" '/assets/apps/share/views/modal/welcome-user.htm' "></div>
+</div>
+</script><script type="text/ng-template" id="/assets/apps/share/views/toolbar/toolbar.htm">
+<div
+ng-controller="toolbar.ToolbarController"
+ng-show="( includeBrowseTool || includeCommentsTool )"
+ng-mouseenter="updateIsUserOverToolbar( true )"
+ng-mouseleave="updateIsUserOverToolbar( false )"
+ng-hide="( share.isEmbed || hideNavBar )"
+class="m-toolbar">
+<div
+class="requestAccessOverlay"
+ng-if="(isShowingSmsForm || $parent.isInspectOpen)"
+ng-click="toggleRequestAccessOverlay()"
+>
+</div>
+<!-- iPhone projects -->
+<div
+id="shareSMS"
+inv-fade-show="isShowingSmsForm"
+ng-if=" deviceTemplate.deviceType == 'phone' && !! shareUrl "
+ng-class="{
+'no-comments': ! includeCommentsTool,
+'no-browse': ! includeBrowseTool,
+'has-qr-code': QRCodeEnabled
+}">
+<div class="smsForm" inv-fade-show="isShowingSmsForm" duration="slow" >
+<a ng-click="toggleSmsShareForm()" class="closeButton"><img src="assets/apps/share/img/close5-V2.png" alt="Close" /></a>
+<h2>View on your mobile phone</h2>
+<div class="qr-code-container" ng-if="QRCodeEnabled">
+<p>Scan the QR code with your mobile device.</p>
+<img ng-src="{{qrCodeUrl}}"/>
+</div>
+<p ng-if="QRCodeEnabled">or enter your mobile phone number and we'll text you a link.</p>
+<p ng-if="!QRCodeEnabled">Enter your mobile phone number and we'll text you a link.</p>
+<input 	inv-i8n-telephone
+type="text"
+class="phoneNumber"
+country-code="share.countryCode"
+ng-class="{ messageSent: sms.messageSent }"
+ui-keypress="{13:'sendShareSms()'}"
+name="phoneNumber"
+placeholder="Enter mobile number"
+ng-model="sms.phoneNumber">
+<button ng-click="sendShareSms()">
+Send
+</button>
+<div class="message">
+{{sms.message}}
+</div>
+</div>
+</div>
+<!-- Request Access Form -->
+<div
+id="requestAccessForm"
+inv-fade-show="$parent.isInspectOpen"
+ng-class="{
+'use-inspect': isUseInspect,
+'role-join': isRoleJoin,
+'request-access-prototype': isRequestAccessPrototype,
+'ent-request-access-prototype': isEntRequestAccessPrototype,
+'ent-request-access-team': isEntRequestAccessTeam,
+'unauthenticated': !isAuthenticated,
+'no-inspect': noInspect,
+'adjust-for-flow': includeFlowTool
+}"
+>
+<div class="step-container">
+<!--
+Since the signature for the request-inspect URL is being loaded async, we
+have an edge-case in which the signature hasn't been loaded yet at the
+time this UI is shown. As such, don't let the user click-through to the
+request-inspect URL until we know that the URL has been generated.
+-->
+<div
+ng-if="( ! requestInspectAccessUrl )"
+class="inspect-click-guard">
+<span class="inspect-click-guard__message">
+Loading...
+</span>
+</div>
+<a ng-click="trackRequestWindowClose();toggleRequestAccess();" class="close-inspect">
+<img
+src="assets/apps/share/img/close5-V2.png"
+class="close-inspect-img"
+/>
+</a>
+<div class="request-access-step-1" ng-hide="$parent.step === 4" ng-class="{
+on: $parent.step === 1,
+left: $parent.step != 1
+}">
+<img
+src="assets/apps/share/img/request-access-hero.svg"
+class="request-access-hero"
+/>
+<h2>Get pixel-perfect code in a click</h2>
+<p ng-if="isUseInspect && isAuthenticated">To use Inspect to download assets for your developers, you need to have access to this prototype.</p>
+<p ng-if="isRoleJoin && isAuthenticated">To use Inspect, join this prototype as a collaborator.</p><!-- Use case for role based join -->
+<p ng-if="isRequestAccessPrototype && isAuthenticated">To use Inspect, you'll need to request access to this prototype as a collaborator.</p>
+<p ng-if="isEntRequestAccessPrototype && isAuthenticated">To use Inspect, you'll need the team owner to add you to this prototype as a collaborator.</p>
+<p ng-if="isEntRequestAccessTeam && isAuthenticated">To use Inspect to download assets for your developers, you'll need to request access to this team and prototype.</p>
+<p ng-if="(isEntRequestAccessPrototype || isEntRequestAccessTeam) && !isAuthenticated">To use Inspect to download assets for your developers, you need to be a member of this team</p>
+<p ng-if="!isEntRequestAccessPrototype && !isEntRequestAccessTeam && !isAuthenticated">To use Inspect to download assets for your developers, you need to have access to this prototype</p>
+<button
+class="form__button"
+ng-disabled="isRequestingAccess"
+ng-click="clickRequestCTA()"
+>
+{{ isUseInspect ? "Use Inspect" : isRoleJoin ? "Join prototype" : "Request access" }}
+</button>
+<p ng-if="!isAuthenticated" class="signin">
+Already a member? <a ng-click="trackRequestAccessSignIn()" href="{{ requestInspectAccessUrl }}">Sign in</a>
+</p>
+</div>
+<div class="request-access-step-2" ng-class="{
+on: $parent.step === 2,
+left: $parent.step > 2,
+right: $parent.step < 2
+}">
+<form
+ng-controller="toolbar.FormController"
+ng-keydown="$event.which === 13 && handleKeyDownAuth($event)">
+<a ng-click="requestAccessBack()" class="nav-back">BACK</a>
+<h2>Ask for an invite</h2>
+<p>We'll ask the team owner to give you access to the team, prototype, and Inspect.</p>
+<label class="form__label" for="identity.request-email">Your email</label>
+<input
+type="text"
+id="identity.request-email"
+ng-model="identity.email"
+tabindex="302"
+class="form__input"
+placeholder="julie@widgetco.com"
+/>
+<label class="form__label" for="identity.request-name">Your name</label>
+<input
+type="text"
+id="identity.request-name"
+ng-model="identity.name"
+tabindex="303"
+class="form__input"
+placeholder="Julie Appleseed"
+/>
+<div>
+<button
+class="form__button"
+type="button"
+ng-disabled="isRequestingAccess"
+ng-click="submitRequestAccess()"
+>
+Request access
+</button>
+</div>
+</form>
+</div>
+<div class="request-access-step-3" ng-class="{
+on: $parent.step === 3,
+left: $parent.step > 3,
+right: $parent.step < 3
+}">
+<img
+src="assets/apps/share/img/request-access-sent.svg"
+class="request-access-sent"
+/>
+<h2>Sent!</h2>
+<p>Your request is en route to the team owner's inbox. Once it's accepted, we'll email you an invite to use Inspect.</p>
+<div>
+<button
+class="form__button"
+type="button"
+ng-click="closeRequestForm()"
+>
+Back to prototype
+</button>
+</div>
+</div>
+<div class="request-access-step-none" ng-class="{
+on: $parent.step === 4,
+right: $parent.step != 4
+}" ng-show="$parent.step === 4">
+<img
+src="assets/apps/share/img/request-access-hero.svg"
+class="request-access-hero"
+/>
+<h2>Get pixel-perfect code with Inspect.</h2>
+<p>Use Inspect to pull developer assets directly from your prototype.</p>
+<div>
+<a
+class="form__button"
+ng-click="trackRequestLearnHow()"
+ng-href="https://www.invisionapp.com/feature/inspect"
+target="_blank"
+>
+Learn how
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- BEGIN: Toolbar. -->
+<div
+inv-toolbar
+class="toolbar"
+ng-class="{
+active: isActive,
+'initialized':  $parent.UILoaded,
+'off': ( isBrowseOpen || isFlowOpen )
+}">
+<div class="tools">
+<div
+ng-if=" deviceTemplate.deviceType == 'phone' && !! shareUrl && ! user.isAnonymous"
+class="tool share-sms-tool"
+ng-class="{ on: isShowingSmsForm }">
+<div class="description" ng-click="toggleSmsShareFormV2()">
+<i class="toolbar-menu-device"></i>
+<span class="device-text">View on mobile</span>
+</div>
+</div>
+<div
+ng-show="includeCommentsTool"
+ng-class="{
+'no-browse': !includeBrowseTool && ( deviceTemplate.deviceType != 'phone' )
+}"
+class="tool comments-toggle-tool">
+<div class="clickable" ng-mouseenter="handleCommentWidth($event)" ng-mouseleave="isShowingComments ? '' : commentWidth=0"></div>
+<div ng-class="{ on: $parent.isCommentContextOpen }" class="comment-context">
+<ul>
+<li ng-repeat="option in typeFilterOptions" ng-hide="(option.isPrivate && !user.canViewPrivateComments)">
+<a ng-click="changeTypeFilter( option )" ng-class="{ on: filters.type === option || (option.label === 'All Types' && filters.type.value === 'all') }" ng-hide="option.label==='All Types'">
+<span ng-hide="option.label==='All Types'">{{ option.label }} </span>
+({{ option.count }})
+</a>
+</li>
+<li class="resolved-context">
+<a ng-click="changeShowCompletedFilterV2()" ng-class='{ on: filters.showCompleted.value }'>
+<span class="comment-context-divider"></span>
+<span>Resolved</span>
+<span>({{ filters.showCompleted.count }})</span>
+<label class="switch">
+<span class="slider" ng-class="{ on: filters.showCompleted.value }"></span>
+</label>
+</a>
+</li>
+</ul>
+</div>
+<div class="description" ng-click="toggleContextMenu()" ng-mouseenter="handleCommentWidth($event)" ng-mouseleave="isShowingComments ? '' : commentWidth=0">
+<i class="comment-count-old"></i>
+<span class="comment-text" style="width: {{ commentWidth }}">Comments {{ commentCount > 0 && !isAuthenticated ? "(" + commentCount + ")" : "" }}</span>
+<i class="comment-context-arrow"></i>
+</div>
+<div class="comment-bubble" ng-if="unreadCommentCount && isAuthenticated">{{ unreadCommentCount }}</div>
+<div class="comment-bubble unauthenticated" ng-if="!isAuthenticated && commentCount > 0"></div>
+<div ng-model="isShowingComments" inv-toggle class="comment-toggle-controller"></div>
+</div>
+<div ng-show="showInspectTool" class="tool inspect-toggle-tool" ng-class="{ on: $parent.isInspectOpen }">
+<div class="description" ng-click="toggleRequestAccess()">
+<i class="toolbar-inspect-sprite"></i>
+<span class="inspect-text">Inspect</span>
+</div>
+</div>
+<div
+ng-show="includeFlowTool"
+ng-class="{ on: isFlowOpen }"
+class="tool flow-toggle-tool">
+<div ng-click="toggleFlow()" class="description">
+<i class="toolbar-flow-sprite"></i>
+<span class="flow-text">
+Flow
+</span>
+</div>
+</div>
+<div
+ng-show="includeBrowseTool"
+ng-class="{ on: isBrowseOpen }"
+class="tool browse-toggle-tool" ng>
+<div class="description" ng-click="toggleBrowse()" ng-mouseenter="handleBrowseWidth($event)" ng-mouseleave="browseWidth=0">
+<i class="toolbar-menu-sprite"></i>
+<span class="browse-text" style="width: {{ browseWidth }}">Screens ({{ $parent.screenCnt }})</span>
+</div>
+</div>
+</div>
+</div>
+<!-- END: Toolbar. -->
+</div>
+</script><script type="text/ng-template" id="/assets/apps/common/views/directives/mobile-transition-layer.htm"><div class="inner">
+<div class="inner2">
+<div
+id="current-screen"
+class="current-screen"
+ng-if="currentScreen"
+ng-style="{
+'background-color': getBackgroundColor(currentScreen)
+}">
+<img
+ng-src="{{ getImageUrl( currentScreen.imageUrl ) }}"
+height="{{ Math.round(currentScreen.height * (currentScreen.displayScale || screen.displayScale)) }}"
+width="{{ Math.round(currentScreen.width * (currentScreen.displayScale || screen.displayScale)) }}" />
+<div
+class="fixed-header"
+ng-style="{
+height: (currentScreen.fixedHeaderHeight * (currentScreen.displayScale || screen.displayScale)),
+marginTop: pushDownFixedHeader
+}">
+<img
+ng-src="{{ getImageUrl( currentScreen.imageUrl ) }}"
+height="{{ Math.round(currentScreen.height * (currentScreen.displayScale || screen.displayScale)) }}"
+width="{{ Math.round(currentScreen.width * (currentScreen.displayScale || screen.displayScale)) }}" />
+</div>
+<div
+class="fixed-footer"
+ng-style="{
+height: (currentScreen.fixedFooterHeight * (currentScreen.displayScale || screen.displayScale))
+}">
+<img
+ng-src="{{ getImageUrl( currentScreen.imageUrl ) }}"
+height="{{ Math.round(currentScreen.height * (currentScreen.displayScale || screen.displayScale)) }}"
+width="{{ Math.round(currentScreen.width * (currentScreen.displayScale || screen.displayScale)) }}" />
+</div>
+</div>
+<div
+id="next-screen"
+ng-if="targetScreen"
+class="target-screen"
+ng-style="{
+'background-color': getBackgroundColor(targetScreen)
+}">
+<img
+ng-src="{{ getImageUrl( targetScreen.imageUrl ) }}"
+height="{{ Math.round(targetScreen.height * (targetScreen.displayScale || screen.displayScale)) }}"
+width="{{ Math.round(targetScreen.width * (targetScreen.displayScale || screen.displayScale)) }}" />
+<div
+class="fixed-header"
+ng-style="{
+height: (targetScreen.fixedHeaderHeight * (targetScreen.displayScale || screen.displayScale)),
+marginTop: pushDownFixedHeader
+}">
+<img
+ng-src="{{ getImageUrl( targetScreen.imageUrl ) }}"
+height="{{ Math.round(targetScreen.height * (targetScreen.displayScale || screen.displayScale)) }}"
+width="{{ Math.round(targetScreen.width * (targetScreen.displayScale || screen.displayScale)) }}" />
+</div>
+<div
+class="fixed-footer"
+ng-style="{
+height: (targetScreen.fixedFooterHeight * (targetScreen.displayScale || screen.displayScale))
+}">
+<img
+ng-src="{{ getImageUrl( targetScreen.imageUrl ) }}"
+height="{{ Math.round(targetScreen.height * (targetScreen.displayScale || screen.displayScale)) }}"
+width="{{ Math.round(targetScreen.width * (targetScreen.displayScale || screen.displayScale)) }}" />
+</div>
+</div>
+<div
+id="transition-picture-{{picture.id}}"
+ng-repeat="picture in transitionScreens track by picture.id"
+ng-style="{
+'background-color': getBackgroundColor(picture)
+}"
+ng-class="{
+'current-screen': picture.id == transitionScreen.id,
+'target-screen': picture.id == transitionData.targetScreen.id
+}"
+class="transition-picture">
+<img
+ng-src="{{ getImageUrl( picture.imageUrl ) }}"
+height="{{ Math.round(picture.height * (picture.displayScale || screen.displayScale)) }}"
+width="{{ Math.round(picture.width * (picture.displayScale || screen.displayScale)) }}" />
+<div
+class="fixed-header"
+ng-style="{
+height: (picture.fixedHeaderHeight * (picture.displayScale || screen.displayScale)),
+marginTop: pushDownFixedHeader
+}">
+<img
+ng-src="{{ getImageUrl( picture.imageUrl ) }}"
+height="{{ Math.round(picture.height * (picture.displayScale || screen.displayScale)) }}"
+width="{{ Math.round(picture.width * (picture.displayScale || screen.displayScale)) }}" />
+</div> <!-- fixed-header -->
+<div
+class="fixed-footer"
+ng-style="{
+height: (picture.fixedFooterHeight * (picture.displayScale || screen.displayScale))
+}">
+<img
+ng-src="{{ getImageUrl( picture.imageUrl ) }}"
+height="{{ Math.round(picture.height * (picture.displayScale || screen.displayScale)) }}"
+width="{{ Math.round(picture.width * (picture.displayScale || screen.displayScale)) }}" />
+</div> <!-- fixed-footer -->
+</div> <!-- current-picture -->
+</div><!-- inner2 -->
+</div> <!-- inner -->
+</script>
+	
+
+
+</body>
+</html>
