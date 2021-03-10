@@ -27,7 +27,7 @@ Our MVP should have:
 
 
 ## Members
-- [Santiage Datte](https://github.com/sdarre) (Sprint 1 Project Owner)
+- [Santiage Darré](https://github.com/sdarre) (Sprint 1 Project Owner)
 - [Ari Khaytser](https://github.com/ajk745)  (Sprint 1 Scrum Master)
 - [Maggie Pierce](https://github.com/m-ggie)
 - [Alex Hammer](https://github.com/ah4597)
