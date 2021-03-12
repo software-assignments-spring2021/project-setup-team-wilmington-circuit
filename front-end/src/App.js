@@ -1,5 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
+import getTestData from'./testData'
+
+getTestData(1).then(data => {
+  data.forEach(classItem => console.log(classItem))
+})
 
 function App() {
   return (
