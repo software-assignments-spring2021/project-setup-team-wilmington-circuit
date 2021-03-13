@@ -1,15 +1,17 @@
 import logo from './logo.svg';
 import './App.css';
 import getTestData from'./testData'
+import ScheduleCalendar from './ScheduleCalendar'
 
 getTestData.getTestClassIDs(1).then(data => {
-  data.forEach(id => console.log(getTestData.getClassInfo(id)))
+  data.forEach(id => getTestData.getClassInfo(id).then(classEvent =>console.log(classEvent)))
 })
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <ScheduleCalendar classIDs={[7619]} />
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
