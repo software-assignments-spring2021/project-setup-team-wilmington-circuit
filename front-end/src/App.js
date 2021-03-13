@@ -1,3 +1,6 @@
+
+import logo from './logo.svg';
+import getTestData from'./testData'
 import React from 'react'
 import { Button, Nav, Navbar, NavItem, NavDropdown, NavLink, Form, FormControl, Container, Row, Col} from 'react-bootstrap';
 import Header from './Header'
