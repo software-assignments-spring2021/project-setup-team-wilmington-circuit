@@ -1,7 +1,6 @@
 import React from 'react'
 import { Button, Nav, Navbar, NavItem, NavDropdown, NavLink, Form, FormControl } from 'react-bootstrap';
-import logo from './NYU-Logo-1.png'; 
-import './main.css';
+import '../main.css';
 
 const sampleClassObj = {
   className: "Agile (CSCIUA 480)",

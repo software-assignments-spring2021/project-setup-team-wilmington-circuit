@@ -1,9 +1,9 @@
 import React from 'react'
 import { Button, Nav, Navbar, NavItem, NavDropdown, NavLink, Form, FormControl, Container, Row, Col} from 'react-bootstrap';
-import logo from './NYU-Logo-1.png'; 
-import avatar from './profile-pic.png';
+import logo from '../images/NYU-Logo-1.png'; 
+import avatar from '../images/profile-pic.png';
 import HeaderProfile from './HeaderProfile'
-import './main.css';
+import '../main.css';
 
 
 export default function Header() {
