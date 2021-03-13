@@ -2,8 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import getTestData from'./testData'
 
-getTestData(1).then(data => {
-  data.forEach(classItem => console.log(classItem))
+getTestData.getTestClassIDs(1).then(data => {
+  data.forEach(id => console.log(getTestData.getClassInfo(id)))
 })
 
 function App() {
