@@ -53,6 +53,8 @@ const ScheduleCalendar = props => {
             nowIndicator = {true}
             nowIndicatorClassNames = {['nowIndicator']}
             bootstrapFontAwesome={false}
+            scrollTime='08:00:00'
+            aspectRatio= {3}
             headerToolbar={{
               left: 'prev,next today',
               center: 'title',
