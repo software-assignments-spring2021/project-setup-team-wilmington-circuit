@@ -2,16 +2,21 @@ import logo from './logo.svg';
 import './App.css';
 import getTestData from'./testData'
 import ScheduleCalendar from './ScheduleCalendar'
+import { useEffect, useState } from 'react';
 
-getTestData.getTestClassIDs(1).then(data => {
-  data.forEach(id => getTestData.getClassInfo(id).then(classEvent =>console.log(classEvent)))
-})
 
 function App() {
+  const [enrolledClasses, setEnrolledClasses] = useState([])
+  useEffect(()=>{
+    setEnrolledClasses([])
+    getTestData.getTestClassIDs(4).then(classIDs => classIDs.forEach(id => {
+      setEnrolledClasses([id])
+    }))
+  }, [])
   return (
     <div className="App">
       <header className="App-header">
-        <ScheduleCalendar classIDs={[7619]} />
+        <ScheduleCalendar classIDs={enrolledClasses} style="width: 100%" />
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
