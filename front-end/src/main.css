@@ -1,3 +1,7 @@
+body {
+    align-items: center;
+}
+
 .profile-pic {
     border-radius: 50px;
     margin-top: 10px;

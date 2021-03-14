@@ -5,7 +5,8 @@
     width: 100%;
     color: black;
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    font-size: smaller;
+    font-size: 1rem im !important;
+    height: 90vh;
 }
 
 .fc-header-toolbar {
@@ -23,7 +24,18 @@
 
 .scheduleEvent {
     border-radius: 0;
-    border-top: purple solid 5px;
-    font-size: small;
+    font-size: 1em;
+    overflow-wrap: break-word;
     overflow: hidden;
+}
+
+@media screen and (max-width: 840px) {
+    .scheduleEvent .classTime, .scheduleEvent .classDetails {
+        display: none;
+        visibility: hidden;
+    } 
+    .scheduleEvent {
+        margin-top: 0;
+        padding: 0;
+    }
 }

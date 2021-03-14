@@ -1,8 +1,6 @@
 
-import logo from './logo.svg';
-import './App.css';
 import getTestData from'./testData'
-import ScheduleCalendar from './ScheduleCalendar'
+import ScheduleCalendar from './components/ScheduleCalendar'
 import { useEffect, useState } from 'react';
 import React from 'react'
 import { Button, Nav, Navbar, NavItem, NavDropdown, NavLink, Form, FormControl, Container, Row, Col} from 'react-bootstrap';
@@ -20,7 +18,7 @@ function App() {
     }))
   }, [])
   return (
-    <div>
+    <div align = "center">
       <Header></Header>
       <ScheduleCalendar classIDs={enrolledClasses} style="width: 100%" />
     </div> 

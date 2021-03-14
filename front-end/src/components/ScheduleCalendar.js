@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './ScheduleCalendar.css'
 //import '@fortawesome/fontawesome-free/css/all.css'; // needs additional webpack config!
 
-import { getClassInfo } from './testData'
+import { getClassInfo } from '../testData'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useEffect, useState } from 'react';
 
@@ -54,7 +54,9 @@ const ScheduleCalendar = props => {
             nowIndicatorClassNames = {['nowIndicator']}
             bootstrapFontAwesome={false}
             scrollTime='08:00:00'
-            aspectRatio= {3}
+            expandRows={true}
+            slotDuration='00:15:00'
+            slotLabelInterval='01:00:00'
             headerToolbar={{
               left: 'prev,next today',
               center: 'title',
@@ -81,14 +83,15 @@ const ScheduleCalendar = props => {
 }
 
 const renderEventContent = eventInfo => {
+    if(eventInfo.view.type === "timeGridWeek")
     return (
-        <>
-            <b>{eventInfo.timeText}</b>
-            <br></br>
+        <div class="timeGridEvent">
+            <h className="classTime">{eventInfo.timeText}<br></br></h>
+            
             <b>{eventInfo.event.title}</b>
             <br></br>
-            <i>{eventInfo.event.extendedProps.location} - {eventInfo.event.extendedProps.campus || 'NYU'}</i>
-        </>
+            <i className="classDetails">{eventInfo.event.extendedProps.location} - {eventInfo.event.extendedProps.campus || 'NYU'}</i>
+        </div>
     )
 }
 
