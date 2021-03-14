@@ -14,13 +14,14 @@ function App() {
   useEffect(()=>{
     setEnrolledClasses([])
     getTestData.getTestClassIDs(4).then(classIDs => classIDs.forEach(id => {
-      setEnrolledClasses([id])
+      setEnrolledClasses(prev => [...prev, id])
     }))
   }, [])
   return (
     <div align = "center">
       <Header></Header>
-      <ScheduleCalendar classIDs={enrolledClasses} style="width: 100%" />
+      {enrolledClasses.map(classID => {console.log(enrolledClasses); return (<Class classID={classID}></Class>)})} 
+      <ScheduleCalendar classIDs={[enrolledClasses[enrolledClasses.length - 1]]} style="width: 100%" />
     </div> 
   )
 }

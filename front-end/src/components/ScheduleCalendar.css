@@ -13,9 +13,14 @@
     margin: 5px;
 }
 
-.fc button, .fc-button, .fc-button-primary, .fc-button-active {
-    border-color: white;
+.fc button, .fc-button, .fc-button-primary {
+    /*background-color: purple !important;
+    border-color: white !important;*/
     border-radius: 0;
+}
+
+.fc-button.active {
+    outline: purple !important;
 }
 
 .fc .nowIndicator{
