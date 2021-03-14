@@ -1,0 +1,29 @@
+.fc {
+    background-color: white;
+    border-radius: 0;
+    border-top: purple solid 5px;
+    width: 100%;
+    color: black;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: smaller;
+}
+
+.fc-header-toolbar {
+    margin: 5px;
+}
+
+.fc button, .fc-button, .fc-button-primary, .fc-button-active {
+    border-color: white;
+    border-radius: 0;
+}
+
+.fc .nowIndicator{
+    background: purple;
+}
+
+.scheduleEvent {
+    border-radius: 0;
+    border-top: purple solid 5px;
+    font-size: small;
+    overflow: hidden;
+}
