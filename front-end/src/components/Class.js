@@ -43,7 +43,7 @@ export default function Header(props) {
           </div>
           <div class="card-body">
               <div style = {{float: 'right'}}>
-                <a href="/" class="btn btn-secondary">Details</a>
+                <ClassDetails></ClassDetails>
               </div>
               <p class="card-text">{classObject.instructors  ? classObject.instructors.toString() : 'TBD'} - {classObject.location}</p>
               <p class="card-text">{classObject.meetings ? getTimeFormat(classObject.meetings) : 'No Date'}</p>
