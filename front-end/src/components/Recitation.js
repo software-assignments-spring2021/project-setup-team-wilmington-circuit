@@ -11,8 +11,8 @@ export default function Recitation() {
     return (
        <div class="card mx-auto border-secondary mb-3 mt-3">
           <Card.Body>
-              <p class="card-text">{sampleRecitation.instructor}, {sampleRecitation.location}</p>
-              <p class="card-text">{sampleRecitation.date}</p>
+              <Card.Text>{sampleRecitation.instructor}, {sampleRecitation.location}</Card.Text>
+              <Card.Text>{sampleRecitation.date}</Card.Text>
           </Card.Body>
        </div> 
     )
