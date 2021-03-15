@@ -2,18 +2,22 @@ import React from "react"
 import {Button, Modal} from "react-bootstrap";
 import Recitation from "./Recitation";
 
-const sampleClass = {
-	name: "CSO (CSCI-UA.0201)",
-	professor: "Joanna Klukowska",
-	location: "Online",
-	date: "Tue, Thu - 12:30 - 1:45PM",
-	status: "Open",
-	department: "Computer Science",
-	description: "Covers the internal structure of computers, machine (assembly) language programming, and the use of pointers in high-level languages. Topics include the logical design of computers, computer architecture, the internal representation of data, instruction sets, and addressing logic, as well as pointers, structures, and other features of high-level languages that relate to assembly language. Programming assignments are in both assembly language and other languages.",
-	recitations: {}
-};
+const desc = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam est augue, facilisis eu mauris nec, faucibus facilisis eros. Etiam id mi sed justo elementum consequat sit amet vel turpis. Nullam et ornare tortor. Proin consequat quis nibh eget facilisis. Etiam erat velit, cursus in urna ut, tristique tincidunt augue. Nulla sapien quam, suscipit id metus vel, vestibulum tincidunt sem. Nam.";
+const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-export default function ClassDetails() {
+function getTimeFormat(meetings){
+  let meetingList = []
+  meetings.forEach(meeting => {
+    const meetingDate = new Date(meeting.beginDate)
+    meetingList.push(
+      `${weekday[meetingDate.getDay()]} ${meetingDate.toLocaleTimeString('en-US', {timeStyle: 'short'})}`
+    )
+
+  })
+  return meetingList.join(', ');
+}
+
+export default function ClassDetails(props) {
 	const [show, setShow] = React.useState(false);
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);	
@@ -25,17 +29,16 @@ export default function ClassDetails() {
 		
 			<Modal show={show} onHide={handleClose}>
 				<Modal.Header closeButton>
-					<Modal.Title><b>{sampleClass.name}</b></Modal.Title>
+					<Modal.Title><b>{props.name}</b> ({props.registrationNumber})</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<p><b>Department: </b>{sampleClass.department}</p>
-					<p><b>Instructor: </b>{sampleClass.professor}</p>
-					<p><b>Location: </b>{sampleClass.location}</p>
-					<p><b>Time: </b>{sampleClass.date}</p>
-					<p><b>Status: </b>{sampleClass.status}</p>
-					<b>Description:</b><p>{sampleClass.description}</p>
-					<b>Recitations:</b>
-					<Recitation></Recitation>
+					<p><b>Department: </b>Computer Science [Placeholder]</p>
+					<p><b>Instructor: </b>{props.instructors}</p>
+					<p><b>Location: </b>{props.location}</p>
+					<p><b>Time: </b>{getTimeFormat(props.meetings)}</p>
+					<p><b>Status: </b>{props.status}</p>
+					<b>Description:</b><p>{desc}</p>
+					<b>Recitation:</b>
 					<Recitation></Recitation>
 				</Modal.Body>
 			</Modal>
