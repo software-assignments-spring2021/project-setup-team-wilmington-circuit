@@ -1,5 +1,5 @@
 import React from "react"
-import {Button, Modal, Container, Row, Col} from "react-bootstrap";
+import {Button, Modal} from "react-bootstrap";
 import Recitation from "./Recitation";
 
 const sampleClass = {
@@ -23,7 +23,7 @@ export default function ClassDetails() {
 				Details
 			</Button>
 		
-			<Modal show={show} onHide={handleClose} dialogClassName="modal-90w">
+			<Modal show={show} onHide={handleClose}>
 				<Modal.Header closeButton>
 					<Modal.Title><b>{sampleClass.name}</b></Modal.Title>
 				</Modal.Header>
