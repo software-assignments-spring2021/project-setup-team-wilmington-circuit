@@ -18,10 +18,14 @@ function App() {
     }))
   }, [])
   return (
-    <div align = "center">
+    <>
       <Header></Header>
+      <h1 class = "ml-4 mt-3 mb-4">My Courses</h1>
+      <Class></Class>
+      <Class></Class>
+      <Class></Class>
       <ScheduleCalendar classIDs={enrolledClasses} style="width: 100%" />
-    </div> 
+    </> 
   )
 }
 
