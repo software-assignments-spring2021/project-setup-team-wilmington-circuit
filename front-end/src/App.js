@@ -20,7 +20,8 @@ function App() {
     }))
   }, [])
   return (
-    <div align = "center">
+    <>
+    <div>
       <Router>
         <Switch>
           <Route path="/personal">
@@ -40,7 +41,7 @@ function App() {
       </Router>
       
     </div> 
-    <>
+    </>
   )
 }
 
