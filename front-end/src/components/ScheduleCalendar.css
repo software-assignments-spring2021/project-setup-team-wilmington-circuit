@@ -4,8 +4,8 @@
     border-top: purple solid 5px;
     width: 100%;
     color: black;
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    font-size: 1rem im !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+    font-size: min(2vw, 1em);
     height: 90vh;
 }
 
@@ -13,9 +13,15 @@
     margin: 5px;
 }
 
-.fc button, .fc-button, .fc-button-primary, .fc-button-active {
-    border-color: white;
+.fc button, .fc-button, .fc-button-primary {
+    /*background-color: purple !important;
+    border-color: white !important;*/
     border-radius: 0;
+    overflow: hidden;
+}
+
+.fc-button.active {
+    outline: purple !important;
 }
 
 .fc .nowIndicator{
@@ -24,7 +30,6 @@
 
 .scheduleEvent {
     border-radius: 0;
-    font-size: 1em;
     overflow-wrap: break-word;
     overflow: hidden;
 }
@@ -37,5 +42,9 @@
     .scheduleEvent {
         margin-top: 0;
         padding: 0;
+    }
+
+    .fc-today-button {
+        display: none;
     }
 }

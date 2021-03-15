@@ -16,7 +16,7 @@ function App() {
   useEffect(()=>{
     setEnrolledClasses([])
     getTestData.getTestClassIDs(4).then(classIDs => classIDs.forEach(id => {
-      setEnrolledClasses([id])
+      setEnrolledClasses(prev => [...prev, id])
     }))
   }, [])
   return (
@@ -30,7 +30,9 @@ function App() {
           
           <Route path="/">
             <Header></Header>
-            <ScheduleCalendar classIDs={enrolledClasses} style="width: 100%" />
+            <h1 class = "ml-4 mt-3 mb-4">My Courses</h1>
+            {enrolledClasses.map(classID => {console.log(enrolledClasses); return (<Class classID={classID}></Class>)})} 
+            <ScheduleCalendar classIDs={[enrolledClasses[enrolledClasses.length - 1]]} style="width: 100%" />
           </Route>
 
           
@@ -38,6 +40,7 @@ function App() {
       </Router>
       
     </div> 
+    <>
   )
 }
 
