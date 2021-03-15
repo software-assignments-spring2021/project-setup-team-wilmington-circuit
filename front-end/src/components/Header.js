@@ -9,15 +9,15 @@ export default function Header() {
     return (
        <div class="profile-nav">
            <Navbar bg="light" expand="lg">
-            <Navbar.Brand href="#home"><img src={logo} alt="NYU Logo" height="50px"></img></Navbar.Brand>
+            <Navbar.Brand href="/"><img src={logo} alt="NYU Logo" height="50px"></img></Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 
                 <Nav className="mr-auto">
-                    <Nav.Link href="#home">My Courses</Nav.Link>
+                    <Nav.Link href="/">My Courses</Nav.Link>
                     <Nav.Link href="#link">Grades</Nav.Link>
                     <Nav.Link href="#link">Finances</Nav.Link>
-                    <Nav.Link href="#link">Personal Information</Nav.Link>
+                    <Nav.Link href="/personal">Personal Information</Nav.Link>
                 </Nav>
                 <Nav>
                     <HeaderProfile></HeaderProfile>

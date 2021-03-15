@@ -67,7 +67,7 @@ const ScheduleCalendar = props => {
                 month:    'Month',
                 week:     'Week',
                 day:      'Day',
-                list:     'List View',
+                list:     'List',
                 prev: '<<',
                 next: '>>'
 

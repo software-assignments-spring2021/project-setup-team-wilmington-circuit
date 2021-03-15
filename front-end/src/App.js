@@ -8,6 +8,8 @@ import Header from './components/Header'
 import avatar from './images/profile-pic.png';
 import './main.css';
 import Class from './components/Class';
+import PersonalInfo from './components/Personal';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 function App() {
   const [enrolledClasses, setEnrolledClasses] = useState([])
@@ -18,12 +20,27 @@ function App() {
     }))
   }, [])
   return (
+    <div align = "center">
+      <Router>
+        <Switch>
+          <Route path="/personal">
+            <Header></Header>
+            <PersonalInfo></PersonalInfo>
+          </Route>
+          
+          <Route path="/">
+            <Header></Header>
+            <h1 class = "ml-4 mt-3 mb-4">My Courses</h1>
+            {enrolledClasses.map(classID => {console.log(enrolledClasses); return (<Class classID={classID}></Class>)})} 
+            <ScheduleCalendar classIDs={[enrolledClasses[enrolledClasses.length - 1]]} style="width: 100%" />
+          </Route>
+
+          
+        </Switch>
+      </Router>
+      
+    </div> 
     <>
-      <Header></Header>
-      <h1 class = "ml-4 mt-3 mb-4">My Courses</h1>
-      {enrolledClasses.map(classID => {console.log(enrolledClasses); return (<Class classID={classID}></Class>)})} 
-      <ScheduleCalendar classIDs={[enrolledClasses[enrolledClasses.length - 1]]} style="width: 100%" />
-    </> 
   )
 }
 
