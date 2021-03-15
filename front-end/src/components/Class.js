@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Button, Nav, Navbar, NavItem, NavDropdown, NavLink, Form, FormControl } from 'react-bootstrap';
 import '../main.css';
 import { getClassInfo } from '../testData'
+import ClassDetails from "./ClassDetails";
+
 
 const sampleClassObj = {
   className: "Agile (CSCIUA 480)",
@@ -9,6 +11,7 @@ const sampleClassObj = {
   location: "Online",
   date: "Mon, Wed - 3:30 - 4:45PM"
 };
+
 
 const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 

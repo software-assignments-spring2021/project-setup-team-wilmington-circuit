@@ -18,11 +18,12 @@ function App() {
     }))
   }, [])
   return (
-    <div align = "center">
+    <>
       <Header></Header>
+      <h1 class = "ml-4 mt-3 mb-4">My Courses</h1>
       {enrolledClasses.map(classID => {console.log(enrolledClasses); return (<Class classID={classID}></Class>)})} 
       <ScheduleCalendar classIDs={[enrolledClasses[enrolledClasses.length - 1]]} style="width: 100%" />
-    </div> 
+    </> 
   )
 }
 

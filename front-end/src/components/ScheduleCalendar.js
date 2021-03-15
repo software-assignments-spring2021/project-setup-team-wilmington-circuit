@@ -46,7 +46,7 @@ const ScheduleCalendar = props => {
     }, [props.classIDs])
 
     return (
-        <div style={{'width': '95%'}}>
+        <div style={{'width': '95%'}} class = "mx-auto">
           <FullCalendar
             plugins={[ dayGridPlugin, timeGridPlugin, listGridPlugin, bootstrapPlugin ]}
             themeSystem='bootstrap'
