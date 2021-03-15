@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Nav, Navbar, NavItem, NavDropdown, NavLink, Form, FormControl } from 'react-bootstrap';
+import ClassDetails from "./ClassDetails";
 
 const sampleClassObj = {
   className: "Agile (CSCIUA 480)",
@@ -16,7 +17,7 @@ export default function Class() {
           </div>
           <div class="card-body">
               <div style = {{float: 'right'}}>
-                <a href="/" class="btn btn-primary">Details</a>
+                <ClassDetails></ClassDetails>
               </div>
               <p class="card-text">{sampleClassObj.professor}, {sampleClassObj.location}</p>
               <p class="card-text">{sampleClassObj.date}</p>
