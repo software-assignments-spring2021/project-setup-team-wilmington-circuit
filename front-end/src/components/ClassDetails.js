@@ -33,9 +33,9 @@ export default function ClassDetails(props) {
 				</Modal.Header>
 				<Modal.Body>
 					<p><b>Department: </b>Computer Science [Placeholder]</p>
-					<p><b>Instructor: </b>{props.instructors}</p>
-					<p><b>Location: </b>{props.location}</p>
-					<p><b>Time: </b>{getTimeFormat(props.meetings)}</p>
+					<p><b>Instructor: </b>{props.instructors ? props.instructors.join(", ") : "No instructors"}</p>
+					<p><b>Location: </b>{props.location ? props.location : "No location"}</p>
+					<p><b>Time: </b>{props.meetings ? getTimeFormat(props.meetings) : "No meetings"}</p>
 					<p><b>Status: </b>{props.status}</p>
 					<b>Description:</b><p>{desc}</p>
 					<b>Recitation:</b>

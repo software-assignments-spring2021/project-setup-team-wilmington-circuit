@@ -34,13 +34,9 @@ function App() {
             {enrolledClasses.map(classID => {console.log(enrolledClasses); return (<Class classID={classID}></Class>)})} 
             <ScheduleCalendar classIDs={[enrolledClasses[enrolledClasses.length - 1]]} style="width: 100%" />
           </Route>
-
-          
         </Switch>
       </Router>
-      
     </div> 
-    <>
   )
 }
 
