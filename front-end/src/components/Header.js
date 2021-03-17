@@ -18,9 +18,10 @@ export default function Header() {
                     <Nav.Link href="#link">Grades</Nav.Link>
                     <Nav.Link href="#link">Finances</Nav.Link>
                     <Nav.Link href="/personal">Personal Information</Nav.Link>
+                    <Nav.Link href="/login">Login Test</Nav.Link>
                 </Nav>
                 <Nav>
-                    <HeaderProfile></HeaderProfile>
+                    <Nav.Link href="/personal"><HeaderProfile></HeaderProfile></Nav.Link>
                 </Nav>
             </Navbar.Collapse>
             </Navbar>
