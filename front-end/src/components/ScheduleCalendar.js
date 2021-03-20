@@ -1,4 +1,5 @@
 import FullCalendar from '@fullcalendar/react';
+import { Calendar } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listGridPlugin from '@fullcalendar/list';
@@ -10,10 +11,61 @@ import './ScheduleCalendar.css'
 import { getClassInfo } from '../testData'
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useEffect, useState } from 'react';
+import { Button, Modal } from 'react-bootstrap';
 
+const DisplayCalendar = props => {
+    
+    return (
+        <div style={{'width': '95%'}} class = "mx-auto">
+          <FullCalendar
+            plugins={[ dayGridPlugin, timeGridPlugin, listGridPlugin, bootstrapPlugin ]}
+            themeSystem='bootstrap'
+            nowIndicator = {true}
+            nowIndicatorClassNames = {['nowIndicator']}
+            bootstrapFontAwesome={false}
+            scrollTime='08:00:00'
+            expandRows={true}
+            slotDuration='00:15:00'
+            slotLabelInterval='01:00:00'
+            headerToolbar={{
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,listWeek'
+            }}
+            buttonText ={{
+                today:    'Today',
+                month:    'Month',
+                week:     'Week',
+                day:      'Day',
+                list:     'List',
+                prev: '<<',
+                next: '>>'
 
- 
+              }}
+            events={props.events}
+            eventContent = {renderEventContent}
+            eventClassNames = {['scheduleEvent']}
+            initialView="timeGridWeek"
+        />
+        </div>
+      )
+}
+
+const renderEventContent = eventInfo => {
+    if(eventInfo.view.type === "timeGridWeek")
+    return (
+        <div class="timeGridEvent">
+            <div className="classTime">{eventInfo.timeText}<br></br></div>
+            
+            <b>{eventInfo.event.title}</b>
+            <br></br>
+            <i className="classDetails">{eventInfo.event.extendedProps.location} - {eventInfo.event.extendedProps.campus || 'NYU'}</i>
+        </div>
+    )
+}
+
 const ScheduleCalendar = props => {
+    const [showCalendar, setShowCalendar] = useState(false);
     const [events, setEvents] = useState([])
 
     useEffect(() =>{
@@ -45,54 +97,21 @@ const ScheduleCalendar = props => {
         })
     }, [props.classIDs])
 
-    return (
-        <div style={{'width': '95%'}} class = "mx-auto">
-          <FullCalendar
-            plugins={[ dayGridPlugin, timeGridPlugin, listGridPlugin, bootstrapPlugin ]}
-            themeSystem='bootstrap'
-            nowIndicator = {true}
-            nowIndicatorClassNames = {['nowIndicator']}
-            bootstrapFontAwesome={false}
-            scrollTime='08:00:00'
-            expandRows={true}
-            slotDuration='00:15:00'
-            slotLabelInterval='01:00:00'
-            headerToolbar={{
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,listWeek'
-            }}
-            buttonText ={{
-                today:    'Today',
-                month:    'Month',
-                week:     'Week',
-                day:      'Day',
-                list:     'List',
-                prev: '<<',
-                next: '>>'
 
-              }}
-            events={events}
-            eventContent = {renderEventContent}
-            eventClassNames = {['scheduleEvent']}
-            initialView="timeGridWeek"
-            rerenderDelay={5}
-        />
-        </div>
-      )
-}
-
-const renderEventContent = eventInfo => {
-    if(eventInfo.view.type === "timeGridWeek")
     return (
-        <div class="timeGridEvent">
-            <h className="classTime">{eventInfo.timeText}<br></br></h>
-            
-            <b>{eventInfo.event.title}</b>
-            <br></br>
-            <i className="classDetails">{eventInfo.event.extendedProps.location} - {eventInfo.event.extendedProps.campus || 'NYU'}</i>
-        </div>
+        <>
+        <Button className="calendar-button" onClick={() => setShowCalendar(true)}>Show Calendar View</Button>
+        <Modal dialogClassName="calendar-modal" show={showCalendar} onHide={() => setShowCalendar(false)}>
+            <Modal.Header closeButton>
+            <Modal.Title>Course Calendar</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <DisplayCalendar events={events}></DisplayCalendar>
+            </Modal.Body>
+        </Modal>
+        </>
     )
+    
 }
 
 export default ScheduleCalendar;

@@ -22,26 +22,50 @@ export default function ClassDetails(props) {
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);	
 	return (
-		<>
-			<Button variant="primary" onClick={handleShow}>
-				Details
-			</Button>
-		
-			<Modal show={show} onHide={handleClose}>
-				<Modal.Header closeButton>
-					<Modal.Title><b>{props.name}</b> ({props.registrationNumber})</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<p><b>Department: </b>Computer Science [Placeholder]</p>
-					<p><b>Instructor: </b>{props.instructors ? props.instructors.join(", ") : "No instructors"}</p>
-					<p><b>Location: </b>{props.location ? props.location : "No location"}</p>
-					<p><b>Time: </b>{props.meetings ? getTimeFormat(props.meetings) : "No meetings"}</p>
-					<p><b>Status: </b>{props.status}</p>
-					<b>Description:</b><p>{desc}</p>
-					<b>Recitation:</b>
-					<Recitation></Recitation>
-				</Modal.Body>
-			</Modal>
-		</>
-	);
+
+    <>
+      <Button variant="primary" onClick={handleShow}>
+        Details
+      </Button>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <b>{props.name}</b> ({props.registrationNumber})
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            <b>Department: </b>Computer Science [Placeholder]
+          </p>
+          <p>
+            <b>Instructor: </b>
+            {props.instructors}
+          </p>
+          <p>
+            <b>Location: </b>
+            {props.location}
+          </p>
+          <p>
+            <b>Time: </b>
+            {props.meetings ? getTimeFormat(props.meetings) : "No Time"}
+          </p>
+          <p>
+            <b>Status: </b>
+            {props.status}
+          </p>
+          <b>Description:</b>
+          <p>{desc}</p>
+          <b>Recitation:</b>
+          {props.recitations ? (
+            props.recitations.map((rec) => {
+              return <Recitation {...rec}></Recitation>;
+            })
+          ) : (
+            <Modal.Body>No Recitations</Modal.Body>
+          )}
+        </Modal.Body>
+      </Modal>
+    </>
+  );
 }
