@@ -7,7 +7,7 @@ const getTestClassIDs = async (len) => {
         const startIndex = Math.floor(Math.random()*(testData.length - len)) 
         testData = testData.slice(startIndex, startIndex+len);
     }
-    return testData.map(classData => classData.sections[0].registrationNumber);
+    return testData.map(classData => classData.sections[Math.floor(Math.random() * (classData.sections.length))].registrationNumber);
 } 
 
 const getClassInfo = async (id) =>{

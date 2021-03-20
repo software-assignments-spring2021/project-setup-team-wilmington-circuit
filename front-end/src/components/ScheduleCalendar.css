@@ -9,6 +9,10 @@
     height: 90vh;
 }
 
+.calendar-modal {
+    max-width: 95% !important;
+}
+
 .fc-header-toolbar {
     margin: 5px;
 }

@@ -31,11 +31,9 @@ export default function Header(props) {
     const [classObject, setClassObject] = useState({});
     useEffect(()=>{
       getClassInfo(props.classID).then(res => {
-        console.log(res);
         setClassObject(()=>res);
       })
     }, [props.classID])
-    console.log(props)
     return (
        <div class="classElement card mx-auto border-light mb-3 mt-3" style={{ width: '95%', border_radius: 0}}>
           <div class="card-header pt-3">

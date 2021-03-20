@@ -7,7 +7,7 @@ import '../main.css';
 
 export default function Header() {
     return (
-       <div class="profile-nav">
+       <div className="profile-nav">
            <Navbar bg="light" expand="lg">
             <Navbar.Brand href="/"><img src={logo} alt="NYU Logo" height="50px"></img></Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
