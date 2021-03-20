@@ -22,6 +22,7 @@ export default function ClassDetails(props) {
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);	
 	return (
+
     <>
       <Button variant="primary" onClick={handleShow}>
         Details
