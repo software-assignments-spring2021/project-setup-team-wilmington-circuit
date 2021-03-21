@@ -9,6 +9,8 @@ import avatar from './images/profile-pic.png';
 import './main.css';
 import Class from './components/Class';
 import PersonalInfo from './components/Personal';
+import GradeInfo from './components/Grades';
+import FinanceInfo from './components/Finance';
 import Login from './components/Login'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
@@ -28,6 +30,17 @@ function App() {
       <div>
         <Router>
           <Switch>
+
+          <Route path="/finance">
+            <Header></Header>
+            <FinanceInfo></FinanceInfo>
+          </Route>
+
+          <Route path="/grades">
+              <Header></Header>
+              <GradeInfo></GradeInfo>
+            </Route>
+
             <Route path="/personal">
               <Header></Header>
               <PersonalInfo></PersonalInfo>
