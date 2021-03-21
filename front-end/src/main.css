@@ -1,4 +1,4 @@
-.btn {
+.btn, .form-control, .form-check-input {
     border-radius: 0;
 }
 
@@ -8,13 +8,21 @@
     margin-bottom: 0.5em;
 }
 
-.dropdown {
-    margin-right: 1em;
-}
-
 .topbar-container {
     width: 95%;
     margin: auto;
+}
+
+.staticbar-container {
+    position: fixed;
+    width: 95%;
+    left: 2.5vw;
+    top: 95vh;
+    text-align: right;
+}
+
+#catalog-static {
+    float: right;
 }
 
 .classElement {

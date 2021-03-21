@@ -13,6 +13,7 @@ import GradeInfo from './components/Grades';
 import FinanceInfo from './components/Finance';
 import Login from './components/Login'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import Catalog from './components/Catalog';
 
 function App() {
   const [enrolledClasses, setEnrolledClasses] = useState([])
@@ -50,6 +51,10 @@ function App() {
               <Login></Login>
             </Route>
 
+            <Route path="/catalog">
+              <Catalog></Catalog>
+            </Route>
+
             <Route path="/">
               <Header></Header>
               <div className="topbar-container">
@@ -72,7 +77,7 @@ function App() {
                 classIDs={[enrolledClasses[enrolledClasses.length-1]]}
                 />
                 <Button>Shopping Cart</Button>
-                <Button>Course Search</Button>
+                <Button href="/catalog">Course Search</Button>
               </ButtonGroup>
               </ButtonToolbar>
               </div>
