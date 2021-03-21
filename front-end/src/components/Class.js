@@ -35,7 +35,7 @@ export default function Header(props) {
       })
     }, [props.classID])
     return (
-       <div class="classElement card mx-auto border-light mb-3 mt-3" style={{ width: '95%', border_radius: 0}}>
+       <div className="classElement card mx-auto border-light mb-3 mt-3" style={{ width: '95%', border_radius: 0}}>
           <div class="card-header pt-3">
           <h5>{classObject.name}</h5>
           </div>
