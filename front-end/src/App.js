@@ -10,6 +10,7 @@ import './main.css';
 import Class from './components/Class';
 import PersonalInfo from './components/Personal';
 import Login from './components/Login'
+import Enroll from './components/Enroll'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Catalog from './components/Catalog';
 
@@ -61,7 +62,7 @@ function App() {
               
               <ButtonGroup>
                 <ScheduleCalendar
-                classIDs={[enrolledClasses[enrolledClasses.length-1]]}
+                classIDs={[enrolledClasses.pop()]}
                 />
                 <Button>Shopping Cart</Button>
                 <Button href="/catalog">Course Search</Button>
