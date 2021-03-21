@@ -16,7 +16,7 @@ function getTimeFormat(meetings){
 }
 
 export default function ClassSelect(props) {
-    const classObject = props
+    const classObject = props.classObject
     return (
        <div className="classElement card mx-auto border-light mb-3 mt-3">
           {!(props.catalog) ? 
@@ -26,7 +26,7 @@ export default function ClassSelect(props) {
            : <></> }
           <div class="card-body">
               <div class = "" style = {{float: 'right'}}>
-              <input class="form-check-input" type="checkbox"  style = {{width: '20px', height: '30px'}}></input>
+              <input onChange={()=>props.onSelect(classObject)} class="form-check-input" type="checkbox"  style = {{width: '20px', height: '30px'}}></input>
               </div>
               <div class = "mr-5" style = {{float: 'right'}}>
                 <ClassDetails {...classObject}/>
