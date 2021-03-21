@@ -1,34 +1,11 @@
 import { useEffect, useState } from "react";
 import { Button, ButtonGroup, ButtonToolbar, DropdownButton, FormControl, InputGroup } from "react-bootstrap";
-import Header from "./Header";
-import getTestData from '../testData';
-import Course from './Course';
-import AddClass from './AddClass';
-
-const selectedClasses = []
+import Header from "./Header"
+import getTestData from '../testData'
+import Course from './Course'
 
 const Catalog = props => {
-    const [courses, setCourses] = useState([]);
-    const [modalClasses, setModalClasses] = useState([]);
-
-    const handleDisplayClasses = () =>{
-        selectedClasses.forEach(classObject =>{
-            setModalClasses(prev => [...prev, classObject])
-        })
-    }
-
-    const handleHideDisplayClasses = (classObject) => {
-        console.log(classObject, modalClasses)
-        setModalClasses(modalClasses.filter(modalClass => modalClass !== classObject))
-
-    }
-
-    const handleSelectClass = classElement => {
-        if(selectedClasses.indexOf(classElement) >= 0) selectedClasses.splice(selectedClasses.indexOf(classElement), 1);
-        else selectedClasses.push(classElement);
-        console.log(selectedClasses)
-    }
-
+    const [courses, setCourses] = useState([])
     useEffect(()=>{
         getTestData.getTestCourses().then(res => {
             setCourses(res);
@@ -61,20 +38,16 @@ const Catalog = props => {
         </div>
         {courses.map(course => {
             return (
-                <Course {...course}  onSelect={handleSelectClass}></Course>
+                <Course {...course}></Course>
             )
         })}
         <div className="staticbar-container">
         <ButtonToolbar id="catalog-static">
-            <Button onClick={()=>handleDisplayClasses()} variant="secondary">Add to Cart</Button>
-            <Button onClick={()=>handleDisplayClasses()}>Enroll Selected</Button>
+            <Button variant="secondary">Add to Cart</Button>
+            <Button>Enroll Selected</Button>
+            
         </ButtonToolbar>
         </div>
-        {
-        modalClasses.map(classObject =>(
-                <AddClass hide={handleHideDisplayClasses} classObject = {classObject}></AddClass>
-            )
-        )}
         </>
     )
 }
