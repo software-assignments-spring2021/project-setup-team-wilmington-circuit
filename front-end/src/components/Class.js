@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Nav, Navbar, NavItem, NavDropdown, NavLink, Form, FormControl } from 'react-bootstrap';
 import '../main.css';
+import './styles/Class.css'
 import { getClassInfo } from '../testData'
 import ClassDetails from "./ClassDetails";
 
@@ -35,12 +36,12 @@ export default function Header(props) {
       })
     }, [props.classID])
     return (
-       <div className="classElement card mx-auto border-light mb-3 mt-3" style={{ width: '95%', border_radius: 0}}>
+       <div className="classContainer classElement card mx-auto border-light mb-3 mt-3">
           <div class="card-header pt-3">
           <h5>{classObject.name}</h5>
           </div>
           <div class="card-body">
-              <div style = {{float: 'right'}}>
+              <div className = "detailsButton">
                 <ClassDetails {...classObject}/>
               </div>
               <p class="card-text">{classObject.instructors  ? classObject.instructors.toString() : 'TBD'} - {classObject.location}</p>

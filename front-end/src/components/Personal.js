@@ -1,7 +1,7 @@
 import React from 'react';
 import '../main.css';
 import avatar from '../images/profile-pic.png';
-
+import "./styles/Personal.css";
 const PersonalInfo = (props) => {
     //im assuming props will be where user information is obtained? so like props.userID, props.addresses etc.?
     // console.log(props);
@@ -17,7 +17,7 @@ const PersonalInfo = (props) => {
 
                 {/* Basic Personal Info*/}
                 <div class="col-lg-2">
-                    <p align='left' style={{'font-size':'30px'}}>
+                    <p className = "nameInfo">
                         John Smith<br></br>
                         He/Him<br></br>
                         NID: N123456789 <br></br>
@@ -26,16 +26,18 @@ const PersonalInfo = (props) => {
                 </div>
 
                 {/* Link to edit screen*/}
-                <div class='col-lg-4'>
-                    <a href='/personal#edit' style={{'float': 'right', 'font-size':'15px'}}><ins>Edit</ins></a>
+                
+                <div className = "editButton" class='col-lg-4'>
+                    <a href='/personal#edit' ><ins>Edit</ins></a>
                 </div>
+                
             </div> <br></br>
 
             {/* Addresses header */}
             <div class="row">
                 <div class="col-lg-2"></div>
                 <div class="col-lg-8">
-                    <h2 align='left' style={{'font-size':'25px'}}>
+                    <h2 className = "addressInfo">
                         Addresses
                     </h2>
                 </div>
@@ -66,7 +68,7 @@ const PersonalInfo = (props) => {
             <div class="row">
                 <div class="col-lg-2"></div>
                 <div class="col-lg-8">
-                    <h2 align='left' style={{'font-size':'25px'}}>
+                    <h2 align='left' className = "phoneInfo">
                         Phone Numbers
                     </h2>
                 </div>
@@ -99,7 +101,7 @@ const PersonalInfo = (props) => {
             <div class="row">
                 <div class="col-lg-2"></div>
                 <div class="col-lg-8">
-                    <h2 align='left' style={{'font-size':'25px'}}>
+                    <h2 className = "emailInfo">
                         Email Addresses
                     </h2>
                 </div>
@@ -126,7 +128,7 @@ const PersonalInfo = (props) => {
             <div class="row">
                 <div class="col-lg-2"></div>
                 <div class="col-lg-8">
-                    <h2 align='left' style={{'font-size':'25px'}}>
+                    <h2 className = "contactInfo">
                         Emergency Contact
                     </h2>
                 </div>
@@ -147,7 +149,7 @@ const PersonalInfo = (props) => {
             <div class="row">
                 <div class="col-lg-2"></div>
                 <div class="col-lg-8">
-                    <h2 align='left' style={{'font-size':'25px'}}>
+                    <h2 class = "citizenshipInfo">
                         Citizenship
                     </h2>
                     <p align='left'>US Citizen</p>

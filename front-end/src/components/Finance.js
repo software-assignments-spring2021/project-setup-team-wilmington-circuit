@@ -1,7 +1,7 @@
 import React from 'react';
 import '../main.css';
 import { Button, ButtonToolbar, Dropdown, DropdownButton, ButtonGroup, Collapse, Table } from 'react-bootstrap';
-
+import "./styles/Finance.css";
 const sampleData = {
     '19-20': [
         {
@@ -89,7 +89,7 @@ const FinanceInfo = (props) => {
                 <Button onClick={handleAwardsClick}>Manage Awards</Button>
                 <br></br>
                 <Collapse in={awards}>
-                    <div style={{'width': '500px', 'border': '15px', 'outline': '1px solid #57068c'}}>
+                    <div className = "manageAwards">
                         <ul>
                             <li><a href="/finance#official-statement-redirect-to-be-implemented">Official Statement of Account</a></li>
                             <li><a href="/finance#financial-appeal-redirect-to-be-implemented">Financial Appeal (Current Semester)</a></li>
@@ -118,7 +118,7 @@ const FinanceInfo = (props) => {
                     {sampleData[year].map(year => {
                         return <tr>
                             <td>
-                                <button style={{'background-color': 'white', 'border': 'none'}}>
+                                <button className = "yearButton">
                                 <u>{year['award-name']}</u>
                                 </button>
                             </td>

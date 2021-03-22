@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Button, ButtonGroup, ButtonToolbar, DropdownButton, FormControl, InputGroup } from "react-bootstrap";
+
 import Header from "./Header";
 import getTestData from '../testData';
 import Course from './Course';
 import AddClass from './AddClass';
+import './styles/Catalog.css'
 
 const selectedClasses = []
 
