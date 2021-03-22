@@ -9,8 +9,12 @@ import avatar from './images/profile-pic.png';
 import './main.css';
 import Class from './components/Class';
 import PersonalInfo from './components/Personal';
+import GradeInfo from './components/Grades';
+import FinanceInfo from './components/Finance';
 import Login from './components/Login'
+import Enroll from './components/Enroll'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import Catalog from './components/Catalog';
 
 function App() {
   const [enrolledClasses, setEnrolledClasses] = useState([])
@@ -28,6 +32,17 @@ function App() {
       <div>
         <Router>
           <Switch>
+
+          <Route path="/finance">
+            <Header></Header>
+            <FinanceInfo></FinanceInfo>
+          </Route>
+
+          <Route path="/grades">
+              <Header></Header>
+              <GradeInfo></GradeInfo>
+            </Route>
+
             <Route path="/personal">
               <Header></Header>
               <PersonalInfo></PersonalInfo>
@@ -35,6 +50,10 @@ function App() {
 
             <Route path="/login">
               <Login></Login>
+            </Route>
+
+            <Route path="/catalog">
+              <Catalog></Catalog>
             </Route>
 
             <Route path="/">
@@ -56,10 +75,10 @@ function App() {
               
               <ButtonGroup>
                 <ScheduleCalendar
-                classIDs={[enrolledClasses[enrolledClasses.length-1]]}
+                classIDs={[enrolledClasses[enrolledClasses.length - 1]]}
                 />
                 <Button>Shopping Cart</Button>
-                <Button>Course Search</Button>
+                <Button href="/catalog">Course Search</Button>
               </ButtonGroup>
               </ButtonToolbar>
               </div>
