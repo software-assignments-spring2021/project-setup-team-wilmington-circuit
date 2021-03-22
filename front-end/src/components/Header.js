@@ -4,7 +4,7 @@ import logo from '../images/NYU-Logo-1.png';
 import avatar from '../images/profile-pic.png';
 import HeaderProfile from './HeaderProfile'
 import '../main.css';
-
+import './styles/Header.css';
 export default function Header() {
     return (
        <div className="profile-nav">

@@ -3,6 +3,7 @@ import { Button, ButtonGroup, ButtonToolbar, DropdownButton, FormControl, InputG
 import Header from "./Header"
 import getTestData from '../testData'
 import Course from './Course'
+import './styles/Catalog.css'
 
 const Catalog = props => {
     const [courses, setCourses] = useState([])

@@ -1,7 +1,7 @@
 import React from 'react';
 import '../main.css';
 import { Button, ButtonToolbar, Dropdown, DropdownButton, ButtonGroup } from 'react-bootstrap';
-
+import "./styles/Grades.css"
 const sampleGrades = {
     OverallGPA: '3.000',
     MajorGPA: '3.500',
@@ -119,11 +119,13 @@ const GradeInfo = (props) => {
                         Junior - Computer Science
                     </p>
                     {sampleGrades.Terms[term].map(course => {
-                        return <div class="classElement card mx-auto border-light mb-3 mt-3" style={{ width: '95%', border_radius: 0}}>
+                        return <div className = "classGrades">
+                         <div class="classElement card mx-auto border-light mb-3 mt-3">
                             {course['name']} ({course['id']}) - {course['credits']} Credits<br></br>
                             {course['instructor']}<br></br>
                             Midterm Grade: {course['midterm-grade']}<br></br>
                             <b>Final Grade: {course['final-grade']}</b>
+                         </div>
                         </div>
                     })}
                     

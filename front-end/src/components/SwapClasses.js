@@ -9,12 +9,11 @@ export default function SwapClasses() {
         <ClassSelect></ClassSelect>
         <h3 class="m-4">With Class:</h3>
         <ClassSelect></ClassSelect>
-        <div style = {{'text-align': 'center'}} class="button-box col-lg-12 mx-auto">
+        <div className = "swapOptions" class="button-box col-lg-12 mx-auto">
             <a href="#" class="btn btn-primary m-3" role="button"><h4>From Cart</h4></a>
             <a href="#" class="btn btn-primary" role="button"><h4>From Catalog</h4></a>
         </div>
-        <a href="#" style = {{'text-align': 'center'}} class="btn btn-danger m-3" role="button"><h4> Cancel </h4></a>
-        <p>Calendar Goes Here (needs backend to work)</p>
+        <a href="#" className = "swapOptions" class="btn btn-danger m-3" role="button"><h4> Cancel </h4></a>
     </div>
     )
 }

@@ -1,9 +1,10 @@
 import { Accordion, Button } from "react-bootstrap";
 import ClassSelect from './ClassSelect';
-
+import './styles/Course.css';
 export default function Course(props) {
     return (
-       <div class="classElement card mx-auto border-light mb-3 mt-3" style={{ width: '95%', border_radius: 0}}>
+     <div className = "courseContainer">
+       <div class="classElement card border-light mb-3 mt-3">
           <div class="card-header pt-3">
           <h5>{props.name}</h5>
           </div>
@@ -24,5 +25,6 @@ export default function Course(props) {
           </div>
           
        </div> 
+     </div>
     )
 }

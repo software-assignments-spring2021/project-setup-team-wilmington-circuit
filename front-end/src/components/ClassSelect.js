@@ -1,6 +1,6 @@
 import React from 'react'
 import ClassDetails from './ClassDetails'
-
+import "./styles/ClassSelect.css"
 const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 function getTimeFormat(meetings){
@@ -25,10 +25,12 @@ export default function ClassSelect(props) {
             </div>
            : <></> }
           <div class="card-body">
-              <div class = "" style = {{float: 'right'}}>
-              <input class="form-check-input" type="checkbox"  style = {{width: '20px', height: '30px'}}></input>
+              <div className = "checkButton">
+              <div className = "checkButtonInput">
+              <input className = "checkButtonInput" class="form-check-input" type="checkbox"></input>
               </div>
-              <div class = "mr-5" style = {{float: 'right'}}>
+              </div>
+              <div className = "detailsButton">
                 <ClassDetails {...classObject}/>
               </div>
               <p class="card-text">{classObject.instructors  ? classObject.instructors.toString() : 'TBD'} - {classObject.location}</p>

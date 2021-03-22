@@ -5,7 +5,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listGridPlugin from '@fullcalendar/list';
 import bootstrapPlugin from '@fullcalendar/bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
-import './ScheduleCalendar.css'
+import './styles/ScheduleCalendar.css'
 //import '@fortawesome/fontawesome-free/css/all.css'; // needs additional webpack config!
 
 import { getClassInfo } from '../testData'
@@ -16,7 +16,7 @@ import { Button, Modal } from 'react-bootstrap';
 const DisplayCalendar = props => {
     
     return (
-        <div style={{'width': '95%'}} class = "mx-auto">
+        <div className = "calendarContainer">
           <FullCalendar
             plugins={[ dayGridPlugin, timeGridPlugin, listGridPlugin, bootstrapPlugin ]}
             themeSystem='bootstrap'
