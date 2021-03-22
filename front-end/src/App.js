@@ -75,7 +75,7 @@ function App() {
               
               <ButtonGroup>
                 <ScheduleCalendar
-                classIDs={[enrolledClasses.pop()]}
+                classIDs={[enrolledClasses[enrolledClasses.length - 1]]}
                 />
                 <Button>Shopping Cart</Button>
                 <Button href="/catalog">Course Search</Button>
