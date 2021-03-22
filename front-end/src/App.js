@@ -11,6 +11,8 @@ import Class from './components/Class';
 import PersonalInfo from './components/Personal';
 import Login from './components/Login'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import CourseSearch from './components/CourseSearch'
+import schools from './components/data/nyuschools.json'
 
 function App() {
   const [enrolledClasses, setEnrolledClasses] = useState([])
@@ -23,6 +25,7 @@ function App() {
       setEnrolledClasses(prev => [...prev, id])
     }))
   }, [selectedTerm])
+
   return (
     <>
       <div>
@@ -59,7 +62,8 @@ function App() {
                 classIDs={[enrolledClasses[enrolledClasses.length-1]]}
                 />
                 <Button>Shopping Cart</Button>
-                <Button>Course Search</Button>
+                
+                <CourseSearch></CourseSearch>
               </ButtonGroup>
               </ButtonToolbar>
               </div>
