@@ -19,6 +19,7 @@ export default function Header() {
                     <Nav.Link href="#link">Finances</Nav.Link>
                     <Nav.Link href="/personal">Personal Information</Nav.Link>
                     <Nav.Link href="/login">Login Test</Nav.Link>
+                    <Nav.Link href="/shopping-cart">Cart Test</Nav.Link>
                 </Nav>
                 <Nav>
                     <Nav.Link href="/personal"><HeaderProfile></HeaderProfile></Nav.Link>

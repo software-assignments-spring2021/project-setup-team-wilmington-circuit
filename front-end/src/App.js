@@ -1,16 +1,17 @@
 
-import getTestData from './testData'
-import ScheduleCalendar from './components/ScheduleCalendar'
+import getTestData from './testData';
+import ScheduleCalendar from './components/ScheduleCalendar';
 import { useEffect, useState } from 'react';
-import React from 'react'
+import React from 'react';
 import { Button, Nav, Navbar, NavItem, NavDropdown, NavLink, Form, FormControl, Container, Row, Col } from 'react-bootstrap';
-import Header from './components/Header'
+import Header from './components/Header';
 import avatar from './images/profile-pic.png';
 import './main.css';
 import Class from './components/Class';
 import PersonalInfo from './components/Personal';
-import Login from './components/Login'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import Login from './components/Login';
+import ShoppingCart from './components/ShoppingCart';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 function App() {
   const [enrolledClasses, setEnrolledClasses] = useState([])
@@ -33,6 +34,12 @@ function App() {
             <Route path="/login">
               <Login></Login>
             </Route>
+            
+            <Route path="/shopping-cart">
+				<Header></Header>
+				<ShoppingCart></ShoppingCart>
+				<ScheduleCalendar classIDs={[enrolledClasses[enrolledClasses.length - 1]]}/>
+			</Route>
 
             <Route path="/">
               <Header></Header>
