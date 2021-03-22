@@ -16,7 +16,7 @@ export default function Course(props) {
                 <Accordion.Collapse eventKey="0">
                     <>
                     {props.sections.map(section => {
-                        return (<ClassSelect {...section} catalog={true}></ClassSelect>)
+                        return (<ClassSelect classObject={section} onSelect={props.onSelect} catalog={true}></ClassSelect>)
                     })}
                     </>
                 </Accordion.Collapse>

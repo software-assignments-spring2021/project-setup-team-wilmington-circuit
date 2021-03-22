@@ -16,7 +16,7 @@ function getTimeFormat(meetings){
 }
 
 export default function ClassSelect(props) {
-    const classObject = props
+    const classObject = props.classObject
     return (
        <div className="classElement card mx-auto border-light mb-3 mt-3">
           {!(props.catalog) ? 
@@ -27,7 +27,7 @@ export default function ClassSelect(props) {
           <div class="card-body">
               <div className = "checkButton">
               <div className = "checkButtonInput">
-              <input className = "checkButtonInput" class="form-check-input" type="checkbox"></input>
+              <input onChange={()=>props.onSelect(classObject)} className = "checkButtonInput" class="form-check-input" type="checkbox"></input>
               </div>
               </div>
               <div className = "detailsButton">
