@@ -138,7 +138,7 @@ function enroll() {
 export default function ShoppingCart(props) {
 	return (
 		<>
-			{sampleClasses.map(Class => {return (<ClassSelect {...Class}/>)})}
+			{sampleClasses.map(Class => {return (<ClassSelect classObject={Class}/>)})}
 			<div style = {{'text-align': 'center'}} class="button-box col-lg-12 mx-auto">
 				<a href="" class="btn btn-danger" role="button" onClick={remove()}><h4>Remove</h4></a>
 				<a href="" class="btn btn-primary m-3" role="button" onClick={enroll()}><h4>Enroll</h4></a>
