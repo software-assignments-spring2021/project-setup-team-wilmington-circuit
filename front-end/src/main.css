@@ -74,3 +74,17 @@ p {
 .profile-text {
     margin-top: 10px;
 }
+
+.form-control {
+    background-color: #fff !important;
+    border-width: 1px;
+    border-color: #404040 !important;
+}
+
+nav {
+    margin-bottom: 30px;
+}
+
+.login-pg {
+    padding-top: 30px;
+}
