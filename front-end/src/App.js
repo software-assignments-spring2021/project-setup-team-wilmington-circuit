@@ -54,10 +54,12 @@ function App() {
             </Route>
             
             <Route path="/shopping-cart">
-				<Header></Header>
-				<ShoppingCart></ShoppingCart>
-				<ScheduleCalendar classIDs={[enrolledClasses[enrolledClasses.length - 1]]}/>
-			</Route>
+              <Header></Header>
+              <ShoppingCart></ShoppingCart>
+              <ScheduleCalendar 
+              classIDs={[enrolledClasses[enrolledClasses.length - 1]]}
+              />
+            </Route>
 
             <Route path="/catalog">
               <Catalog></Catalog>
