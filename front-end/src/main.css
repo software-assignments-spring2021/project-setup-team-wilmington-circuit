@@ -8,10 +8,9 @@
 
 a {
     font-family: 'Gothic A1', sans-serif;
-    color: #404040;
 }
 
-.btn:hover, .btn:focus, .active, .fc-dayGridMonth-button:hover, .fc-dayGridMonth-button:focus {
+.btn:hover, .btn:focus, .btn.active, .fc-dayGridMonth-button:hover, .fc-dayGridMonth-button:focus {
     background-color: #390063 !important;
     border-color: #fff !important;
 }
