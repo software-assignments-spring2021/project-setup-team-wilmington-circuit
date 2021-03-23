@@ -1,27 +1,20 @@
-import React from 'react';
+import React, {useState, useEffect } from 'react';
 import '../main.css';
 import avatar from '../images/profile-pic.png';
+import getTestData from '../testData'
+import "./styles/Personal.css";
 
-
-export default class PersonalInfo extends React.Component{
-
-    state = {
-        loading: true,
-        person: null
-    }
-
-    async componentDidMount() {
-        const url = 'https://my.api.mockaroo.com/mock_personal_data.json?key=202d5e00'
-        const response = await fetch(url);
-        const data = await response.json();
-        console.log(data);
-        this.setState({person: data, loading: false})
-    }
-
-    render() {
+const PersonalInfo = (props) => {
+    const [personData, setPersonData] = React.useState([]);
+    useEffect(()=>{
+        getTestData.getPersonalData().then(res => {
+            setPersonData(res);
+        }
+        )
+    }, [])
         return (
             <div>
-                {this.state.loading || !this.state.person ? (
+                {!personData.first_name ? (
                     <div>loading...</div>
                 ) : (
                     <div>
@@ -35,17 +28,17 @@ export default class PersonalInfo extends React.Component{
             
                             {/* Basic Personal Info*/}
                             <div class="col-lg-2">
-                                <p align='left' style={{'font-size':'30px'}}>
-                                    {this.state.person.first_name} {this.state.person.last_name}<br></br>
+                                <p className = "nameInfo">
+                                    {personData.first_name} {personData.last_name}<br></br>
                                     He/Him<br></br>
-                                    NID: N{this.state.person.NID}<br></br>
-                                    DOB: {this.state.person.dob}
+                                    NID: N{personData.NID}<br></br>
+                                    DOB: {personData.dob}
                                 </p>
                             </div>
             
                             {/* Link to edit screen*/}
-                            <div class='col-lg-4'>
-                                <a href='/personal#edit' style={{'float': 'right', 'font-size':'15px'}}><ins>Edit</ins></a>
+                            <div className = "editButton" class='col-lg-4'>
+                                <a href='/personal#edit'><ins>Edit</ins></a>
                             </div>
                         </div> <br></br>
             
@@ -53,7 +46,7 @@ export default class PersonalInfo extends React.Component{
                         <div class="row">
                             <div class="col-lg-2"></div>
                             <div class="col-lg-8">
-                                <h2 align='left' style={{'font-size':'25px'}}>
+                                <h2 className = "addressInfo">
                                     Addresses
                                 </h2>
                             </div>
@@ -62,7 +55,7 @@ export default class PersonalInfo extends React.Component{
                         {/* Addresses row*/}
                         <div class="row">
                             <div class="col-lg-2"></div>
-                            {this.state.person.addresses.map((address) =>{
+                            {personData.addresses.map((address) =>{
                                 return (
                                     <div class="col-lg-4">
                                         <p align='left'>
@@ -80,7 +73,7 @@ export default class PersonalInfo extends React.Component{
                         <div class="row">
                             <div class="col-lg-2"></div>
                             <div class="col-lg-8">
-                                <h2 align='left' style={{'font-size':'25px'}}>
+                                <h2 className = "phoneInfo">
                                     Phone Numbers
                                 </h2>
                             </div>
@@ -89,7 +82,7 @@ export default class PersonalInfo extends React.Component{
                         {/* Phone Numbers row */}
                         <div class="row">
                             <div class="col-lg-2"></div>
-                            {this.state.person.phone_numbers.map((number) =>{
+                            {personData.phone_numbers.map((number) =>{
                                 return (
                                     <div class="col-lg-2">
                                         <p align='left'>
@@ -105,7 +98,7 @@ export default class PersonalInfo extends React.Component{
                         <div class="row">
                             <div class="col-lg-2"></div>
                             <div class="col-lg-8">
-                                <h2 align='left' style={{'font-size':'25px'}}>
+                                <h2 className = "emailInfo">
                                     Email Addresses
                                 </h2>
                             </div>
@@ -114,7 +107,7 @@ export default class PersonalInfo extends React.Component{
                         {/* Email Addresses row */}
                         <div class="row">
                             <div class="col-lg-2"></div>
-                            {this.state.person.emails.map((email) =>{
+                            {personData.emails.map((email) =>{
                                 return (
                                     <div class="col-lg-2">
                                         <p align='left'>
@@ -130,7 +123,7 @@ export default class PersonalInfo extends React.Component{
                         <div class="row">
                             <div class="col-lg-2"></div>
                             <div class="col-lg-8">
-                                <h2 align='left' style={{'font-size':'25px'}}>
+                                <h2 className = "contactInfo">
                                     Emergency Contact
                                 </h2>
                             </div>
@@ -139,7 +132,7 @@ export default class PersonalInfo extends React.Component{
                         {/* Emergency Contact row */}
                         <div class="row">
                             <div class="col-lg-2"></div>
-                            {this.state.person.emergency_contacts.map((contact) =>{
+                            {personData.emergency_contacts.map((contact) =>{
                                 return (
                                     <div class="col-lg-2">
                                         <p align='left'>
@@ -158,7 +151,7 @@ export default class PersonalInfo extends React.Component{
                                 <h2 align='left' style={{'font-size':'25px'}}>
                                     Citizenship
                                 </h2>
-                                <p align='left'>{this.state.person.citizenship_status}</p>
+                                <p align='left'>{personData.citizenship_status}</p>
                             </div>
                         </div>
                     </div>)}
@@ -166,4 +159,5 @@ export default class PersonalInfo extends React.Component{
             
         )
     }
-}
+
+export default PersonalInfo;
