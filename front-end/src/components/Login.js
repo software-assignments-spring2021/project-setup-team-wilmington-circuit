@@ -1,9 +1,9 @@
 import React from 'react';
-
+import './styles/Login.css';
 export default function Login() {
    
         return (
-            <form class='mx-auto' style={{ width: '50%'}}>
+            <form className = "loginForm">
                 <h3>Log In to Your NYU Account</h3>
 
                 <div className="form-group">

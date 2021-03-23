@@ -1,7 +1,7 @@
 import React from "react"
-import {Button, Modal} from "react-bootstrap";
+import {Button, ButtonGroup, ButtonToolbar, Modal} from "react-bootstrap";
 import Recitation from "./Recitation";
-import "./styles/ClassDetails.css";
+import ScheduleCalendar from './ScheduleCalendar'
 
 const desc = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam est augue, facilisis eu mauris nec, faucibus facilisis eros. Etiam id mi sed justo elementum consequat sit amet vel turpis. Nullam et ornare tortor. Proin consequat quis nibh eget facilisis. Etiam erat velit, cursus in urna ut, tristique tincidunt augue. Nulla sapien quam, suscipit id metus vel, vestibulum tincidunt sem. Nam.";
 const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -18,21 +18,14 @@ function getTimeFormat(meetings){
   return meetingList.join(', ');
 }
 
-export default function ClassDetails(props) {
-	const [show, setShow] = React.useState(false);
-	const handleClose = () => setShow(false);
-	const handleShow = () => setShow(true);	
+export default function AddClass(props) {
+    const classObject = props.classObject;
 	return (
-
     <>
-      <Button variant="primary" onClick={handleShow}>
-        Details
-      </Button>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
+      <Modal show={true}>
+        <Modal.Header>
           <Modal.Title>
-            <b>{props.name}</b> ({props.registrationNumber})
+            <b>{classObject.name}</b> ({classObject.registrationNumber})
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -41,31 +34,40 @@ export default function ClassDetails(props) {
           </p>
           <p>
             <b>Instructor: </b>
-            {props.instructors}
+            {classObject.instructors}
           </p>
           <p>
             <b>Location: </b>
-            {props.location}
+            {classObject.location}
           </p>
           <p>
             <b>Time: </b>
-            {props.meetings ? getTimeFormat(props.meetings) : "No Time"}
+            {classObject.meetings ? getTimeFormat(classObject.meetings) : "No Time"}
           </p>
           <p>
             <b>Status: </b>
-            {props.status}
+            {classObject.status}
           </p>
           <b>Description:</b>
           <p>{desc}</p>
-          <b>Recitation:</b>
-          {props.recitations ? (
-            props.recitations.map((rec) => {
+          <b>Recitations:</b>
+          {classObject.recitations ? (
+            classObject.recitations.map((rec) => {
               return <Recitation {...rec}></Recitation>;
             })
           ) : (
             <Modal.Body>No Recitations</Modal.Body>
           )}
         </Modal.Body>
+        <ButtonToolbar className="justify-content-between" block>
+            <ButtonGroup><Button variant="danger" onClick={()=>props.hide(classObject)}>Cancel</Button>
+          <Button variant="secondary">Add to Cart</Button>
+          <Button>ENROLL</Button></ButtonGroup>
+          <ButtonGroup><ScheduleCalendar
+                classIDs={[classObject.registrationNumber]}
+                /></ButtonGroup>
+          
+        </ButtonToolbar>
       </Modal>
     </>
   );

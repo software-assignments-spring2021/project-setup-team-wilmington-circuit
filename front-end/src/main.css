@@ -1,6 +1,38 @@
-.btn, .form-control, .form-check-input {
+.btn, .btn-primary, .fc-dayGridMonth-button, .form-control, .form-check-input {
     border-radius: 0;
+    background-color: #57088B !important;
+    border-color: #fff !important;
+    border-radius: 10px;
+    font-family: 'Gothic A1', sans-serif !important;
 }
+
+a {
+    font-family: 'Gothic A1', sans-serif;
+    color: #404040;
+}
+
+.btn:hover, .btn:focus, .active, .fc-dayGridMonth-button:hover, .fc-dayGridMonth-button:focus {
+    background-color: #390063 !important;
+    border-color: #fff !important;
+}
+
+.fc-list-event-dot, .fc-daygrid-event-dot {
+    border: 5px solid #8C00E7 !important;
+    border: calc(var(--fc-list-event-dot-width, 10px) / 2) solid var(--fc-event-border-color, #8C00E7) !important;
+    border-radius: 5px !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Gothic A1', sans-serif;
+    font-weight: 800;
+}
+
+p {
+    font-family: 'Gothic A1', sans-serif;
+    font-weight: 400;
+    color: #404040;
+}
+
 
 .title {
     margin-left: 0 !important;
