@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Button, ButtonGroup, ButtonToolbar, DropdownButton, FormControl, InputGroup } from "react-bootstrap";
+
 import Header from "./Header";
 import getTestData from '../testData';
 import Course from './Course';
 import AddClass from './AddClass';
+import './styles/Catalog.css'
 
 const selectedClasses = []
 
@@ -20,7 +22,6 @@ const Catalog = props => {
     const handleHideDisplayClasses = (classObject) => {
         console.log(classObject, modalClasses)
         setModalClasses(modalClasses.filter(modalClass => modalClass !== classObject))
-
     }
 
     const handleSelectClass = classElement => {

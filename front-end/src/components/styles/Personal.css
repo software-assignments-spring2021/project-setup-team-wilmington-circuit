@@ -1,0 +1,30 @@
+.nameInfo {
+  text-align: left;
+  font-size: 30px;
+}
+
+.editButton {
+  float: right;
+  font-size: 15px;
+}
+
+.addressInfo {
+  text-align: left;
+  font-size: 25px;
+}
+
+.phoneInfo {
+  font-size: 25px;
+}
+.emailInfo {
+  font-size: 25px;
+  text-align: left;
+}
+.contactInfo {
+  text-align: left;
+  font-size: 25px;
+}
+.citizenshipInfo {
+  text-align: left;
+  font-size: 25px;
+}

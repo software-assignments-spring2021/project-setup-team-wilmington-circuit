@@ -1,11 +1,11 @@
 import React from 'react';
-
+import './styles/Login.css';
 export default function Login() {
    
         return (
             <div class="login-pg">
-                <form class='mx-auto' style={{ width: '50%'}}>
-                    <h3>Log In to Your NYU Account</h3>
+                <form className = "loginForm">
+                <h3>Log In to Your NYU Account</h3>
 
                     <div className="form-group">
                         <label>NetID</label>
