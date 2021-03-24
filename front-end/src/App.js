@@ -1,6 +1,6 @@
 
-import getTestData from './testData'
-import ScheduleCalendar from './components/ScheduleCalendar'
+import getTestData from './testData';
+import ScheduleCalendar from './components/ScheduleCalendar';
 import { useEffect, useState } from 'react';
 import React from 'react'
 import { Button, ButtonToolbar, Dropdown, DropdownButton, ButtonGroup } from 'react-bootstrap';
@@ -15,6 +15,7 @@ import Login from './components/Login'
 import Enroll from './components/Enroll'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Catalog from './components/Catalog';
+import ShoppingCart from './components/ShoppingCart';
 
 function App() {
   const [enrolledClasses, setEnrolledClasses] = useState([])
@@ -50,6 +51,14 @@ function App() {
 
             <Route path="/login">
               <Login></Login>
+            </Route>
+            
+            <Route path="/shopping-cart">
+              <Header></Header>
+              <ShoppingCart></ShoppingCart>
+              <ScheduleCalendar 
+              classIDs={[enrolledClasses[enrolledClasses.length - 1]]}
+              />
             </Route>
 
             <Route path="/catalog">
