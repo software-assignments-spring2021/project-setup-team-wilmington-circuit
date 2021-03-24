@@ -19,7 +19,7 @@ function getTimeFormat(meetings){
 }
 
 export default function AddClass(props) {
-    const classObject = props.classObject;
+  const classObject = props.classObject;
 	return (
     <>
       <Modal show={true}>
@@ -61,7 +61,7 @@ export default function AddClass(props) {
         </Modal.Body>
         <ButtonToolbar className="justify-content-between" block>
             <ButtonGroup><Button variant="danger" onClick={()=>props.hide(classObject)}>Cancel</Button>
-          <Button variant="secondary">Add to Cart</Button>
+          {props.inCart ? null :<Button variant="secondary">Add to Cart</Button>}
           <Button>ENROLL</Button></ButtonGroup>
           <ButtonGroup><ScheduleCalendar
                 classIDs={[classObject.registrationNumber]}

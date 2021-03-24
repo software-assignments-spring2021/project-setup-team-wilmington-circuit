@@ -1,148 +1,75 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ClassSelect from "./ClassSelect";
-
-const sampleClasses = [
-	{
-		"registrationNumber": 22981,
-		"code": "001",
-		"instructors": [
-			"Joseph John Versoza"
-		],
-		"type": "Lecture",
-		"status": "WaitList",
-		"meetings": [
-			{
-				"beginDate": "2021-02-01 11:00:00",
-				"minutesDuration": 75,
-				"endDate": "2021-05-10 23:59:00"
-			},
-			{
-				"beginDate": "2021-02-03 11:00:00",
-				"minutesDuration": 75,
-				"endDate": "2021-05-10 23:59:00"
-			}
-		],
-		"waitlistTotal": 72,
-		"instructionMode": "Online",
-		"name": "Data Management and Analysis",
-		"minUnits": 0,
-		"maxUnits": 4,
-		"location": "Online"
-	},
-	{
-		"registrationNumber": 9425,
-		"code": "034",
-		"instructors": [
-		"Joseph John Versoza"
-		],
-		"type": "Lecture",
-		"status": "WaitList",
-		"meetings": [
-		{
-			"beginDate": "2021-01-28 09:30:00",
-			"minutesDuration": 75,
-			"endDate": "2021-05-10 23:59:00"
-		},
-		{
-			"beginDate": "2021-02-02 09:30:00",
-			"minutesDuration": 75,
-			"endDate": "2021-05-10 23:59:00"
-		}
-		],
-		"waitlistTotal": 79,
-		"instructionMode": "Online",
-		"name": "Special Topics: Applied Internet Tech",
-		"minUnits": 0,
-		"maxUnits": 4,
-		"location": "Online"
-	},
-	{
-		"registrationNumber": 7624,
-		"code": "001",
-		"instructors": [
-		"Douglas L Moody"
-		],
-		"type": "Lecture",
-		"status": "WaitList",
-		"meetings": [
-		{
-			"beginDate": "2021-02-01 09:30:00",
-			"minutesDuration": 75,
-			"endDate": "2021-05-10 23:59:00"
-		},
-		{
-			"beginDate": "2021-02-03 09:30:00",
-			"minutesDuration": 75,
-			"endDate": "2021-05-10 23:59:00"
-		}
-		],
-		"recitations": [
-		{
-			"registrationNumber": 7625,
-			"code": "002",
-			"instructors": [
-			"Staff"
-			],
-			"type": "Recitation",
-			"status": "WaitList",
-			"meetings": [
-			{
-				"beginDate": "2021-02-02 09:30:00",
-				"minutesDuration": 75,
-				"endDate": "2021-05-10 23:59:00"
-			}
-			],
-			"waitlistTotal": 0,
-			"instructionMode": "In-Person",
-			"name": "Computer Systems Org",
-			"minUnits": 0,
-			"maxUnits": 0,
-			"location": "60 5th Ave - Room: 125"
-		}
-		],
-		"waitlistTotal": 1,
-		"instructionMode": "Online",
-		"name": "Computer Systems Org",
-		"minUnits": 0,
-		"maxUnits": 4,
-		"location": "Online"
-	}
-]
+import getTestData from '../testData';
+import ScheduleCalendar from './ScheduleCalendar';
+import Header from './Header';
+import AddClass from './AddClass';
+import { Button, ButtonGroup, ButtonToolbar } from "react-bootstrap";
 
 const enrolled = [];
 
-function remove() {
-	try {
-		sampleClasses = sampleClasses.filter(Class => {
-			console.log(`${Class.registrationNumber} removed from cart`);
-			console.log(ClassSelect.returnSelected());
-			return !(Class.registrationNumber in ClassSelect.returnSelected());
-		})
-	}
-	catch(e) {console.log("Removal failed")}
-}
-
-function enroll() {
-	try {
-		sampleClasses = sampleClasses.filter(Class => {
-			if (!(Class.registrationNumber in ClassSelect.returnSelected())) {
-				console.log(`${Class.registrationNumber} enrolled`);
-				enrolled.push(Class);
-				return true;
-			}
-		})
-	}
-	catch(e) {console.log("Enrollment failed")}
-}
+const selectedClasses = []
 
 export default function ShoppingCart(props) {
+	const [cartClasses, setCartClasses] = useState([]);
+	const [modalClasses, setModalClasses] = useState([]);
+
+	const handleDisplayClasses = () =>{
+        selectedClasses.forEach(classObject =>{
+            setModalClasses(prev => [...prev, classObject])
+        })
+    }
+
+	const handleRemoveClasses = () => {
+		console.log(cartClasses, selectedClasses)
+		selectedClasses.forEach(classObject => {
+			setCartClasses(prev => prev.filter(id => id != classObject.registrationNumber))
+		});
+		selectedClasses.splice(0, selectedClasses.length);
+	}
+
+    const handleHideDisplayClasses = (classObject) => {
+        console.log(classObject, modalClasses)
+        setModalClasses(modalClasses.filter(modalClass => modalClass !== classObject))
+    }
+
+	const handleSelectClass = classElement => {
+        if(selectedClasses.indexOf(classElement) >= 0) selectedClasses.splice(selectedClasses.indexOf(classElement), 1);
+        else selectedClasses.push(classElement);
+        console.log(selectedClasses)
+    }
+
+	useEffect(() => {
+		setCartClasses([])
+		getTestData.getTestClassIDs(4).then(classIDs => classIDs.forEach(id => {
+		  setCartClasses(prev => [...prev, id])
+		}))
+	  }, [])
 	return (
-		<>
-			{sampleClasses.map(Class => {return (<ClassSelect classObject={Class}/>)})}
-			<div style = {{'text-align': 'center'}} class="button-box col-lg-12 mx-auto">
-				<a href="" class="btn btn-danger" role="button" onClick={remove()}><h4>Remove</h4></a>
-				<a href="" class="btn btn-primary m-3" role="button" onClick={enroll()}><h4>Enroll</h4></a>
-			</div>
-		</>
-	)
+    <>
+      <Header></Header>
+      <div className="topbar-container">
+        <h1 className="ml-4 mt-3 mb-4 title">Shopping Cart</h1>
+      </div>
+      {cartClasses.map((cartClass) => {
+        return <ClassSelect onSelect={handleSelectClass} classID={cartClass} />;
+      })}
+      <div className="staticbar-container">
+        <ButtonToolbar id="catalog-static">
+          <ScheduleCalendar classIDs={[cartClasses[cartClasses.length - 1]]} />
+          <ButtonGroup>
+            <Button onClick={() => handleRemoveClasses()} variant="secondary">
+              Remove Selected
+            </Button>
+            <Button onClick={() => handleDisplayClasses()}>Enroll Selected</Button>
+          </ButtonGroup>
+        </ButtonToolbar>
+      </div>
+	  {
+        modalClasses.map(classObject =>(
+                <AddClass hide={handleHideDisplayClasses} inCart={true} classObject = {classObject}></AddClass>
+            )
+        )}
+    </>
+  );
 }

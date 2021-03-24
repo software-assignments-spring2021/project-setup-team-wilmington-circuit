@@ -60,18 +60,6 @@ p {
 .classElement {
     border-radius: 0;
     margin-top: 1em;
+    width: 95%;
 }
 
-.profile-pic {
-    border-radius: 50px;
-    margin-top: 10px;
-}
-
-.profile-nav {
-    margin: auto;
-    text-align: center;
-}
-
-.profile-text {
-    margin-top: 10px;
-}

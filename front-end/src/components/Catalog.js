@@ -22,7 +22,6 @@ const Catalog = props => {
     const handleHideDisplayClasses = (classObject) => {
         console.log(classObject, modalClasses)
         setModalClasses(modalClasses.filter(modalClass => modalClass !== classObject))
-
     }
 
     const handleSelectClass = classElement => {

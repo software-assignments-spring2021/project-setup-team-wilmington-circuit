@@ -54,11 +54,7 @@ function App() {
             </Route>
             
             <Route path="/shopping-cart">
-              <Header></Header>
               <ShoppingCart></ShoppingCart>
-              <ScheduleCalendar 
-              classIDs={[enrolledClasses[enrolledClasses.length - 1]]}
-              />
             </Route>
 
             <Route path="/catalog">
@@ -86,7 +82,7 @@ function App() {
                 <ScheduleCalendar
                 classIDs={[enrolledClasses[enrolledClasses.length - 1]]}
                 />
-                <Button>Shopping Cart</Button>
+                <Button href="/shopping-cart">Shopping Cart</Button>
                 <Button href="/catalog">Course Search</Button>
               </ButtonGroup>
               </ButtonToolbar>
