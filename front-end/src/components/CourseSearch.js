@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Button, Modal, ModalBody, ModalTitle, ModalFooter } from 'react-bootstrap';
 import Dropdown from './Dropdown'
+import schools from './data/nyuschools.json'
+import times from './data/times.json'
+import subjects from './data/subjects.json'
+import days from './data/days.json'
 
 export default function CourseSearch() {
     const [show, setShow] = useState(false);
@@ -8,13 +12,17 @@ export default function CourseSearch() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const [value, setVlaue] = useState(null)
+    const [value, setValue] = useState(null);
+    
+    const mystyle = {
+        height: 900
+      };
 
     return (
         <div>
-            <Button onClick={handleShow} >Course Search</Button>
+            <Button onClick={handleShow} >More Filters</Button>
 
-            <Modal show={show} onHide={handleClose} animation={false}>
+            <Modal show={show} onHide={handleClose} animation={false} style={mystyle}>
             <Modal.Header closeButton>
             <Modal.Title>Course Search</Modal.Title>
             </Modal.Header>
@@ -23,19 +31,25 @@ export default function CourseSearch() {
                     <label>
                     School:
                     </label>
-                    <Dropdown
-                    promt = 'Select School'
-                    value = {value}
-                    onChange = {val => setVlaue()}
+                    <Dropdown 
+                    options={schools} 
+                    prompt='Select School'
+                    id='code'
+                    label='name'
+                    value={value}
+                    onChange={val => setValue(val)}
                     ></Dropdown>
-
                     <label>
+                    
                     Subject:
                     </label>
                     <Dropdown
-                    promt = 'Select Subject'
-                    value = {value}
-                    onChange = {val => setVlaue()}
+                    options={subjects} 
+                    prompt='Select Subject'
+                    id='id'
+                    label='name'
+                    value={value}
+                    onChange={val => setValue(val)}
                     ></Dropdown>
 
                     <label>
@@ -44,29 +58,33 @@ export default function CourseSearch() {
                     type="text"
                     />
                     <br></br>
-                    <label>
-                    <p>Location:</p></label>
-                    <input
-                    type="text"
-                    />
-                    <br></br>
+
                     <label>
                     Day:
                     </label>
                     <Dropdown
-                    promt = 'Select Day'
-                    value = {value}
-                    onChange = {val => setVlaue()}
+                    options={days} 
+                    prompt='Select Day'
+                    id='id'
+                    label='name'
+                    value={value}
+                    onChange={val => setValue(val)}
                     ></Dropdown>
 
                     <label>
                     Time:
                     </label>
                     <Dropdown
-                    promt = 'Select Time'
-                    value = {value}
-                    onChange = {val => setVlaue()}
+                    options={times} 
+                    prompt='Select Time'
+                    id='id'
+                    label='time'
+                    value={value}
+                    onChange={val => setValue(val)}
                     ></Dropdown>
+
+
+
                 </div>
             </Modal.Body>
             <Modal.Footer>

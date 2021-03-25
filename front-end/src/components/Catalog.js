@@ -4,6 +4,7 @@ import Header from "./Header";
 import getTestData from '../testData';
 import Course from './Course';
 import AddClass from './AddClass';
+import CourseSearch from './CourseSearch';
 
 const selectedClasses = []
 
@@ -55,7 +56,7 @@ const Catalog = props => {
             />
             </InputGroup>
             <ButtonGroup>
-                <Button>More Filters</Button>
+                <CourseSearch></CourseSearch>
             </ButtonGroup>
         </ButtonToolbar>
         </div>

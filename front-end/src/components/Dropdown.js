@@ -1,44 +1,143 @@
-import React, {useState} from "react"
+import React, {useState, useRef, useEffect} from "react"
 import "./Dropdown.css"
 
-export default function Dropdown({value, onChange}) {
+/*export default function Dropdown({options, id, label, prompt, value, onChange}) {
 
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(true)
+
+    const [query, setQuery] = useState("")
+
+    const ref = useRef(null)
+
+    useEffect(
+        () => {
+            ["click", "touchend"].forEach(e => (
+                document.addEventListener(e, toggle)
+            ))
+            return () => ["click", "touchend"].forEach(e => (
+                document.removeEventListener(e, toggle)
+            ))
+        }, [])
+
+    function toggle(e) {
+        setOpen(e && e.target === ref.current)
+    }
+
+    function filter(options) {
+        return options.filter(
+            (option) => 
+            option[label].toLowerCase().indexOf(query.toLowerCase()) > -1
+        )
+    }
+
+    function displayValue() {
+        if(query.length > 0) return query
+        if(value) return value[label]
+        return ""
+    }
+
+    function selectOption(option) {
+        setQuery("")
+        onChange(option)
+        setOpen(false)
+    }
 
     return <div className="dropdown">
-    <div className="control" onClick={() => setOpen((prev) => !prev)}>
-    <div className="selected-value">Select School</div>
-    <div className = {`arrow ${open ? "open" : null}`}>
-        </div>  
+    <div className="control">
+        <div className="selected-value" ref={ref}>
+            <input 
+            type="text" 
+            ref={ref} 
+            placeholder={value ? value[label] : prompt}
+            value={displayValue()}
+            onChange={e => {
+                setQuery(e.target.value)
+                onChange(null)
+            }}
+            onClick={toggle}
+            onTouchEnd={toggle} /> 
+
+        </div>
+        <div className = {`arrow ${open ? "open" : null}`} ></div>
+
         <div className = {`options ${open ? "open" : null}`}>
-            <div className="option">College of Arts and Science</div>
-            <div className="option">Leonard N. Stern School of Business</div>
-            <div className="option">School of Professional Studies</div>
-            <div className="option">College of Dentistry</div>
-            <div className="option">Steinhardt School of Culture, Education, and Human Development</div>
-            <div className="option">Liberal Studies</div>
-            <div className="option">Gallatin School of Individualized Study</div>
-            <div className="option">NYU Abu Dhabi</div>
-            <div className="option">Rory Meyers College of Nursing</div>
-            <div className="option">Graduate School of Arts and Science</div>
-            <div className="option">Leonard N. Stern School of Business - Graduate</div>
-            <div className="option">School of Professional Studies - Graduate</div>
-            <div className="option">Steinhardt School of Culture, Education, and Human Development - Graduate</div>
-            <div className="option">Silver School of Social Work</div>
-            <div className="option">Tisch School of the Arts</div>
-            <div className="option">Gallatin School of Individualized Study - Graduate</div>
-            <div className="option">College of Global Public Health</div>
-            <div className="option">NYU Shanghai</div>
-            <div className="option">Tandon School of Engineering</div>
-            <div className="option">Rory Meyers College of Nursing - Graduate</div>
-            <div className="option">Robert F. Wagner Graduate School of Public Service - Graduate</div>
-            <div className="option">Silver School of Social Work - Graduate</div>
-            <div className="option">Tisch School of the Arts - Graduate</div>
-            <div className="option">College of Global Public Health - Graduate</div>
-            <div className="option">Center for Urban Science and Progress - Graduate</div>
-            <div className="option">Tandon School of Engineering - Graduate</div>
-            <div className="option">School of Professional Studies</div>
+            {filter(options).map((option) => (
+                <div 
+                key = {option[id]}
+                className={`option ${value === option ? "selected" : null}`}
+                onClick={() => selectOption(option)}
+                onTouchEnd={() => selectOption(option)}
+                >{option[label]}</div>
+            ))}
         </div>
     </div>
 </div>
 }
+*/
+export default function Dropdown({options, id, label, prompt, value, onChange}) {
+
+   /* const [open, setOpen] = useState(true)
+
+    const [query, setQuery] = useState("")
+
+    const ref = useRef(null)
+
+    useEffect(
+        () => {
+            ["click", "touchend"].forEach(e => (
+                document.addEventListener(e, toggle)
+            ))
+            return () => ["click", "touchend"].forEach(e => (
+                document.removeEventListener(e, toggle)
+            ))
+        }, [])
+
+    function toggle(e) {
+        setOpen(e && e.target === ref.current)
+    }
+
+    function displayValue() {
+        if(query.length > 0) return query
+        if(value) return value[label]
+        return ""
+    }
+
+    function selectOption(option) {
+        setQuery("")
+        onChange(option)
+        setOpen(false)
+    }*/
+
+    const [open, setOpen] = useState(false)
+    const ref = useRef(null)
+
+    function close(e) {
+        setOpen(e && e.target === ref.current)
+    }
+
+    useEffect(
+        () => {
+            document.addEventListener("click", close)
+            return () => document.removeEventListener("click", close)
+        }, [])
+
+    return <div className="dropdown">
+    <div className='control' onClick={() => setOpen((prev) => !prev)}>
+        <div className="selected-value" ref={ref}>
+            {value ? value.name : prompt}
+        </div>
+        <div className={`arrow ${open ? "open" : null}`}></div>
+
+        <div className={`options ${open ? "open" : null}`}>
+            {
+                options.map((option) => (
+                <div className={`option ${value === option ? "selected" : null}`} onClick={() => {
+                        onChange(option)
+                        setOpen(false)
+                    }}>{option.name}</div>
+            ))}
+        </div>
+    </div>
+</div>
+}
+
