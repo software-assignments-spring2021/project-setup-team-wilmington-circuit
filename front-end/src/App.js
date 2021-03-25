@@ -16,11 +16,45 @@ import Enroll from './components/Enroll'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Catalog from './components/Catalog';
 import ShoppingCart from './components/ShoppingCart';
+import ClassSelect from './components/ClassSelect';
+import DropClasses from './components/DropClasses';
+import SwapClasses from './components/SwapClasses';
+
+const selectedClasses = [];
 
 function App() {
-  const [enrolledClasses, setEnrolledClasses] = useState([])
-  const [selectedTerm, setSelectedTerm] = useState('spring21')
+  const [enrolledClasses, setEnrolledClasses] = useState([]);
+  const [selectedTerm, setSelectedTerm] = useState('spring21');
+  const [editMode, setEditMode] = useState(false);
+  const [multipleSelected, setMultipleSelected] =  useState(false);
+  const [modalDropClass, setModalDropClass] = useState(null);
+  const [modalSwapClass, setModalSwapClass] = useState(null);
   const termNames = {fall20: 'Fall 2020', spring21: 'Spring 2021', summer21: 'Summer 2021'};
+
+  const handleSelectClass = classElement => {
+    if(selectedClasses.indexOf(classElement) >= 0) selectedClasses.splice(selectedClasses.indexOf(classElement), 1);
+    else selectedClasses.push(classElement);
+    
+    setMultipleSelected(selectedClasses.length > 1);
+  }
+
+  const handleSwapSelected = () => {
+    setModalSwapClass(selectedClasses[0] || null);
+  }
+
+  const handleDropSelected = () => {
+    setModalDropClass(selectedClasses[0] || null);
+  }
+
+  const handleRemoveClass = () => {
+		if(selectedClasses[0]) setEnrolledClasses(prev => prev.filter(id => id != selectedClasses[0].registrationNumber))
+		selectedClasses.splice(0, selectedClasses.length);
+	}
+
+  const handleHideDisplayClasses = (classObject) => {
+    setModalDropClass(null);
+    setModalSwapClass(null);
+  }
 
   useEffect(() => {
     setEnrolledClasses([])
@@ -33,13 +67,12 @@ function App() {
       <div>
         <Router>
           <Switch>
+            <Route path="/finance">
+              <Header></Header>
+              <FinanceInfo></FinanceInfo>
+            </Route>
 
-          <Route path="/finance">
-            <Header></Header>
-            <FinanceInfo></FinanceInfo>
-          </Route>
-
-          <Route path="/grades">
+            <Route path="/grades">
               <Header></Header>
               <GradeInfo></GradeInfo>
             </Route>
@@ -52,7 +85,7 @@ function App() {
             <Route path="/login">
               <Login></Login>
             </Route>
-            
+
             <Route path="/shopping-cart">
               <ShoppingCart></ShoppingCart>
             </Route>
@@ -64,37 +97,68 @@ function App() {
             <Route path="/">
               <Header></Header>
               <div className="topbar-container">
-              <h1 className="ml-4 mt-3 mb-4 title" >My Courses</h1>
-              <ButtonToolbar className="justify-content-between">
-                <ButtonGroup>
-                <Button>Edit</Button>
-                <DropdownButton id="dropdown-basic-button" title={termNames[selectedTerm]} onSelect={(term, e) => {
-                  console.log(`Diplaying ${term} classes`);
-                  setSelectedTerm(term);
-                }}>
-                <Dropdown.Item eventKey="fall20">Fall 2020</Dropdown.Item>
-                <Dropdown.Item eventKey="spring21">Spring 2021</Dropdown.Item>
-                <Dropdown.Item eventKey="summer21">Summer 2021</Dropdown.Item>
-                </DropdownButton>
-              </ButtonGroup>
-              
-              <ButtonGroup>
-                <ScheduleCalendar
-                classIDs={[enrolledClasses[enrolledClasses.length - 1]]}
-                />
-                <Button href="/shopping-cart">Shopping Cart</Button>
-                <Button href="/catalog">Course Search</Button>
-              </ButtonGroup>
-              </ButtonToolbar>
+                <h1 className="ml-4 mt-3 mb-4 title">My Courses</h1>
+                <ButtonToolbar className="justify-content-between">
+                  <ButtonGroup>
+                    <Button onClick={() => setEditMode(!editMode)}>
+                      {editMode ? "Cancel" : "Edit"}
+                    </Button>
+                    <DropdownButton
+                      id="dropdown-basic-button"
+                      title={termNames[selectedTerm]}
+                      onSelect={(term, e) => {
+                        console.log(`Diplaying ${term} classes`);
+                        setSelectedTerm(term);
+                      }}
+                    >
+                      <Dropdown.Item eventKey="fall20">Fall 2020</Dropdown.Item>
+                      <Dropdown.Item eventKey="spring21">
+                        Spring 2021
+                      </Dropdown.Item>
+                      <Dropdown.Item eventKey="summer21">
+                        Summer 2021
+                      </Dropdown.Item>
+                    </DropdownButton>
+                  </ButtonGroup>
+
+                  <ButtonGroup>
+                    {editMode ? (
+                      <>
+                        <Button disabled={multipleSelected} onClick={handleSwapSelected}>Swap Class</Button>
+                        <Button disabled={multipleSelected} onClick={handleDropSelected}>Drop Class</Button>
+                      </>
+                    ) : (
+                      <>
+                        <ScheduleCalendar
+                          classIDs={[
+                            enrolledClasses[enrolledClasses.length - 1],
+                          ]}
+                        />
+                        <Button href="/shopping-cart">Shopping Cart</Button>
+                        <Button href="/catalog">Course Search</Button>
+                      </>
+                    )}
+                  </ButtonGroup>
+                </ButtonToolbar>
               </div>
-              
+
               {enrolledClasses.map((classID) => {
-                return <Class classID={classID}></Class>;
+                return editMode ? (
+                  <ClassSelect classID={classID} onSelect={handleSelectClass}></ClassSelect>
+                ) : (
+                  <Class classID={classID}></Class>
+                );
               })}
             </Route>
           </Switch>
         </Router>
       </div>
+      {
+        modalDropClass ? <DropClasses action={handleRemoveClass} hide={handleHideDisplayClasses} classObject={modalDropClass}></DropClasses> : <></>
+      }
+      {
+        modalSwapClass ? <SwapClasses hide={handleHideDisplayClasses} classObject={modalSwapClass}></SwapClasses> : <></>
+      }
     </>
   );
 }
