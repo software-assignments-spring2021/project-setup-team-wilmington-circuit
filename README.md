@@ -30,8 +30,8 @@ Our MVP should have:
 - [Santiage Darré](https://github.com/sdarre) (Sprint 1 Project Owner)
 - [Ari Khaytser](https://github.com/ajk745)  (Sprint 1 Scrum Master)
 - [Maggie Pierce](https://github.com/m-ggie)
-- [Alex Hammer](https://github.com/ah4597)
-- [Luis Cordova](https://github.com/LGCX)
+- [Alex Hammer](https://github.com/ah4597) (Sprint 2 Product Owner)
+- [Luis Cordova](https://github.com/LGCX) (Sprint 2 Scrum Master)
 
 ## History
 The course registration system on NYU Albert has frustrated students for years. The demand for a more intuitive and user-friendly system to register for classes has never been higher, and our goal is to fill that demand. 
