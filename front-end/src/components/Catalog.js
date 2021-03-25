@@ -44,8 +44,6 @@ const Catalog = props => {
         <h1 className="ml-4 mt-3 mb-4 title" >Catalog</h1>
         <ButtonToolbar className="justify-content-between">
             <InputGroup>
-            <DropdownButton title="School"></DropdownButton>
-            <DropdownButton title="Department"></DropdownButton>
             <InputGroup.Prepend>
                 <InputGroup.Text>@NYU</InputGroup.Text>
             </InputGroup.Prepend>
