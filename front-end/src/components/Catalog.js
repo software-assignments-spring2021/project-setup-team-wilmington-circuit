@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Button, ButtonGroup, ButtonToolbar, DropdownButton, FormControl, InputGroup } from "react-bootstrap";
-
 import Header from "./Header";
 import getTestData from '../testData';
 import Course from './Course';
 import AddClass from './AddClass';
+import CourseSearch from './CourseSearch'
 import './styles/Catalog.css'
 
 const selectedClasses = []
@@ -22,6 +22,7 @@ const Catalog = props => {
     const handleHideDisplayClasses = (classObject) => {
         console.log(classObject, modalClasses)
         setModalClasses(modalClasses.filter(modalClass => modalClass !== classObject))
+
     }
 
     const handleSelectClass = classElement => {
@@ -43,8 +44,6 @@ const Catalog = props => {
         <h1 className="ml-4 mt-3 mb-4 title" >Catalog</h1>
         <ButtonToolbar className="justify-content-between">
             <InputGroup>
-            <DropdownButton title="School"></DropdownButton>
-            <DropdownButton title="Department"></DropdownButton>
             <InputGroup.Prepend>
                 <InputGroup.Text>@NYU</InputGroup.Text>
             </InputGroup.Prepend>
@@ -56,7 +55,7 @@ const Catalog = props => {
             />
             </InputGroup>
             <ButtonGroup>
-                <Button>More Filters</Button>
+                <CourseSearch></CourseSearch>
             </ButtonGroup>
         </ButtonToolbar>
         </div>

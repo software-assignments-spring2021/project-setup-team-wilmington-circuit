@@ -14,6 +14,8 @@ import FinanceInfo from './components/Finance';
 import Login from './components/Login'
 import Enroll from './components/Enroll'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import CourseSearch from './components/CourseSearch'
+import schools from './components/data/nyuschools.json'
 import Catalog from './components/Catalog';
 import ShoppingCart from './components/ShoppingCart';
 import ClassSelect from './components/ClassSelect';
@@ -62,6 +64,7 @@ function App() {
       setEnrolledClasses(prev => [...prev, id])
     }))
   }, [selectedTerm])
+
   return (
     <>
       <div>
@@ -97,6 +100,7 @@ function App() {
             <Route path="/">
               <Header></Header>
               <div className="topbar-container">
+
                 <h1 className="ml-4 mt-3 mb-4 title">My Courses</h1>
                 <ButtonToolbar className="justify-content-between">
                   <ButtonGroup>
@@ -140,6 +144,7 @@ function App() {
                     )}
                   </ButtonGroup>
                 </ButtonToolbar>
+
               </div>
 
               {enrolledClasses.map((classID) => {
