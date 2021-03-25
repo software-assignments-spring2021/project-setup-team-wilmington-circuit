@@ -1,6 +1,6 @@
 import React from "react";
 import {Card} from "react-bootstrap";
-
+import "./styles/Recitation.css";
 const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 function getTimeFormat(meetings){

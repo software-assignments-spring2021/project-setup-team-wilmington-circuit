@@ -1,6 +1,37 @@
-.btn, .form-control, .form-check-input {
+.btn, .btn-primary, .fc-dayGridMonth-button, .form-control, .form-check-input {
     border-radius: 0;
+    background-color: #57088B !important;
+    border-color: #fff !important;
+    border-radius: 10px;
+    font-family: 'Gothic A1', sans-serif !important;
 }
+
+a {
+    font-family: 'Gothic A1', sans-serif;
+}
+
+.btn:hover, .btn:focus, .btn.active, .fc-dayGridMonth-button:hover, .fc-dayGridMonth-button:focus {
+    background-color: #390063 !important;
+    border-color: #fff !important;
+}
+
+.fc-list-event-dot, .fc-daygrid-event-dot {
+    border: 5px solid #8C00E7 !important;
+    border: calc(var(--fc-list-event-dot-width, 10px) / 2) solid var(--fc-event-border-color, #8C00E7) !important;
+    border-radius: 5px !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Gothic A1', sans-serif;
+    font-weight: 800;
+}
+
+p {
+    font-family: 'Gothic A1', sans-serif;
+    font-weight: 400;
+    color: #404040;
+}
+
 
 .title {
     margin-left: 0 !important;
@@ -28,16 +59,21 @@
 .classElement {
     border-radius: 0;
     margin-top: 1em;
+    width: 95%;
 }
 
-.profile-pic {
-    border-radius: 50px;
-    margin-top: 10px;
+.form-control {
+    background-color: #fff !important;
+    border-width: 1px;
+    border-color: #404040 !important;
 }
 
-.profile-nav {
-    margin: auto;
-    text-align: center;
+nav {
+    margin-bottom: 30px;
+}
+
+.login-pg {
+    padding-top: 30px;
 }
 
 .profile-text {

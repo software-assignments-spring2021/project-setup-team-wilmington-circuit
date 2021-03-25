@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ClassDetails from './ClassDetails'
+import { getClassInfo } from '../testData'
 
+import "./styles/ClassSelect.css"
 const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 function getTimeFormat(meetings){
@@ -16,19 +18,31 @@ function getTimeFormat(meetings){
 }
 
 export default function ClassSelect(props) {
-    const classObject = props.classObject
+    const [classObject, setClassObject] = useState({});
+    const [checked, setChecked] = useState(false);
+    useEffect(()=>{
+      if(props.classObject) setClassObject(props.classObject)
+      else{
+        getClassInfo(props.classID).then(res => {
+          setClassObject(()=>res);
+        })
+      }
+      setChecked(false)
+    }, [props.classID])
     return (
        <div className="classElement card mx-auto border-light mb-3 mt-3">
           {!(props.catalog) ? 
             <div class="card-header pt-3">
-            <h5>{props.name}</h5>
+            <h5>{classObject.name}</h5>
             </div>
            : <></> }
           <div class="card-body">
-              <div class = "" style = {{float: 'right'}}>
-              <input onChange={()=>props.onSelect(classObject)} class="form-check-input" type="checkbox"  style = {{width: '20px', height: '30px'}}></input>
+              <div className = "checkButton">
+              <div className = "checkButtonInput">
+              <input onChange={()=> {setChecked(true); props.onSelect(classObject)}} checked={checked} className = "checkButtonInput" class="form-check-input" type="checkbox"></input>
               </div>
-              <div class = "mr-5" style = {{float: 'right'}}>
+              </div>
+              <div className = "detailsButton">
                 <ClassDetails {...classObject}/>
               </div>
               <p class="card-text">{classObject.instructors  ? classObject.instructors.toString() : 'TBD'} - {classObject.location}</p>

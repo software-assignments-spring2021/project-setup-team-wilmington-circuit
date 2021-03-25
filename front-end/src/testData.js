@@ -25,5 +25,24 @@ const getTestCourses = async (len) => {
 
 }
 
-export default {getTestClassIDs, getClassInfo, getTestCourses }
-export {getTestClassIDs, getClassInfo, getTestCourses }
+const getGradeData = async () => {
+    const res = await axios.get('https://my.api.mockaroo.com/grades_mock_data.json?key=202d5e00');
+    const data = res.data;
+    return data;
+}
+
+const getPersonalData = async () => {
+    const res = await axios.get('https://my.api.mockaroo.com/mock_personal_data.json?key=202d5e00');
+    const data = res.data;
+    console.log(data);
+    return data;
+}
+
+const getFinancialData = async () => {
+    const res = await axios.get('https://my.api.mockaroo.com/mock_finance_data.json?key=202d5e00');
+    const data = res.data;
+    console.log(data);
+    return data;
+}
+export default {getTestClassIDs, getClassInfo, getTestCourses, getGradeData, getPersonalData, getFinancialData }
+export {getTestClassIDs, getClassInfo, getTestCourses, getGradeData, getPersonalData, getFinancialData }

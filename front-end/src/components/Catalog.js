@@ -4,7 +4,8 @@ import Header from "./Header";
 import getTestData from '../testData';
 import Course from './Course';
 import AddClass from './AddClass';
-import CourseSearch from './CourseSearch';
+import CourseSearch from './CourseSearch'
+import './styles/Catalog.css'
 
 const selectedClasses = []
 

@@ -1,6 +1,6 @@
 
-import getTestData from './testData'
-import ScheduleCalendar from './components/ScheduleCalendar'
+import getTestData from './testData';
+import ScheduleCalendar from './components/ScheduleCalendar';
 import { useEffect, useState } from 'react';
 import React from 'react'
 import { Button, ButtonToolbar, Dropdown, DropdownButton, ButtonGroup } from 'react-bootstrap';
@@ -17,6 +17,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import CourseSearch from './components/CourseSearch'
 import schools from './components/data/nyuschools.json'
 import Catalog from './components/Catalog';
+import ShoppingCart from './components/ShoppingCart';
 
 function App() {
   const [enrolledClasses, setEnrolledClasses] = useState([])
@@ -54,6 +55,10 @@ function App() {
             <Route path="/login">
               <Login></Login>
             </Route>
+            
+            <Route path="/shopping-cart">
+              <ShoppingCart></ShoppingCart>
+            </Route>
 
             <Route path="/catalog">
               <Catalog></Catalog>
@@ -80,9 +85,9 @@ function App() {
                 <ScheduleCalendar
                 classIDs={[enrolledClasses[enrolledClasses.length - 1]]}
                 />
-                <Button>Shopping Cart</Button>
-                
-                <CourseSearch></CourseSearch>
+
+                <Button href="/shopping-cart">Shopping Cart</Button>
+                <Button href="/catalog">Course Search</Button>
 
               </ButtonGroup>
               </ButtonToolbar>
