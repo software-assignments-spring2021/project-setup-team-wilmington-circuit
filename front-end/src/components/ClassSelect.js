@@ -39,7 +39,7 @@ export default function ClassSelect(props) {
           <div class="card-body">
               <div className = "checkButton">
               <div className = "checkButtonInput">
-              <input onChange={()=> {setChecked(true); props.onSelect(classObject)}} checked={checked} className = "checkButtonInput" class="form-check-input" type="checkbox"></input>
+              <input onChange={()=> {setChecked(!checked); props.onSelect(classObject)}} checked={checked} className = "checkButtonInput" class="form-check-input" type="checkbox"></input>
               </div>
               </div>
               <div className = "detailsButton">
