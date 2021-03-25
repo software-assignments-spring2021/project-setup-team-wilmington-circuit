@@ -13,16 +13,16 @@ export default function CourseSearch() {
     const handleShow = () => setShow(true);
 
     const [value, setValue] = useState(null);
+    const [value2, setValue2] = useState(null);
+    const [value3, setValue3] = useState(null);
+    const [value4, setValue4] = useState(null);
     
-    const mystyle = {
-        height: 900
-      };
 
     return (
         <div>
             <Button onClick={handleShow} >More Filters</Button>
 
-            <Modal show={show} onHide={handleClose} animation={false} style={mystyle}>
+            <Modal show={show} onHide={handleClose} animation={false}>
             <Modal.Header closeButton>
             <Modal.Title>Course Search</Modal.Title>
             </Modal.Header>
@@ -48,8 +48,8 @@ export default function CourseSearch() {
                     prompt='Select Subject'
                     id='id'
                     label='name'
-                    value={value}
-                    onChange={val => setValue(val)}
+                    value={value2}
+                    onChange={val => setValue2(val)}
                     ></Dropdown>
 
                     <label>
@@ -67,8 +67,8 @@ export default function CourseSearch() {
                     prompt='Select Day'
                     id='id'
                     label='name'
-                    value={value}
-                    onChange={val => setValue(val)}
+                    value={value3}
+                    onChange={val => setValue3(val)}
                     ></Dropdown>
 
                     <label>
@@ -79,10 +79,10 @@ export default function CourseSearch() {
                     prompt='Select Time'
                     id='id'
                     label='time'
-                    value={value}
-                    onChange={val => setValue(val)}
+                    value={value4}
+                    onChange={val => setValue4(val)}
                     ></Dropdown>
-
+                    
 
 
                 </div>
