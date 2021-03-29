@@ -4,7 +4,7 @@ import avatar from '../images/profile-pic.png';
 import getTestData from '../testData'
 import "./styles/Personal.css";
 
-const PersonalInfo = (props) => {
+const PersonalEdit = (props) => {
     const [personData, setPersonData] = React.useState([]);
     useEffect(()=>{
         getTestData.getPersonalData().then(res => {
@@ -17,7 +17,7 @@ const PersonalInfo = (props) => {
                 {!personData.first_name ? (
                     <div>loading...</div>
                 ) : (
-                    <div>
+                    <form action="/personal">
                         <div class="row">
                             <div class="col-lg-2"></div>
             
@@ -25,20 +25,19 @@ const PersonalInfo = (props) => {
                             <div class="col-lg-2">
                                 <img align='left' src={avatar} alt="NYU Logo" height="200px"></img>
                             </div>
-            
+
                             {/* Basic Personal Info*/}
                             <div class="col-lg-2">
-                                <p className = "nameInfo">
-                                    {personData.first_name} {personData.last_name}<br></br>
-                                    He/Him<br></br>
-                                    NID: N{personData.NID}<br></br>
-                                    DOB: {personData.dob}
-                                </p>
+                                <input type="text" id="first_name" value={personData.first_name}></input>
+                                <input type="text" id="last_name" value={personData.last_name}></input>
+                                <input type="text" id="pronouns" value="He/Him"></input>
+                                <p>NID: N{personData.NID}</p>
+                                <input type="text" id="DOB" value={personData.dob}></input>
                             </div>
             
-                            {/* Link to edit screen*/}
+                            {/* Done Button, link back to /personal*/}
                             <div className = "editButton" class='col-lg-4'>
-                                <a href='/personal-edit'><ins>Edit</ins></a>
+                                <a href='/personal'><ins>Done</ins></a>
                             </div>
                         </div> <br></br>
             
@@ -58,12 +57,12 @@ const PersonalInfo = (props) => {
                             {personData.addresses.map((address) =>{
                                 return (
                                     <div class="col-lg-4">
-                                        <p align='left'>
-                                            <b>{address.type}</b><br></br>
-                                            {address.street_address}<br></br>
-                                            {address.city}, {address.state}<br></br>
-                                            {address.postal_code} {address.country}
-                                        </p>
+                                        <input type="text" id="address_type" value={address.type}></input><br></br>
+                                        <input type="text" id="address_street_address" value={address.street_address}></input><br></br>
+                                        <input type="text" id="address_city" value={address.city}></input>
+                                        <input type="text" id="address_state" value={address.state}></input><br></br>
+                                        <input type="text" id="address_postal_code" value={address.postal_code}></input>
+                                        <input type="text" id="address_country" value={address.country}></input>
                                     </div>
                                 )
                             })}
@@ -85,10 +84,8 @@ const PersonalInfo = (props) => {
                             {personData.phone_numbers.map((number) =>{
                                 return (
                                     <div class="col-lg-2">
-                                        <p align='left'>
-                                            <b>{number.type}</b><br></br>
-                                            {number.number}<br></br>
-                                        </p>
+                                        <input type="text" id="phone_number_type" value={number.type}></input>
+                                        <input type="text" id="phone_number_number" value={number.number}></input>
                                     </div>
                                 )
                             })}
@@ -110,10 +107,8 @@ const PersonalInfo = (props) => {
                             {personData.emails.map((email) =>{
                                 return (
                                     <div class="col-lg-2">
-                                        <p align='left'>
-                                            <b>{email.type}</b><br></br>
-                                            {email.email}<br></br>
-                                        </p>
+                                        <input type="text" id="email_type" value={email.type}></input>
+                                        <input type="text" id="email_email" value={email.email}></input>
                                     </div>
                                 )
                             })}
@@ -135,10 +130,10 @@ const PersonalInfo = (props) => {
                             {personData.emergency_contacts.map((contact) =>{
                                 return (
                                     <div class="col-lg-2">
-                                        <p align='left'>
-                                            <b>{contact.first_name} {contact.last_name} - {contact.relationship}</b><br></br>
-                                            {contact.phone_number}<br></br>
-                                        </p>
+                                        <input type="text" id="contact_first_name" value={contact.first_name}></input>
+                                        <input type="text" id="contact_last_name" value={contact.last_name}></input>
+                                        <input type="text" id="contact_relationship" value={contact.relationship}></input>
+                                        <input type="text" id="contact_phone_number" value={contact.phone_number}></input>
                                     </div>
                                 )
                             })}
@@ -154,10 +149,11 @@ const PersonalInfo = (props) => {
                                 <p align='left'>{personData.citizenship_status}</p>
                             </div>
                         </div>
-                    </div>)}
+                    </form>
+                    )}
                 </div>
             
         )
     }
 
-export default PersonalInfo;
+export default PersonalEdit;
