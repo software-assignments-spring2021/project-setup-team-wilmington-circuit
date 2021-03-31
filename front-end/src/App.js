@@ -9,6 +9,7 @@ import avatar from './images/profile-pic.png';
 import './main.css';
 import Class from './components/Class';
 import PersonalInfo from './components/Personal';
+import PersonalEdit from './components/Personal-Edit';
 import GradeInfo from './components/Grades';
 import FinanceInfo from './components/Finance';
 import Login from './components/Login'
@@ -83,6 +84,11 @@ function App() {
             <Route path="/personal">
               <Header></Header>
               <PersonalInfo></PersonalInfo>
+            </Route>
+
+            <Route path="/personal-edit">
+              <Header></Header>
+              <PersonalEdit></PersonalEdit>
             </Route>
 
             <Route path="/login">
