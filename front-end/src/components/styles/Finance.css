@@ -1,0 +1,10 @@
+.manageAwards {
+  width: 500px;
+  border: 15px;
+  outline: 1px solid #57068c;
+}
+
+.yearButton {
+  background-color: white;
+  border: none;
+}

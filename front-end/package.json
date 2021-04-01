@@ -1,0 +1,54 @@
+{
+  "name": "front-end",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@fullcalendar/bootstrap": "^5.5.0",
+    "@fullcalendar/core": "^5.5.1",
+    "@fullcalendar/daygrid": "^5.5.0",
+    "@fullcalendar/list": "^5.5.0",
+    "@fullcalendar/react": "^5.5.0",
+    "@fullcalendar/rrule": "^5.5.1",
+    "@fullcalendar/timegrid": "^5.5.1",
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^12.8.3",
+    "axios": "^0.21.1",
+    "bootstrap": "^4.6.0",
+    "globalize": "^1.6.0",
+    "moment": "^2.29.1",
+    "react": "^17.0.1",
+    "react-big-calendar": "^0.33.2",
+    "react-bootstrap": "^1.5.2",
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
+    "react-schedule-calendar": "^0.22.8",
+    "react-scripts": "^4.0.3",
+    "web-vitals": "^1.1.0",
+    "webpack": "4.44.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

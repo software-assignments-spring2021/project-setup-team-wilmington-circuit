@@ -1,0 +1,91 @@
+.btn-primary, .fc-dayGridMonth-button, .form-control, .form-check-input {
+    border-radius: 0;
+    background-color: #57088B !important;
+    border-color: #57088B !important;
+    border-radius: 5px;
+    font-family: 'Gothic A1', sans-serif !important;
+}
+
+.btn-link {
+    color: #57088B;
+}
+
+a {
+    font-family: 'Gothic A1', sans-serif;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary.active, .fc-dayGridMonth-button:hover, .fc-dayGridMonth-button:focus {
+    background-color: #390063 !important;
+    border-color: #fff !important;
+}
+
+.fc-list-event-dot, .fc-daygrid-event-dot {
+    border: 5px solid #8C00E7 !important;
+    border: calc(var(--fc-list-event-dot-width, 10px) / 2) solid var(--fc-event-border-color, #8C00E7) !important;
+    border-radius: 5px !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Gothic A1', sans-serif;
+    font-weight: 800;
+}
+
+p {
+    font-family: 'Gothic A1', sans-serif;
+    font-weight: 400;
+    color: #404040;
+}
+
+
+.title {
+    margin-left: 0 !important;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+
+.topbar-container {
+    width: 95%;
+    margin: auto;
+}
+
+.staticbar-container {
+    position: fixed;
+    width: 95%;
+    left: 2.5vw;
+    top: 95vh;
+    text-align: right;
+}
+
+#catalog-static {
+    float: right;
+}
+
+.classElement {
+    border-radius: 0;
+    margin-top: 1em;
+    width: 95%;
+    margin: auto;
+}
+
+.form-control {
+    background-color: #fff !important;
+    border-width: 1px;
+    border-color: #404040 !important;
+}
+
+nav {
+    margin-bottom: 30px;
+}
+
+.login-pg {
+    padding-top: 30px;
+}
+
+.profile-text {
+    margin-top: 10px;
+}
+
+label {
+    margin-top: 10px;
+    margin-right: 10px;
+}
