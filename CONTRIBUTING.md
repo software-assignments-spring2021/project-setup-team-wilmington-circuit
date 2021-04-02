@@ -3,9 +3,6 @@
 Zoom link: https://nyu.zoom.us/j/93978452728  
 Times: M - 6:30 pm, W - 4:50 pm, Sa - 11 am
 
-## Why
-Alberta is a much needed overhaul to NYU's Albert. NYU students have long been frustrated by Albert's sluggish, buggy, and convoluted interface. This project seeks to amend these concerns by providing a modern and intelligently designed front end and back end.
-
 ## What this repository is
 This is the repo 
 
