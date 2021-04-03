@@ -30,7 +30,7 @@ function Login() {
       {user ? <div>
         <GoogleLogout
           clientId={clientId}
-          onLogoutSuccess={loginSuccess}
+          onLogoutSuccess={logoutSuccess}
           onFailure={logoutFailure}
         />
       </div> :
