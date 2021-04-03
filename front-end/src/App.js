@@ -6,14 +6,14 @@ import OriginPoints from './components/OriginPoints';
 import Result from './components/Result';
 import ResultList from './components/ResultList.js';
 import getTestData from './testData';
+import Login from './components/Login';
 
 function App() {
   return (
     <>
-
+      <Login/>
       <OriginPoints></OriginPoints>
       <ResultList /* results={results} */></ResultList>
-      
     </>
   );
 }
