@@ -3,6 +3,7 @@ import './App.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import OriginPoints from './components/OriginPoints';
+import MapDisplay from './components/MapDisplay';
 import Result from './components/Result';
 import ResultList from './components/ResultList.js';
 import getTestData from './testData';
@@ -11,9 +12,13 @@ import Login from './components/Login';
 function App() {
   return (
     <>
-      <Login/>
-      <OriginPoints></OriginPoints>
-      <ResultList /* results={results} */></ResultList>
+     <Login></Login>
+     <OriginPoints></OriginPoints>
+     <div>
+     <MapDisplay></MapDisplay>
+     <ResultList /* results={results} */></ResultList>
+     
+     </div>
     </>
   );
 }
