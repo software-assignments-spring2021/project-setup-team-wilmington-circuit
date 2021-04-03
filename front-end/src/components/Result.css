@@ -1,0 +1,11 @@
+.result-card {
+    width: 350px;
+    display: flex;
+    flex: 1 1 auto;
+}
+
+img {
+    height: 150px;
+    width: 150px;
+    object-fit: contain;
+}
