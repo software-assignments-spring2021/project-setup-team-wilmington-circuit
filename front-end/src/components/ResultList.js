@@ -1,8 +1,11 @@
 import React, {useState, useEffect } from 'react';
 import Result from './Result.js';
 import getTestData from '../testData';
+import './ResultsList.css'
+
 const ResultList = (props) => {
-    const [mockResults, setData] = React.useState([]);
+    const [mockResults, setData] = useState([]);
+    const [scrollStyle, setScrollStyle] = useState('hidden')
     useEffect(()=>{
         getTestData.getResults_mock().then(res => {
             setData(res);
@@ -14,7 +17,7 @@ const ResultList = (props) => {
         (false && !props) ? (
             <div>Loading...</div>
         ) : (
-            <div class='card-group'>
+            <div class='card-group' style={{'overflowY': scrollStyle}} onMouseOver={()=>setScrollStyle('scroll')} onMouseOut={()=>setScrollStyle('hidden')}>
                 {mockResults.map((result) => {
                     return (
                         <Result result={result}></Result>

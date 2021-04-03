@@ -12,8 +12,12 @@ function App() {
   return (
     <>
      <OriginPoints></OriginPoints>
-     <ResultList /* results={results} */></ResultList>
+     <div>
      <MapDisplay></MapDisplay>
+     <ResultList /* results={results} */></ResultList>
+     
+     </div>
+     
     </>
   );
 }

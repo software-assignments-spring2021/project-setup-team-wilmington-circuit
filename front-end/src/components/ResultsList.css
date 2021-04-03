@@ -1,0 +1,8 @@
+.card-group {
+    position:absolute;
+    width: 400px;
+    left: calc(100% - 400px);
+    height: 80vh;
+    overflow-y: hidden;
+    overflow-x:hidden
+}
