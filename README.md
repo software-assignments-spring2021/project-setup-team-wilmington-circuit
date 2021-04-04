@@ -28,9 +28,9 @@ Also, our MVP should have:
 ## Members
 - [Santiage Darré](https://github.com/sdarre) 
 - [Ari Khaytser](https://github.com/ajk745) 
-- [Maggie Pierce](https://github.com/m-ggie)
+- [Maggie Pierce](https://github.com/m-ggie) (Sprint 1, 2 Product Owner)
 - [Alex Hammer](https://github.com/ah4597)
-- [Luis Cordova](https://github.com/LGCX)
+- [Luis Cordova](https://github.com/LGCX) (Sprint 1, 2 Scrum Master)
 
 ## History
 Finding a "fair" place to meet has long been a source of unnessessary dispute. This project aims to solve this with a fair and optimal solution. 
