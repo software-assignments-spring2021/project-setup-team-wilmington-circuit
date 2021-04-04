@@ -1,50 +1,33 @@
-import React from 'react'
-import { useState } from 'react';
+import React, { useState } from 'react'
 import logo from './logo.svg';
 import './App.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import OriginPoints from './components/OriginPoints';
 import MapDisplay from './components/MapDisplay';
-import Result from './components/Result';
 import ResultList from './components/ResultList.js';
 import Header from './components/Header'
 import SideDrawer from './components/SideDrawer'
-import Backdrop from './components/Backdrop'
-import getTestData from './testData';
-import Login from './components/Login';
+
 
 function App() {
+  const [toggle, setToggle] = useState(false)
   const [origins, setOrigins] = useState([])
-  const [mapLoaded, setMapLoaded] = useState(false)
-  const [sideDrawerOpen, setSideDrawerOpen] = useState(false)
-
-  const drawerToggleClickHandler = () => {
-    setSideDrawerOpen(!sideDrawerOpen)
-  };
-
-  const backdropClickHandler = () => {
-    setSideDrawerOpen(false)
-  }
+  const [mapLoaded, setMapLoaded] = useState(false);
 
   const loadOriginMarkers = data => {
     setMapLoaded(!mapLoaded)
     setOrigins(data)
     console.log(origins)
   }
-  
-  let backdrop;
-  if (sideDrawerOpen) {
-    backdrop = <Backdrop click={backdropClickHandler}/>
-  }
 
   return (
     <>
       <div style={{ height: "100%" }}>
-        <Header drawerClickHandler={drawerToggleClickHandler} />
-        <SideDrawer show={sideDrawerOpen} />
-        {backdrop}
-
+        <button class="header-btn" onClick={() => setToggle(!toggle)}>
+          <Header onClick={() => setToggle(!toggle)} />
+        </button>
+        <SideDrawer show={toggle} />
         <div style={{ marginTop: "64px" }}>
           <OriginPoints onChange={loadOriginMarkers}></OriginPoints>
           <div>

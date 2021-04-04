@@ -1,8 +1,24 @@
-.card-group {
-    position:absolute;
+@media only screen and (min-width: 1000px) {
+  .card-group {
+    position: absolute;
     width: 400px;
     left: calc(100% - 400px);
     height: 80vh;
     overflow-y: hidden;
-    overflow-x:hidden
+    overflow-x: hidden;
+  }
+}
+
+@media only screen and (max-width: 999px) {
+  .card-group {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    bottom: 1vh;
+    height: 20vh;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    white-space: nowrap;
+    overflow: auto;
+  }
 }

@@ -19,9 +19,7 @@ const Header = props => {
                     
                 </div>
                 
-                <div>
-                    <DrawerToggleButton click={props.drawerClickHandler}/>
-                </div>
+                    <DrawerToggleButton />
                 <div className="login">
                     <Login></Login>
                 </div>
