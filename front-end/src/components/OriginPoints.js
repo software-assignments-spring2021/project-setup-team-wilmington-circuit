@@ -8,17 +8,30 @@ const OriginPoints = props => {
 
 	const onOriginChange = (originNumber, originData) => {
 		const newOrigins = origins;
+        newOrigins[originNumber] = originData;
+        setOrigins(newOrigins);
+        props.onChange(origins);
 	}
 
     const displayOriginInputs = () => {
 		let inputs = []	
-		for(let i = 0; i < origins.length; i++) inputs.push(<OriginInput origin-number={i} onChange={onOriginChange}></OriginInput>)
+		for(let i = 0; i < origins.length; i++) inputs.push(<OriginInput originNumber={i} onChange={onOriginChange}></OriginInput>)
 		return inputs;
 	}
 
-	const addOrigin = () => {setOrigins(prev => [...prev, {loc: null, mode: null, options: null}])}
+	const addOrigin = () => {
+        const newOrigins = origins;
+        newOrigins.push({loc: null, mode: null, options: null});
+        setOrigins(newOrigins);
+        props.onChange(origins);
+    }
 
-	const removeOrigin = () => {setOrigins(prev => [...prev.splice(0, prev.length-1)])}
+	const removeOrigin = () => {
+        const newOrigins = origins;
+        newOrigins.pop();
+        setOrigins(newOrigins);
+        props.onChange(origins);
+    }
 	
 
     return(

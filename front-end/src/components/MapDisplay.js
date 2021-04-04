@@ -1,16 +1,24 @@
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+import { useEffect, useState } from 'react';
 import './MapDisplay.css'
 
 const APIKEY = 'AIzaSyASWWjp7Y_io1R8OPMlNdNSLDRwj8SdPbs';
 
 const MapDisplay = props => {
+
     return (
-        <Map google={props.google} zoomControlOptions={{position: props.google.maps.ControlPosition.LEFT_CENTER}} streetViewControlOptions={{position: props.google.maps.ControlPosition.LEFT_CENTER}} fullscreenControl={false} className="map-display" initialCenter={{ lat: 40.74852, lng: -73.981687 }} >
- 
-        <Marker animation={props.google.maps.Animation.DROP} name={'Current location'} label='1' title="Pos" position={{lat: 40.74852, lng: -73.981687}}/>
-        <Marker animation={props.google.maps.Animation.DROP} name={'Current location'} label='2' title="Pos" position={{lat: 40.74952, lng: -73.983687}}/>
-        <Marker animation={props.google.maps.Animation.DROP} name={'Current location'} label='3' title="Pos" position={{lat: 40.74062, lng: -73.986687}}/>
-        <Marker animation={props.google.maps.Animation.DROP} name={'Current location'} label='4' title="Pos" position={{lat: 40.74552, lng: -73.999687}}/>
+        <Map google={props.google} on zoomControlOptions={{position: props.google.maps.ControlPosition.LEFT_CENTER}} streetViewControlOptions={{position: props.google.maps.ControlPosition.LEFT_CENTER}} fullscreenControl={false} className="map-display" initialCenter={{ lat: 40.74852, lng: -73.981687 }} >
+        
+        {props.origin1 ? (<Marker animation={props.google.maps.Animation.DROP} position={props.origin1} label="1"></Marker>) : null}
+        {props.origin2 ? (<Marker animation={props.google.maps.Animation.DROP} position={props.origin2} label="2"></Marker>) : null}
+        {props.origin3 ? (<Marker animation={props.google.maps.Animation.DROP} position={props.origin3} label="3"></Marker>) : null}
+        {props.origin4 ? (<Marker animation={props.google.maps.Animation.DROP} position={props.origin4} label="4"></Marker>) : null}
+        {props.origin5 ? (<Marker animation={props.google.maps.Animation.DROP} position={props.origin5} label="5"></Marker>) : null}
+        {props.origin6 ? (<Marker animation={props.google.maps.Animation.DROP} position={props.origin6} label="6"></Marker>) : null}
+        {props.origin7 ? (<Marker animation={props.google.maps.Animation.DROP} position={props.origin7} label="7"></Marker>) : null}
+        {props.origin8 ? (<Marker animation={props.google.maps.Animation.DROP} position={props.origin8} label="8"></Marker>) : null}
+        {props.origin9 ? (<Marker animation={props.google.maps.Animation.DROP} position={props.origin9} label="9"></Marker>) : null}
+        {props.origin10 ? (<Marker animation={props.google.maps.Animation.DROP} position={props.origin10} label="10"></Marker>) : null}
         
         </Map>
     )
