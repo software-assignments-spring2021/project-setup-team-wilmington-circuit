@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import { useState } from 'react';
+import React, { useState } from 'react'
 import logo from './logo.svg';
 import './App.css';
 
@@ -11,37 +10,20 @@ import ResultList from './components/ResultList.js';
 import getTestData from './testData';
 import Header from './components/Header'
 import SideDrawer from './components/SideDrawer'
-import Backdrop from './components/Backdrop'
 
-class App extends Component {
-  state = {
-      sideDrawerOpen: false
-  };
 
-  drawerToggleClickHandler = () => {
-      this.setState((prevState) => {
-          return {sideDrawerOpen: !prevState.sideDrawerOpen} 
-      });
-  };
 
-  backdropClickHandler = () => {
-    this.setState({sideDrawerOpen: false})
-  }
+function App() {
+ const [toggle, setToggle] = useState(false)
 
-  render() {
-    let backdrop;
-    if (this.state.sideDrawerOpen) {
-      backdrop = <Backdrop click={this.backdropClickHandler}/>
-  }
   return (
     <>
     <div style={{height: '100%'}}>
-      <Header drawerClickHandler={this.drawerToggleClickHandler}/>
-      <SideDrawer show={this.state.sideDrawerOpen}/>
-      {backdrop}
-
+    <button class="header-btn" onClick={() => setToggle(!toggle)}>
+      <Header onClick={() => setToggle(!toggle)}/>
+      </button>
+      <SideDrawer show={toggle} />
       <div style={{marginTop: '64px'}}>
-        
         <OriginPoints></OriginPoints>
         <div>
           <MapDisplay></MapDisplay>
@@ -51,7 +33,6 @@ class App extends Component {
      </div>
     </>
   );
-  }
 }
 
 export default App;
