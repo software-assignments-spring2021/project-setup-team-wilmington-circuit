@@ -22,4 +22,13 @@ const getGroups_mock = async () => {
     console.log(data);
     return data;
 }
-export default {getResults_mock, getFriends_mock, getGroups_mock }
+
+const getPlaceLocation = (query) => {
+    return query && query.length > 0 ? {
+        "lat" : 40.730891449013164 + Math.random()*0.02,
+        "lng" : -73.99746941257406 + Math.random()*0.05
+    } : null;
+}
+
+export default {getResults_mock, getPlaceLocation, getFriends_mock, getGroups_mock}
+
