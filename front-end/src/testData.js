@@ -29,6 +29,4 @@ const getPlaceLocation = (query) => {
         "lng" : -73.99746941257406 + Math.random()*0.05
     } : null;
 }
-
 export default {getResults_mock, getPlaceLocation, getFriends_mock, getGroups_mock}
-

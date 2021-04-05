@@ -8,6 +8,7 @@ import MapDisplay from './components/MapDisplay';
 import ResultList from './components/ResultList.js';
 import Header from './components/Header'
 import SideDrawer from './components/SideDrawer'
+import SearchInput from './components/SearchInput'
 
 
 function App() {
@@ -23,12 +24,13 @@ function App() {
 
   return (
     <>
-      <div style={{ height: "100%" }}>
+      <div className="html">
         <button class="header-btn" onClick={() => setToggle(!toggle)}>
           <Header onClick={() => setToggle(!toggle)} />
         </button>
         <SideDrawer show={toggle} />
-        <div style={{ marginTop: "64px" }}>
+        <div className="content">
+        <SearchInput></SearchInput>
           <OriginPoints onChange={loadOriginMarkers}></OriginPoints>
           <div>
             <MapDisplay
