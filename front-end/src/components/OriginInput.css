@@ -2,6 +2,16 @@
     margin-top: 1em;
     margin-bottom: 1em;
 }
+
+@media screen and (max-width: 999px) {
+    .input-append {
+        float: right;
+    }
+
+    .origin-input-form {
+        width: 100% !important;
+    }
+}
 .custom-input-group {
     display: flex;
     align-items: center;

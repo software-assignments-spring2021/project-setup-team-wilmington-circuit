@@ -8,6 +8,8 @@ import MapDisplay from './components/MapDisplay';
 import ResultList from './components/ResultList.js';
 import Header from './components/Header'
 import SideDrawer from './components/SideDrawer'
+import { Button, ButtonGroup, ButtonToolbar } from 'react-bootstrap';
+
 import SearchInput from './components/SearchInput'
 
 
@@ -29,10 +31,13 @@ function App() {
           <Header onClick={() => setToggle(!toggle)} />
         </button>
         <SideDrawer show={toggle} />
-        <div className="content">
-        <SearchInput></SearchInput>
+        <div className="content" id="main-container">
+          <div id="input-container">
+          <SearchInput></SearchInput>
           <OriginPoints onChange={loadOriginMarkers}></OriginPoints>
-          <div>
+          <a id="share-link">Share this map</a>
+          </div>
+          <div className='map-result-container'>
             <MapDisplay
               set={mapLoaded}
               //doesn't update properly when passes as array...

@@ -14,8 +14,8 @@
     position: absolute;
     display: flex;
     width: 100%;
-    bottom: 1vh;
-    height: 20vh;
+    bottom: 0;
+    height: 250px;
     overflow-y: hidden;
     overflow-x: scroll;
     white-space: nowrap;

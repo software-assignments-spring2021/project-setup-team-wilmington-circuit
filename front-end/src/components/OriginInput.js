@@ -29,19 +29,18 @@ const OriginInput = props => {
     return (
         <>
         <InputGroup className="origin-input">
-        <FormControl className="custom-input" onBlur={e=>setOrigin(e.target.value)} onKeyPress={e => {if(e.charCode === 13){setOrigin(e.target.value)}}} placeholder="Enter a starting location"></FormControl>
+        <FormControl className="custom-input origin-input-form" onBlur={e=>setOrigin(e.target.value)} onKeyPress={e => {if(e.charCode === 13){setOrigin(e.target.value)}}} placeholder="Enter a starting location"></FormControl>
         <InputGroup.Append>
-        <Button variant="light">My Location</Button>
+        <Button className="input-append" variant="light">My Location</Button>
         </InputGroup.Append>
-        <DropdownButton as={InputGroup.Append} variant="light" title ={tranportMode ? transportModeNames[tranportMode] : 'Transport Mode'} onSelect={mode=>setTransportMode(mode)}>
+        <DropdownButton className="input-append" as={InputGroup.Append} variant="light" title ={tranportMode ? transportModeNames[tranportMode] : 'Transport Mode'} onSelect={mode=>setTransportMode(mode)}>
             <Dropdown.Item eventKey="walk">Walk</Dropdown.Item>
             <Dropdown.Item eventKey="bike">Bike</Dropdown.Item>
             <Dropdown.Item eventKey="car">Drive</Dropdown.Item>
             <Dropdown.Item eventKey="trans">Public Transport</Dropdown.Item>
         </DropdownButton>
         <InputGroup.Append>
-
-        <Button variant="light" onClick = {handleShow}>More Options</Button>
+        <Button className="input-append" variant="light" onClick = {handleShow}>More Options</Button>
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
             <Modal.Title>More Options</Modal.Title>
