@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {Button, Dropdown, DropdownButton, FormControl, InputGroup} from 'react-bootstrap';
+import {Button, Modal, Dropdown, DropdownButton, FormControl, InputGroup} from 'react-bootstrap';
 import getTestData from '../testData'
 
 import './OriginInput.css'
@@ -20,6 +20,11 @@ const OriginInput = props => {
             props.onChange(props.originNumber, originData);
         }
     } 
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    
 
     return (
         <>
@@ -35,7 +40,48 @@ const OriginInput = props => {
             <Dropdown.Item eventKey="trans">Public Transport</Dropdown.Item>
         </DropdownButton>
         <InputGroup.Append>
-        <Button className="input-append" variant="light">More Options</Button>
+        <Button className="input-append" variant="light" onClick = {handleShow}>More Options</Button>
+        <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+            <Modal.Title>More Options</Modal.Title>
+            </Modal.Header>
+                <Modal.Body>
+                    <Dropdown class="dropselect">
+                    <Dropdown.Toggle variant="light" id="dropdown-basic">
+                        Leave at:
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <Dropdown.Item href="#">Now</Dropdown.Item>
+                        <Dropdown.Item href="#">In 1 hour</Dropdown.Item>
+                        <Dropdown.Item href="#">In 2 hours</Dropdown.Item>
+                        <Dropdown.Item href="#">In 3 hours</Dropdown.Item>
+                        <Dropdown.Item href="#">In 4 hours</Dropdown.Item>
+                        <Dropdown.Item href="#">In 5 hours</Dropdown.Item>
+                    </Dropdown.Menu>
+                    </Dropdown>
+                    
+                    <form action="/action_page.php">
+  <br></br>
+  <h5>Avoid:</h5>
+  <input type="radio" id="male" name="gender" value="male"></input>
+  <label for="male">Tolls</label>
+  <br></br>
+  <input type="radio" id="female" name="gender" value="female"></input>
+  <label for="female">Highways</label>
+  <br></br>
+
+</form>
+    
+                </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+                Close
+            </Button>
+            <Button variant="primary" onClick={handleClose}>
+                Save Changes
+            </Button>
+            </Modal.Footer>
+        </Modal>
         </InputGroup.Append>
         </InputGroup>
         </>

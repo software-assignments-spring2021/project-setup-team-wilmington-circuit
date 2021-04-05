@@ -10,6 +10,7 @@ import Header from './components/Header'
 import SideDrawer from './components/SideDrawer'
 import { Button, ButtonGroup, ButtonToolbar } from 'react-bootstrap';
 
+import SearchInput from './components/SearchInput'
 
 function App() {
   const [toggle, setToggle] = useState(false)
@@ -31,6 +32,7 @@ function App() {
         <SideDrawer show={toggle} />
         <div className="content" id="main-container">
           <div id="input-container">
+          <SearchInput></SearchInput>
           <OriginPoints onChange={loadOriginMarkers}></OriginPoints>
           <a id="share-link">Share this map</a>
           </div>
