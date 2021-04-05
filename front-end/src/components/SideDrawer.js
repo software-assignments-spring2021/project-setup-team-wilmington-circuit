@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import './SideDrawer.css'
 import MenuDropdown from './MenuDropdown'
 import Profile from './Profile'
-import getTestData from '../testData';
+import getMockData from '../testData';
 
 import {
     BrowserRouter as Router,
