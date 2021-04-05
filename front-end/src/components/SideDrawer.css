@@ -52,3 +52,13 @@
     display: flex;
     padding-right: 0px;
 }
+
+.item li {
+    color: #4789C8;
+    padding: 0px;
+    margin: 0px 20px;
+}
+
+li {
+    cursor: pointer;
+}

@@ -8,4 +8,18 @@ const getResults_mock = async () => {
     console.log(data);
     return data;
 }
-export default {getResults_mock }
+
+const getFriends_mock = async () => {
+    const res = await axios.get('https://my.api.mockaroo.com/friends.json?key=b3baae00');
+    const data = res.data;
+    console.log(data);
+    return data;
+}
+
+const getGroups_mock = async () => {
+    const res = await axios.get('https://my.api.mockaroo.com/groups.json?key=b3baae00');
+    const data = res.data;
+    console.log(data);
+    return data;
+}
+export default {getResults_mock, getFriends_mock, getGroups_mock }
