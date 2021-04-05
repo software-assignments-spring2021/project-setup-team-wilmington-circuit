@@ -23,14 +23,16 @@ function App() {
 
   return (
     <>
-      <div style={{ height: "100%" }}>
+      <div>
         <button class="header-btn" onClick={() => setToggle(!toggle)}>
           <Header onClick={() => setToggle(!toggle)} />
         </button>
         <SideDrawer show={toggle} />
-        <div style={{ marginTop: "64px" }}>
+        <div id="main-container">
+          <div id="input-container">
           <OriginPoints onChange={loadOriginMarkers}></OriginPoints>
-          <div>
+          </div>
+          <div className='map-result-container'>
             <MapDisplay
               set={mapLoaded}
               //doesn't update properly when passes as array...
