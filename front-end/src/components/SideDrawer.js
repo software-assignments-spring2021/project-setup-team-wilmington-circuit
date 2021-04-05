@@ -18,19 +18,19 @@ const SideDrawer = props => {
         drawerClasses = 'side-drawer open'
     }
     return (
-        <Router>
+        <>
             <nav className={drawerClasses}>
                 <ul>
-                    <li><Link to="/profile">Profile</Link></li>
+                    <ProfilePage />
                     <MenuDropdown title="Friends"></MenuDropdown>
                     <MenuDropdown title="Saved Groups"></MenuDropdown>
                 </ul>
+                
             </nav>
 
-            <Route path="/profile">
-                <ProfilePage />
-            </Route>
-        </Router>
+                
+        </>
+            
     )}
 
 function ProfilePage() {

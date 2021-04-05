@@ -12,7 +12,7 @@ const Profile = (props) => {
 const [profileData, setData] = useState([]);
 useEffect(()=>{
     getTestData.getResults_mock().then(res => {
-        setData(profileData);
+        setData(res[0]);
     }
     )
 }, [])
@@ -25,7 +25,7 @@ return(
     <div class="container m-5">
         <div class="row profile">
             <div >
-            <h5 class="font-weight-bold"><Link to="/">Close</Link></h5>
+            {/*<h5 class="font-weight-bold">Close</h5>*/}
                 <div class="profile-sidebar">
                     
                     <div class="profile-pic">
