@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import logo from './logo.svg';
+
 import './App.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,12 +24,12 @@ function App() {
 
   return (
     <>
-      <div>
+      <div className="html">
         <button class="header-btn" onClick={() => setToggle(!toggle)}>
           <Header onClick={() => setToggle(!toggle)} />
         </button>
         <SideDrawer show={toggle} />
-        <div id="main-container">
+        <div className="content" id="main-container">
           <div id="input-container">
           <OriginPoints onChange={loadOriginMarkers}></OriginPoints>
           <a id="share-link">Share this map</a>

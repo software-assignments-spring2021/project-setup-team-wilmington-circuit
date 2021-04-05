@@ -1,5 +1,6 @@
 .html, .body {
   height: 100%;
+  font-family: 'Open Sans', sans-serif;
 }
 
 #main-container {
@@ -11,6 +12,10 @@
   padding-bottom: 2em;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
   z-index: 99;
+}
+
+.content {
+  margin-top: 70px;
 }
 
 #share-link {

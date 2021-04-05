@@ -35,17 +35,19 @@ const OriginPoints = props => {
 	
 
     return(
-    <div className="originpoints-container">
-        {displayOriginInputs()}
-        <ButtonToolbar>
-        <ButtonGroup className="mr-2">
+    <div className="custom-input-group">
+        <div className="originpoints-container">
+            {displayOriginInputs()}
+            <ButtonToolbar>
+            <ButtonGroup className="mr-2">
             {origins.length < 10 ? (<Button onClick={addOrigin}>Add Location</Button>) : null}
             {origins.length > 2 ? (<Button onClick={removeOrigin} variant="danger">Remove Location</Button>) : null}
-        </ButtonGroup>
-        <Button>Save Locations as Group</Button>
-        </ButtonToolbar>
-        
+            </ButtonGroup>
+            <Button>Save Locations as Group</Button>
+            </ButtonToolbar>
+        </div>
     </div>
+    
     )
 }
 
