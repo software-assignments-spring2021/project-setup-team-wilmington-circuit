@@ -2,3 +2,14 @@
     margin-top: 1em;
     margin-bottom: 1em;
 }
+.custom-input-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-input {
+    background-color: #F6F6F6 ;
+    border: none ;
+}
+

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import logo from './logo.svg';
+
 import './App.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -17,12 +17,12 @@ function App() {
 
   return (
     <>
-    <div style={{height: '100%'}}>
-    <button class="header-btn" onClick={() => setToggle(!toggle)}>
-      <Header onClick={() => setToggle(!toggle)}/>
-      </button>
-      <SideDrawer show={toggle} />
-      <div style={{marginTop: '64px'}}>
+    <div className="html">
+        <button class="header-btn" onClick={() => setToggle(!toggle)}>
+          <Header onClick={() => setToggle(!toggle)}/>
+        </button>
+        <SideDrawer show={toggle} />
+      <div className="content">
         <OriginPoints></OriginPoints>
         <div>
           <MapDisplay></MapDisplay>

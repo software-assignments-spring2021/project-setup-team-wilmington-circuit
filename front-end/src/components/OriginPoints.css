@@ -1,4 +1,11 @@
 .originpoints-container {
-    width: 95%;
+    width: 70%;
     margin: auto;
+    margin-bottom: 20px;
+}
+
+.custom-input-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
