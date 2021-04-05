@@ -24,7 +24,7 @@ const OriginInput = props => {
     return (
         <>
         <InputGroup className="origin-input">
-        <FormControl onBlur={e=>setOrigin(e.target.value)} onKeyPress={e => {if(e.charCode === 13){setOrigin(e.target.value)}}} placeholder="Enter a starting location"></FormControl>
+        <FormControl className="custom-input" onBlur={e=>setOrigin(e.target.value)} onKeyPress={e => {if(e.charCode === 13){setOrigin(e.target.value)}}} placeholder="Enter a starting location"></FormControl>
         <InputGroup.Append>
         <Button variant="light">My Location</Button>
         </InputGroup.Append>
@@ -35,7 +35,7 @@ const OriginInput = props => {
             <Dropdown.Item eventKey="trans">Public Transport</Dropdown.Item>
         </DropdownButton>
         <InputGroup.Append>
-        <Button>More Options</Button>
+        <Button variant="light">More Options</Button>
         </InputGroup.Append>
         </InputGroup>
         </>
