@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Button, ButtonGroup } from "react-bootstrap"
+import { Button, ButtonGroup, ButtonToolbar } from "react-bootstrap"
 import OriginInput from "./OriginInput"
 import './OriginPoints.css'
 
@@ -38,10 +38,13 @@ const OriginPoints = props => {
     <div className="custom-input-group">
         <div className="originpoints-container">
             {displayOriginInputs()}
-            <ButtonGroup>
-                {origins.length < 10 ? (<Button onClick={addOrigin}>Add Point</Button>) : null}
-                {origins.length > 2 ? (<Button onClick={removeOrigin} variant="danger">Remove Point</Button>) : null}
+            <ButtonToolbar>
+            <ButtonGroup className="mr-2">
+            {origins.length < 10 ? (<Button onClick={addOrigin}>Add Location</Button>) : null}
+            {origins.length > 2 ? (<Button onClick={removeOrigin} variant="danger">Remove Location</Button>) : null}
             </ButtonGroup>
+            <Button>Save Locations as Group</Button>
+            </ButtonToolbar>
         </div>
     </div>
     

@@ -3,10 +3,27 @@
   font-family: 'Open Sans', sans-serif;
 }
 
+#main-container {
+  margin-top: 64px;
+}
+
+#input-container {
+  position: relative;
+  padding-bottom: 2em;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
+  z-index: 99;
+}
+
 .content {
   margin-top: 70px;
 }
 
+#share-link {
+  float: right;
+  margin-bottom: 1em;
+  margin-right: 2.5%;
+  text-decoration: underline;
+}
 .App {
   text-align: center;
 }
@@ -48,4 +65,9 @@
 
 .header-btn {
   cursor: default !important;
+}
+
+.map-result-container {
+  position: relative;
+  height: 80vh;
 }
