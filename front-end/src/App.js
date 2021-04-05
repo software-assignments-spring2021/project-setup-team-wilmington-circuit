@@ -8,7 +8,7 @@ import MapDisplay from './components/MapDisplay';
 import ResultList from './components/ResultList.js';
 import Header from './components/Header'
 import SideDrawer from './components/SideDrawer'
-
+import SearchInput from './components/SearchInput'
 
 function App() {
   const [toggle, setToggle] = useState(false)
@@ -29,6 +29,7 @@ function App() {
         </button>
         <SideDrawer show={toggle} />
         <div className="content">
+        <SearchInput></SearchInput>
           <OriginPoints onChange={loadOriginMarkers}></OriginPoints>
           <div>
             <MapDisplay
