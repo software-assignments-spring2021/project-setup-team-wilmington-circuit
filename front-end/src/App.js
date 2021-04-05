@@ -8,6 +8,7 @@ import MapDisplay from './components/MapDisplay';
 import ResultList from './components/ResultList.js';
 import Header from './components/Header'
 import SideDrawer from './components/SideDrawer'
+import { Button, ButtonGroup, ButtonToolbar } from 'react-bootstrap';
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <div id="main-container">
           <div id="input-container">
           <OriginPoints onChange={loadOriginMarkers}></OriginPoints>
+          <a id="share-link">Share this map</a>
           </div>
           <div className='map-result-container'>
             <MapDisplay
