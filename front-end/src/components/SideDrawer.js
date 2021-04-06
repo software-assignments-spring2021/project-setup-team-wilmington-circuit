@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import './SideDrawer.css'
-import MenuDropdown from './MenuDropdown'
 import Profile from './Profile'
-import getTestData from '../testData';
+import getMockData from '../testData';
 
 import {
     BrowserRouter as Router,
@@ -17,25 +16,77 @@ const SideDrawer = props => {
     if (props.show) {
         drawerClasses = 'side-drawer open'
     }
-    return (
-        <>
-            <nav className={drawerClasses}>
-                <ul>
-                    <ProfilePage />
-                    <MenuDropdown title="Friends"></MenuDropdown>
-                    <MenuDropdown title="Saved Groups"></MenuDropdown>
-                </ul>
-                
-            </nav>
 
-                
-        </>
-            
+    const [toggle, setToggle] = useState(false)
+    const [toggle2, setToggle2] = useState(false)
+
+    const [friends, setFriend] = useState([])
+    const [groups, setGroup] = useState([])
+
+    useEffect(()=>{
+        getMockData.getFriends_mock().then(res => {
+            setFriend(res);
+        }
+        )
+    }, [])
+
+    useEffect(()=>{
+        getMockData.getGroups_mock().then(res => {
+            setGroup(res);
+        }
+        )
+    }, [])
+
+    /*
+    useEffect(async () => {
+        const response = await fetch('https://my.api.mockaroo.com/friends.json?key=b3baae00')
+        const data = await response.json()
+        console.log(data)
+        const item = data
+        setFriend(item)
+    }, []) */
+
+
+    return (
+        <nav className={drawerClasses}>
+            <ul>
+                <li><ProfilePage /></li>
+
+                <div>
+                    <li><a onClick={() => setToggle(!toggle)}>Friends +</a></li>
+                    {toggle && (
+                        <div>
+                            <ul>
+                            {friends.map((friend) => {
+                                return (
+                                    <li className="item">{friend.first_name}</li>
+                                )
+                            })}
+                            </ul>
+                        </div>
+                    )}
+                </div>
+
+                <div>
+                    <li><a onClick={() => setToggle2(!toggle2)}>Groups +</a></li>
+                    {toggle2 && (
+                        <div>
+                            <ul>
+                            {groups.map((group) => {
+                                return (
+                                    <li className="item">{group.group_name}</li>
+                                )
+                            })}
+                            </ul>
+                        </div>
+                    )}
+                </div>
+
+            </ul>
+        </nav>
     )}
 
 function ProfilePage() {
     return <Profile />;
-
-    }
-
-export default SideDrawer;
+}
+export default SideDrawer
