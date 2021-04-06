@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
 import './SideDrawer.css'
-import MenuDropdown from './MenuDropdown'
 import Profile from './Profile'
 import getMockData from '../testData';
 
