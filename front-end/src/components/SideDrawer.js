@@ -50,7 +50,7 @@ const SideDrawer = props => {
     return (
         <nav className={drawerClasses}>
             <ul>
-                <li><a href="/">Profile</a></li>
+                <li><ProfilePage /></li>
 
                 <div>
                     <li><a onClick={() => setToggle(!toggle)}>Friends +</a></li>
@@ -86,4 +86,7 @@ const SideDrawer = props => {
         </nav>
     )}
 
+function ProfilePage() {
+    return <Profile />;
+}
 export default SideDrawer
