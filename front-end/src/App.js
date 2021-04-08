@@ -21,7 +21,6 @@ function App() {
   const loadOriginMarkers = data => {
     setMapLoaded(!mapLoaded)
     setOrigins(data)
-    console.log(origins)
   }
 
   return (
@@ -41,6 +40,7 @@ function App() {
             <MapDisplay
               set={mapLoaded}
               //doesn't update properly when passes as array...
+              originlocs = {origins.map(origin => origin.loc)}
               origin1={(origins[0] && origins[0].loc) || null}
               origin2={(origins[1] && origins[1].loc) || null}
               origin3={(origins[2] && origins[2].loc) || null}
