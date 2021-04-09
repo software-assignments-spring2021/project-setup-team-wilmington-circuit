@@ -8,3 +8,9 @@
     align-items: center;
     justify-content: center;
 }
+
+#origin-input-guide {
+    font-size: small;
+    margin-bottom: 0;
+    opacity: 50%;
+}
