@@ -31,3 +31,5 @@
     parameters = parameters.replace(/%20/g, '+')
     return `https://www.google.com/maps/dir/?api=1&${parameters}`
 }
+
+export default generateGoogleMapsURL;

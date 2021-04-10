@@ -17,6 +17,7 @@ const SideDrawer = props => {
         drawerClasses = 'side-drawer open'
     }
 
+
     const [toggle, setToggle] = useState(false)
     const [toggle2, setToggle2] = useState(false)
 
@@ -33,8 +34,9 @@ const SideDrawer = props => {
     useEffect(()=>{
         getMockData.getGroups_mock().then(res => {
             setGroup(res);
+            
         }
-        )
+        );
     }, [])
 
     /*
@@ -68,7 +70,20 @@ const SideDrawer = props => {
                 </div>
 
                 <div>
-                    <li><a onClick={() => setToggle2(!toggle2)}>Groups +</a></li>
+                    <li><a onClick={() => {
+                        console.log('clicked');
+                        const savedGroups = JSON.parse(sessionStorage.getItem('groups'));
+                        
+                        //This is kinda scuffed, but hard coding this in for now
+                        const startingDataLength = 3;
+                        if(savedGroups && groups.length < savedGroups.length + startingDataLength){
+                            savedGroups.map((group) => {
+                                groups.push(group);
+                            })
+                        }
+                        setToggle2(!toggle2);
+                        }
+                    }>Groups +</a></li>
                     {toggle2 && (
                         <div>
                             <ul>
