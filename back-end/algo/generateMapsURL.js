@@ -14,7 +14,7 @@
  * If none is specified, or its invalid, it shows one or more of the most relevant modes for the specified route and/or user preferences.
  */
 
- function generateGoogleMapsURL(origin, dest, origin_place_id = null, dest_place_id = null, travelmode=null){
+const generateGoogleMapsURL = async (origin, dest, origin_place_id = null, dest_place_id = null, travelmode=null) => {
     let parameters = '';
     parameters += 'origin=' + encodeURIComponent(origin) + '&';
     if(origin_place_id){
@@ -32,4 +32,4 @@
     return `https://www.google.com/maps/dir/?api=1&${parameters}`
 }
 
-export default generateGoogleMapsURL;
+module.exports = generateGoogleMapsURL;
