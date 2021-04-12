@@ -75,11 +75,11 @@ const SideDrawer = props => {
                         const savedGroups = JSON.parse(sessionStorage.getItem('groups'));
                         
                         //This is kinda scuffed, but hard coding this in for now
-                        const startingDataLength = 3;
-                        if(savedGroups && groups.length < savedGroups.length + startingDataLength){
+                        if(savedGroups){
                             savedGroups.map((group) => {
                                 groups.push(group);
-                            })
+                            });
+                            sessionStorage.removeItem('groups');
                         }
                         setToggle2(!toggle2);
                         }
