@@ -47,9 +47,17 @@ const geoCenterHelper = async (candidate, origins) => {
     })
     const r = averageDuration/maxDuration;
     const x = Math.round(maxPath.length * r);
-    return {
-        averageSquaredError: getAverageSquaredError(pathData.map(path => path.duration), averageDuration),
-        newCandidate: turf.point([maxPath[x].lat, maxPath[x].lng])
+    if(maxPath[x]){
+        return {
+            averageSquaredError: getAverageSquaredError(pathData.map(path => path.duration), averageDuration),
+            newCandidate: turf.point([maxPath[x].lat, maxPath[x].lng])
+        }
+    }
+    else {
+        return {
+            averageSquaredError: 0,
+            newCandidate: candidate
+        }
     }
 }
 
