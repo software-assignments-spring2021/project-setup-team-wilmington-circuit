@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import './MapDisplay.css'
 
 const APIKEY = 'AIzaSyASWWjp7Y_io1R8OPMlNdNSLDRwj8SdPbs';
+const iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
 let map = null
 
 
@@ -35,7 +36,7 @@ const MapDisplay = props => {
         {props.origin9 ? (<Marker animation={props.google.maps.Animation.DROP} position={props.origin9} label="9"></Marker>) : null}
         {props.origin10 ? (<Marker animation={props.google.maps.Animation.DROP} position={props.origin10} label="10"></Marker>) : null}
 
-        
+        {props.centerPoint ? (<Marker animation={props.google.maps.Animation.DROP} icon={iconBase + 'star.png'} position={props.centerPoint} title="centerPoint" label="X"></Marker>) : null}
         </Map>
     )
 }

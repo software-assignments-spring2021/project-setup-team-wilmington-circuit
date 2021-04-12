@@ -4,22 +4,21 @@ import getTestData from '../testData'
 
 import './OriginInput.css'
 
-
-
 const OriginInput = props => {
     const [tranportMode, setTransportMode] = useState(null);
     const [name, setName] = useState('');
     const [valid, setValid] = useState(true);
     const [errMessage, setErrMessage] = useState(null)
 
-    const transportModeNames = {'walk': 'Walk', 'bike': 'Bike', 'car': 'Drive', 'trans': 'Public Transport'}
-    const originData = {loc: null, mode: null, options: null}
+    const transportModeNames = {'walking': 'Walk', 'bicycling': 'Bike', 'driving': 'Drive', 'transit': 'Public Transit'}
+    const [originData, setOriginData] = useState({loc: null, mode: null, options: null}) 
 
     const setOrigin = value => {
         if(value.length === 0){
             setValid(true);
             originData.loc = null
                 props.onChange(props.originNumber, originData);
+            setOriginData(originData)
         }
         else if(!(name == value)) {
             setName(value)
@@ -27,15 +26,25 @@ const OriginInput = props => {
                 originData.loc = loc
                 props.onChange(props.originNumber, originData);
                 setValid(true)
+                setOriginData(originData)
             }).catch(e => {
                 setValid(false)
                 setErrMessage(e.response.data)
                 originData.loc = null
                 props.onChange(props.originNumber, originData);
+                setOriginData(originData)
             })
             
         }
     } 
+
+    const handleTransportModeChange = mode => {
+        setTransportMode(mode);
+        originData.mode = mode;
+        props.onChange(props.originNumber, originData);
+        setOriginData(originData)
+    }
+
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -50,11 +59,11 @@ const OriginInput = props => {
         <InputGroup.Append>
         <Button className="input-append" variant="light">My Location</Button>
         </InputGroup.Append>
-        <DropdownButton className="input-append" as={InputGroup.Append} variant="light" title ={tranportMode ? transportModeNames[tranportMode] : 'Transport Mode'} onSelect={mode=>setTransportMode(mode)}>
-            <Dropdown.Item eventKey="walk">Walk</Dropdown.Item>
-            <Dropdown.Item eventKey="bike">Bike</Dropdown.Item>
-            <Dropdown.Item eventKey="car">Drive</Dropdown.Item>
-            <Dropdown.Item eventKey="trans">Public Transport</Dropdown.Item>
+        <DropdownButton className="input-append" as={InputGroup.Append} variant="light" title ={tranportMode ? transportModeNames[tranportMode] : 'Transport Mode'} onSelect={mode=>handleTransportModeChange(mode)}>
+            <Dropdown.Item eventKey="walking">Walk</Dropdown.Item>
+            <Dropdown.Item eventKey="bicycling">Bike</Dropdown.Item>
+            <Dropdown.Item eventKey="driving">Drive</Dropdown.Item>
+            <Dropdown.Item eventKey="transit">Public Transit</Dropdown.Item>
         </DropdownButton>
         <InputGroup.Append>
         <Button className="input-append" variant="light" onClick = {handleShow}>More Options</Button>

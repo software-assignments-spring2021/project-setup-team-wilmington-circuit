@@ -29,4 +29,16 @@ const getPlaceLocation = async (query) => {
     console.log(data);
     return data;
 }
-export default {getResults_mock, getPlaceLocation, getFriends_mock, getGroups_mock}
+
+const search = async (origins, search) => {
+    const res = await axios.post('/api/search',
+        {
+            origins: origins,
+            search: search
+        }
+    )
+    const data = res.data;
+    console.log(data);
+    return data;
+}
+export default {getResults_mock, getPlaceLocation, getFriends_mock, getGroups_mock, search}
