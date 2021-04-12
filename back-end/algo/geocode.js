@@ -10,9 +10,12 @@ const geocode = async query => {
         text: query
     })).catch(e => {throw e});
     const results = res.data.features;
-    console.log(results)
     if(!results || results.length === 0) throw 'No geocode results for this query';
-    return results[0].geometry.coordinates;
+    const coords = results[0].geometry.coordinates;
+    return {
+        lat : coords[1],
+        lng : coords[0]
+    }
 }
 
 module.exports = geocode

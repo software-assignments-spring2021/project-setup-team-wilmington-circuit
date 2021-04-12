@@ -8,6 +8,7 @@ import MapDisplay from './components/MapDisplay';
 import ResultList from './components/ResultList.js';
 import Header from './components/Header'
 import SideDrawer from './components/SideDrawer'
+import getTestData from './testData'
 import { Button, ButtonGroup, ButtonToolbar } from 'react-bootstrap';
 
 import SearchInput from './components/SearchInput'
@@ -15,12 +16,28 @@ import SearchInput from './components/SearchInput'
 
 function App() {
   const [toggle, setToggle] = useState(false)
-  const [origins, setOrigins] = useState([])
+  const [origins, setOrigins] = useState([]);
+  const [centerPoint, setCenterPoint] = useState(null);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [searchError, setSearchError] = useState(null)
 
   const loadOriginMarkers = data => {
     setMapLoaded(!mapLoaded)
     setOrigins(data)
+    console.log(origins)
+  }
+
+  const onSearch = data => {
+    if(origins.length>=2){
+      getTestData.search(origins).then(data => {
+        setCenterPoint(data)
+        setSearchError(null)
+      }).catch(e => {
+        const err = e.response.data
+        setSearchError(err)
+      })
+    }
+    setSearchError('Must enter at least 2 valid starting locations')
   }
 
   return (
@@ -32,7 +49,7 @@ function App() {
         <SideDrawer show={toggle} />
         <div className="content" id="main-container">
           <div id="input-container">
-          <SearchInput></SearchInput>
+          <SearchInput err={searchError} onSearch={onSearch}></SearchInput>
           <OriginPoints onChange={loadOriginMarkers}></OriginPoints>
           <a id="share-link">Share this map</a>
           </div>
@@ -51,6 +68,8 @@ function App() {
               origin8={(origins[7] && origins[7].loc) || null}
               origin9={(origins[8] && origins[8].loc) || null}
               origin10={(origins[9] && origins[9].loc) || null}
+
+              centerPoint={centerPoint}
             ></MapDisplay>
             <ResultList /* results={results} */></ResultList>
           </div>
