@@ -2,8 +2,7 @@ const express = require('express')
 const geocode = require('./algo/geocode')
 const geocenter = require('./algo/geocenter')
 const bodyParser = require('body-parser');
-
-
+const placeInfo = require('./algo/placeinfo');
 const router = express.Router();
 
 router.use(bodyParser.json())
@@ -37,7 +36,17 @@ router.post('/search', (req, res) => {
     }
     else {
         geocenter(origins).then(loc => {
-            if(loc) res.json(loc)
+            if(loc){
+
+                placeInfo(loc.lat, loc.lng, 1000, "restaurant", "burger").then(places => {
+                    if(places){
+                        res.send({loc:loc, placeList: places}) 
+                        //Sends both location and nearby places in one response
+                    }
+                });
+               
+             
+            } 
             else {
                 res.status(500);
                 res.send('Internal error geocentering starting locations')

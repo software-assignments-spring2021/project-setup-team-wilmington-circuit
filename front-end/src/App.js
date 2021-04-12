@@ -20,6 +20,7 @@ function App() {
   const [centerPoint, setCenterPoint] = useState(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [searchError, setSearchError] = useState(null)
+  const [places, setPlaces] = useState([])
 
   const loadOriginMarkers = data => {
     setMapLoaded(!mapLoaded)
@@ -30,8 +31,10 @@ function App() {
   const onSearch = data => {
     if(origins.length>=2){
       getTestData.search(origins).then(data => {
-        setCenterPoint(data)
+        setCenterPoint(data.loc)
         setSearchError(null)
+        setPlaces(data.placeList)
+        
       }).catch(e => {
         const err = e.response.data
         setSearchError(err)
@@ -39,6 +42,7 @@ function App() {
     }
     setSearchError('Must enter at least 2 valid starting locations')
   }
+  
 
   return (
     <>
@@ -71,7 +75,10 @@ function App() {
 
               centerPoint={centerPoint}
             ></MapDisplay>
-            <ResultList /* results={results} */></ResultList>
+            
+            {places.length>0 &&
+            <ResultList results={places}></ResultList>
+            }
           </div>
         </div>
       </div>

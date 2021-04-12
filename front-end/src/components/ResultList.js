@@ -5,6 +5,7 @@ import './ResultsList.css'
 
 const ResultList = (props) => {
     const [mockResults, setData] = useState([]);
+    const [places, setPlaces] = useState([]);
     const [scrollStyle, setScrollStyle] = useState('hidden')
     useEffect(()=>{
         getTestData.getResults_mock().then(res => {
@@ -12,13 +13,14 @@ const ResultList = (props) => {
         }
         )
     }, [])
+
     return (
         //perma false for now
         (false && !props) ? (
             <div>Loading...</div>
         ) : (
             <div class='card-group' style={{'overflowY': scrollStyle}} onMouseOver={()=>setScrollStyle('scroll')} onMouseOut={()=>setScrollStyle('hidden')}>
-                {mockResults.map((result) => {
+                {props.results.map((result) => {
                     return (
                         <Result result={result}></Result>
                     )

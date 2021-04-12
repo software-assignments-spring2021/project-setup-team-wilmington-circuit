@@ -18,7 +18,7 @@ const Result = (props) => {
                                     <div class='card-body'>
                                         <h4 class='card-title'>{props.result.name}</h4>
                                         <p class='card-text'>
-                                            {props.result.geometry[0].location[0].lat}, {props.result.geometry[0].location[0].lng}<br></br>
+                                            {props.result.location.lat}, {props.result.location.lng}<br></br>
                                             Rating: {props.result.rating}<br></br>
                                         </p>
                                         <a href='#'><small class='text-muted'><u>More Info</u></small></a>
