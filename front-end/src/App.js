@@ -26,10 +26,10 @@ function App() {
   return (
     <>
       <div className="html">
-        <button class="header-btn" onClick={() => setToggle(!toggle)}>
-          <Header onClick={() => setToggle(!toggle)} />
+        <button class="header-btn">
+          <Header show ={toggle} setShow={setToggle} />
         </button>
-        <SideDrawer show={toggle} />
+        <SideDrawer show={toggle} setShow={setToggle}/>
         <div className="content" id="main-container">
           <div id="input-container">
           <SearchInput></SearchInput>

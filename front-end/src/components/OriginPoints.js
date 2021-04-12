@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Button, ButtonGroup, ButtonToolbar, Modal } from "react-bootstrap"
 import OriginInput from "./OriginInput"
 import './OriginPoints.css'
+import SideDrawer from './SideDrawer';
 
 const OriginPoints = props => {
     const [origins, setOrigins] = useState([{ loc: null, mode: null, options: null }, { loc: null, mode: null, options: null }])
@@ -66,24 +67,22 @@ const OriginPoints = props => {
                                     <Button variant="primary" onClick={() => {
                                         //not checking validity yet
                                         //if(origins[0].loc !== null && origins[1].loc !== null){
-                                            const groupName = document.getElementById('group_name');
-                                            if(groupName !== ''){
-                                                const newGroup = {
-                                                    group_name: groupName.value,
-                                                    origins: origins
-                                                };
-                                                const currentGroups = sessionStorage.getItem('groups');
-                                                console.log(sessionStorage);
-                                                console.log(currentGroups);
-                                                if(currentGroups){
-                                                    const parsedGroup = JSON.parse(currentGroups);
-                                                    parsedGroup.push(newGroup);
-                                                    sessionStorage.setItem('groups', JSON.stringify(parsedGroup));
-                                                } else {
-                                                    const newSession = [newGroup];
-                                                    sessionStorage.setItem('groups', JSON.stringify(newSession));
-                                                }
+                                        const groupName = document.getElementById('group_name');
+                                        if (groupName !== '') {
+                                            const newGroup = {
+                                                group_name: groupName.value,
+                                                origins: origins
+                                            };
+                                            const currentGroups = sessionStorage.getItem('groups');
+                                            if (currentGroups) {
+                                                const parsedGroup = JSON.parse(currentGroups);
+                                                parsedGroup.push(newGroup);
+                                                sessionStorage.setItem('groups', JSON.stringify(parsedGroup));
+                                            } else {
+                                                const newSession = [newGroup];
+                                                sessionStorage.setItem('groups', JSON.stringify(newSession));
                                             }
+                                        }
                                         //}
                                         handleClose();
                                     }}>
