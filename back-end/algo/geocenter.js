@@ -6,10 +6,38 @@ const decode = require('./polyline-decode');
 require('dotenv').config()
 
 const getGeoCentriod = locs => {
+    if(locs.length < 2) throw 'Input must contain at least 2 locs'
     let features = turf.points([
         ...(locs.map(loc => [loc.lat, loc.lng]))
     ])
     return turf.center(features);
+}
+
+const cutPath = (pathData, candidate) => {
+    if(pathData.length < 2) throw 'Input must contain at least 2 locs';
+    if(!candidate || !(candidate.type === 'Feature')) throw 'Invalid candidate point'
+    let maxPath = pathData[0].polyline, maxDuration = pathData[0].duration, averageDuration = 0;
+    pathData.forEach((path, i) => {
+        averageDuration += path.duration/pathData.length;
+        if(path.duration > maxDuration){
+            maxPath = path.polyline;
+            maxDuration = path.duration;
+        }
+    })
+    const r = averageDuration/maxDuration;
+    const x = Math.round(maxPath.length * r);
+    if(maxPath[x]){
+        return {
+            averageSquaredError: getAverageSquaredError(pathData.map(path => path.duration), averageDuration),
+            newCandidate: turf.point([maxPath[x].lat, maxPath[x].lng])
+        }
+    }
+    else {
+        return {
+            averageSquaredError: 0,
+            newCandidate: candidate
+        }
+    }
 }
 
 const geoCenterHelper = async (candidate, origins) => {
@@ -37,40 +65,19 @@ const geoCenterHelper = async (candidate, origins) => {
         }
     }
     if(errors.length > 0) throw errors.toString();
-    let maxPath = pathData[0].polyline, maxDuration = pathData[0].duration, averageDuration = 0;
-    pathData.forEach((path, i) => {
-        averageDuration += path.duration/pathData.length;
-        if(path.duration > maxDuration){
-            maxPath = path.polyline;
-            maxDuration = path.duration;
-        }
-    })
-    const r = averageDuration/maxDuration;
-    const x = Math.round(maxPath.length * r);
-    if(maxPath[x]){
-        return {
-            averageSquaredError: getAverageSquaredError(pathData.map(path => path.duration), averageDuration),
-            newCandidate: turf.point([maxPath[x].lat, maxPath[x].lng])
-        }
-    }
-    else {
-        return {
-            averageSquaredError: 0,
-            newCandidate: candidate
-        }
-    }
+    return cutPath(pathData, candidate)
 }
 
 const getAverageSquaredError = (durations, average) => {
     if(durations && durations.length > 0){
         let sum = 0;
-        durations.forEach(duration => sum += Math.pow(duration-average, 2))
-        return sum/durations.length
+        durations.forEach(duration => sum += (Math.pow(duration-average, 2))/average)
+        return sum
     }
     return null;
 }
 
-const geoCenter = async(origins, power = 5, tol = 300) => {
+const geoCenter = async(origins, power = 5, tol = 20) => {
     let candidate = getGeoCentriod(origins.map(origin => origin.loc)), i = 0;
     while (i < power){
         let data;
@@ -89,4 +96,4 @@ const geoCenter = async(origins, power = 5, tol = 300) => {
     return null;
 }
 
-module.exports = geoCenter
+module.exports = {geoCenter, getAverageSquaredError, cutPath, geoCenterHelper, getGeoCentriod}
