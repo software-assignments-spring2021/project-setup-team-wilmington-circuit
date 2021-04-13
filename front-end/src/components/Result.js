@@ -31,7 +31,10 @@ const Result = (props) => {
                             <div class='card'>
                                 <div class='result-card'>
                                     <div class='img-square-wrapper'>
-                                        <img src={imageURL} alt='icon'></img>
+                                        <div style ={{backgroundImage: `url(${imageURL})`}}>
+                                            <img src={imageURL} alt='icon'></img>
+                                        </div>
+                                        
                                     </div>
                                     <div class='card-body'>
                                         <h4 class='card-title'>{props.result.name}</h4>
