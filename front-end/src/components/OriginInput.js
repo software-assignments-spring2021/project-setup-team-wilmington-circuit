@@ -4,8 +4,6 @@ import getTestData from '../testData'
 
 import './OriginInput.css'
 
-
-
 const OriginInput = props => {
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -18,6 +16,7 @@ const OriginInput = props => {
       });
     
     const [tranportMode, setTransportMode] = useState(null);
+
     const [name, setName] = useState(''); 
     const [haveLocation, setHaveLocation] = useState(false)
     const [haveAddress, setHaveAddress] = useState(false)
@@ -25,26 +24,39 @@ const OriginInput = props => {
     const [longitude, setLng] = useState(null)
     const [address, setAddress] = useState(null)
 
-    const transportModeNames = {'walk': 'Walk', 'bike': 'Bike', 'car': 'Drive', 'trans': 'Public Transport'}
-    const originData = {loc: null, mode: null, options: null}
+    const [name, setName] = useState('');
+    const [valid, setValid] = useState(true);
+    const [errMessage, setErrMessage] = useState(null)
+
+
+    const transportModeNames = {'walking': 'Walk', 'bicycling': 'Bike', 'driving': 'Drive', 'transit': 'Public Transit'}
+    const [originData, setOriginData] = useState({loc: null, mode: null, options: null}) 
 
     const setOrigin = value => {
-        if(!(name == value)) {
+        if(value.length === 0){
+            setValid(true);
+            originData.loc = null
+                props.onChange(props.originNumber, originData);
+            setOriginData(originData)
+        }
+        else if(!(name == value)) {
             setName(value)
-            originData.loc = getTestData.getPlaceLocation(value);
-            props.onChange(props.originNumber, originData);
+            getTestData.getPlaceLocation(value).then(loc => {
+                originData.loc = loc
+                props.onChange(props.originNumber, originData);
+                setValid(true)
+                setOriginData(originData)
+            }).catch(e => {
+                setValid(false)
+                setErrMessage(e.response.data)
+                originData.loc = null
+                props.onChange(props.originNumber, originData);
+                setOriginData(originData)
+            })
+            
         }
     } 
-/*
-    const getLocation = () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(getCoordinates, handleError)
-            setHaveLocation(true)
-        } else {
-            alert("Geolocation is not supported by this browser. Please manually enter your current address.")
-        }
-    }
-*/
+
     const getCoordinates = (position) => {
         console.log(position.coords.latitude)
         setLat(position.coords.latitude)
@@ -98,6 +110,15 @@ const OriginInput = props => {
         }
       }
 
+
+    const handleTransportModeChange = mode => {
+        setTransportMode(mode);
+        originData.mode = mode;
+        props.onChange(props.originNumber, originData);
+        setOriginData(originData)
+    }
+
+
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -110,16 +131,18 @@ const OriginInput = props => {
         <>
         
         <InputGroup className="origin-input">
-      
-        <FormControl className="custom-input origin-input-form" onBlur={e=>setOrigin(e.target.value)} onKeyPress={e => {if(e.charCode === 13){setOrigin(e.target.value)}}} placeholder='Enter a starting location' value={haveAddress ? address : ''}></FormControl>
+
+        <FormControl isInvalid={!valid} className="custom-input origin-input-form" onBlur={e=>setOrigin(e.target.value)} onKeyPress={e => {if(e.charCode === 13){setOrigin(e.target.value)}}} placeholder="Enter a starting location" value={haveAddress ? address : ''}></FormControl>
+        <FormControl.Feedback tooltip={true} type="invalid">{errMessage}</FormControl.Feedback>
+
         <InputGroup.Append>
         <Button onClick={() => getAddress(longitude, latitude)}className="input-append" variant="light">My Location</Button>
         </InputGroup.Append>
-        <DropdownButton className="input-append" as={InputGroup.Append} variant="light" title ={tranportMode ? transportModeNames[tranportMode] : 'Transport Mode'} onSelect={mode=>setTransportMode(mode)}>
-            <Dropdown.Item eventKey="walk">Walk</Dropdown.Item>
-            <Dropdown.Item eventKey="bike">Bike</Dropdown.Item>
-            <Dropdown.Item eventKey="car">Drive</Dropdown.Item>
-            <Dropdown.Item eventKey="trans">Public Transport</Dropdown.Item>
+        <DropdownButton className="input-append" as={InputGroup.Append} variant="light" title ={tranportMode ? transportModeNames[tranportMode] : 'Transport Mode'} onSelect={mode=>handleTransportModeChange(mode)}>
+            <Dropdown.Item eventKey="walking">Walk</Dropdown.Item>
+            <Dropdown.Item eventKey="bicycling">Bike</Dropdown.Item>
+            <Dropdown.Item eventKey="driving">Drive</Dropdown.Item>
+            <Dropdown.Item eventKey="transit">Public Transit</Dropdown.Item>
         </DropdownButton>
         <InputGroup.Append>
         <Button className="input-append" variant="light" onClick = {handleShow}>More Options</Button>
@@ -165,7 +188,9 @@ const OriginInput = props => {
             </Modal.Footer>
         </Modal>
         </InputGroup.Append>
+        
         </InputGroup>
+        
         </>
     )
 }
