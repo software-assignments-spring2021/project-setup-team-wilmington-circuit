@@ -28,6 +28,7 @@ const geoCenterHelper = async (candidate, origins) => {
             const route = data.routes[0]
             const path = {
                 duration: route.legs[0].duration.value,
+                distance: route.legs[0].distance.value,
                 polyline: decode(route.overview_polyline.points)
             }
             pathData.push(path)
@@ -37,9 +38,10 @@ const geoCenterHelper = async (candidate, origins) => {
         }
     }
     if(errors.length > 0) throw errors.toString();
-    let maxPath = pathData[0].polyline, maxDuration = pathData[0].duration, averageDuration = 0;
+    let maxPath = pathData[0].polyline, maxDuration = pathData[0].duration, averageDuration = 0, averageDistance = 0;
     pathData.forEach((path, i) => {
         averageDuration += path.duration/pathData.length;
+        averageDistance += path.distance/pathData.length;
         if(path.duration > maxDuration){
             maxPath = path.polyline;
             maxDuration = path.duration;
@@ -50,13 +52,17 @@ const geoCenterHelper = async (candidate, origins) => {
     if(maxPath[x]){
         return {
             averageSquaredError: getAverageSquaredError(pathData.map(path => path.duration), averageDuration),
-            newCandidate: turf.point([maxPath[x].lat, maxPath[x].lng])
+            newCandidate: turf.point([maxPath[x].lat, maxPath[x].lng]),
+            averageDuration: averageDuration,
+            averageDistance: averageDistance
         }
     }
     else {
         return {
             averageSquaredError: 0,
-            newCandidate: candidate
+            newCandidate: candidate,
+            averageDuration: averageDuration,
+            averageDistance: averageDistance
         }
     }
 }
@@ -72,18 +78,27 @@ const getAverageSquaredError = (durations, average) => {
 
 const geoCenter = async(origins, power = 5, tol = 300) => {
     let candidate = getGeoCentriod(origins.map(origin => origin.loc)), i = 0;
+    let averageDuration = Infinity;
     while (i < power){
         let data;
         data = await geoCenterHelper(candidate, origins).catch(e => {throw(e)})
+        averageDuration = data.averageDuration;
+        averageDistance = data.averageDistance
         if(data.averageSquaredError <= tol) break;
-        else candidate = data.newCandidate;
+        else {
+            candidate = data.newCandidate;
+        }
         i++;
     }
     if(candidate){
         const coord = turf.getCoord(candidate);
         return {
+        loc: {
             lat: coord[0],
             lng: coord[1]
+        },
+        averageDuration: averageDuration,
+        averageDistance: averageDistance
         }
     }
     return null;

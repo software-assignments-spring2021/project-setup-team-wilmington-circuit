@@ -56,12 +56,12 @@ router.post('/search', (req, res) => {
         res.send('No search found');
     }
     else {
-        geocenter(origins).then(loc => {
-            if(loc){
+        geocenter(origins).then(data => {
+            if(data.loc){
 
-                placeInfo(loc.lat, loc.lng, 1000, search.query, search.query).then(places => {
+                placeInfo(data.loc.lat, data.loc.lng, data.averageDistance, search.query).then(places => {
                     if(places){
-                        res.send({loc:loc, placeList: places}) 
+                        res.send({loc:data.loc, averageDuration: data.averageDuration, placeList: places}) 
                         //Sends both location and nearby places in one response
                     }
                 }).catch(e => {
