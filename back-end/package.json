@@ -13,6 +13,8 @@
     "istanbul": "^0.4.5",
     "mocha": "^8.3.2",
     "nyc": "^15.1.0",
+    "mongoose": "^5.12.3",
+    "node-fetch": "^2.6.1",
     "querystring": "^0.2.1",
     "scikit-node": "^0.2.2",
     "sinon": "^10.0.0",
