@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {Button, Modal, Dropdown, DropdownButton, FormControl, InputGroup} from 'react-bootstrap';
 import getTestData from '../testData'
 
@@ -7,8 +7,23 @@ import './OriginInput.css'
 
 
 const OriginInput = props => {
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            console.log("Latitude is :", position.coords.latitude);
+            setLat(position.coords.latitude)
+            console.log("Longitude is :", position.coords.longitude);
+            setLng(position.coords.longitude)
+            //setHaveLocation(true)
+          });
+      });
+    
     const [tranportMode, setTransportMode] = useState(null);
     const [name, setName] = useState(''); 
+    const [haveLocation, setHaveLocation] = useState(false)
+    const [haveAddress, setHaveAddress] = useState(false)
+    const [latitude, setLat] = useState(null)
+    const [longitude, setLng] = useState(null)
+    const [address, setAddress] = useState(null)
 
     const transportModeNames = {'walk': 'Walk', 'bike': 'Bike', 'car': 'Drive', 'trans': 'Public Transport'}
     const originData = {loc: null, mode: null, options: null}
@@ -20,18 +35,85 @@ const OriginInput = props => {
             props.onChange(props.originNumber, originData);
         }
     } 
+/*
+    const getLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(getCoordinates, handleError)
+            setHaveLocation(true)
+        } else {
+            alert("Geolocation is not supported by this browser. Please manually enter your current address.")
+        }
+    }
+*/
+    const getCoordinates = (position) => {
+        console.log(position.coords.latitude)
+        setLat(position.coords.latitude)
+        console.log({latitude})
+        setLng(position.coords.longitude)
+        console.log({longitude})
+        haveLocation(true)
+    }
+
+    // get address reverse geocodes the coordinates obtained through navigator.geolocation
+    const getAddress = (lng, lat) => {
+        if(lng == null) {
+            alert("Could not get your location. lease manually enter your current address or change your browser settings. ")
+            
+        } else {
+            //https://app.geocodeapi.io/api/v1/reverse?point.lat=${latitude}&point.lon=${longitude}&apikey=66fd1840-9805-11eb-847b-6b6f38884161
+        let url = `https://app.geocodeapi.io/api/v1/reverse?apikey=66fd1840-9805-11eb-847b-6b6f38884161&point.lat=${lat}&point.lon=${lng}`
+        fetch(url)
+        .then(response => response.json())
+        .then(data => setAddress(data.features[0].properties.label))
+        //setAddress(data.features[0].properties.label)
+        .catch(error => alert(error))
+        console.log({url})
+        setHaveAddress(true)
+        }
+        
+    }
+    
+
+  /*  const getLocation = () => {
+        setAddress("My Current Address")
+        setHaveLocation(true)
+    }*/
+
+    const handleError = (error) => {
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+            alert("Your browser denied the request for Geolocation. Please manually enter your current address or change your browser settings.")
+            break;
+          case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable. Please manually enter your current address.")
+            break;
+          case error.TIMEOUT:
+            alert("The request to get user location timed out. Please manually enter your current address.")
+            break;
+          case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred. Please manually enter your current address.")
+            break;
+            default:
+            alert("An unknown error occurred. Please manually enter your current address.")
+        }
+      }
+
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    
     
 
     return (
         <>
+        
         <InputGroup className="origin-input">
-        <FormControl className="custom-input origin-input-form" onBlur={e=>setOrigin(e.target.value)} onKeyPress={e => {if(e.charCode === 13){setOrigin(e.target.value)}}} placeholder="Enter a starting location"></FormControl>
+      
+        <FormControl className="custom-input origin-input-form" onBlur={e=>setOrigin(e.target.value)} onKeyPress={e => {if(e.charCode === 13){setOrigin(e.target.value)}}} placeholder='Enter a starting location' value={haveAddress ? address : ''}></FormControl>
         <InputGroup.Append>
-        <Button className="input-append" variant="light">My Location</Button>
+        <Button onClick={() => getAddress(longitude, latitude)}className="input-append" variant="light">My Location</Button>
         </InputGroup.Append>
         <DropdownButton className="input-append" as={InputGroup.Append} variant="light" title ={tranportMode ? transportModeNames[tranportMode] : 'Transport Mode'} onSelect={mode=>setTransportMode(mode)}>
             <Dropdown.Item eventKey="walk">Walk</Dropdown.Item>
