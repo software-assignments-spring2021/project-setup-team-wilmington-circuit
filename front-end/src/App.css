@@ -22,8 +22,17 @@
   float: right;
   margin-bottom: 1em;
   margin-right: 2.5%;
+  margin-left: 0;
   text-decoration: underline;
 }
+
+#average-duration {
+  float: right;
+  margin-bottom: 1em;
+  margin-right: 2.5%;
+  margin-left: 0;
+}
+
 .App {
   text-align: center;
 }
