@@ -53,7 +53,8 @@ const Result = (props) => {
             price = "Not Available";
             break;
     }
-    
+    const infoLink = "https://www.google.com/maps/place/?q=place_id:" + props.result.placeId;
+    console.log(props.result)
     console.log(hours)
     return (
         !props ? (
@@ -78,7 +79,7 @@ const Result = (props) => {
                                             Rating: {props.result.rating}<br></br>
                                             Price Level: {price}<br></br>
                                         </p>
-                                        <a href='#'><small class='text-muted'><u>More Info</u></small></a>
+                                        <a href={infoLink}><small class='text-muted'><u>More Info</u></small></a>
                                     </div>
                                 </div>
                             </div>

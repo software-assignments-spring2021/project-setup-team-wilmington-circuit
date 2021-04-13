@@ -12,6 +12,7 @@ const makeArr = async (arr) =>{
                 icon: arr.results[i].icon,
                 price: arr.results[i].price_level,
                 hours: arr.results[i].opening_hours,
+                placeId: arr.results[i].place_id,
             }
         newArr.push(obj)
        }
