@@ -8,7 +8,6 @@ const Result = (props) => {
     useEffect(()=>{
         try{
             getTestData.getPlaceImage(props.result.photoreference[0].photo_reference).then(url => {
-                console.log(url)
                 setImageURL(url)
             }).catch(e => {
                 console.log(e)
@@ -18,7 +17,7 @@ const Result = (props) => {
             console.log(e)
             setImageURL(props.result.icon)
         }
-    })
+    }, [props.result])
 
     return (
         !props ? (
