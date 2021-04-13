@@ -54,7 +54,7 @@ const getPlaceLocation = async (query) => {
 const getPlaceImage = async (photoreference) => {
     const res = await axios.get('/api/photo?photoreference='+photoreference);
     const data = res.data;
-    console.log(data);
+    //console.log(data);
     return data;
 }
 
