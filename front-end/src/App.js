@@ -31,6 +31,10 @@ function App() {
     console.log(origins)
   }
 
+  const pad2 = (number) => { 
+    return (number < 10 ? '0' : '') + number 
+  }
+
   const onSearch = searchData => {
     if(origins.length>=2){
       if(searchData.query.length < 3){
@@ -42,8 +46,8 @@ function App() {
         setSearchError(null)
         setPlaces(data.placeList)
         if(data.averageDuration){
-          const hour = Math.floor(data.averageDuration/3600), minute = Math.floor(data.averageDuration/60), second=data.averageDuration%60;
-          setAverageDuration(`${hour > 0 ? hour + ':' : ''}${minute}:${second}`);
+          const hour = Math.floor(data.averageDuration/3600), minute = (Math.floor(data.averageDuration/60))%60, second=data.averageDuration%60;
+          setAverageDuration(`${hour > 0 ? hour + ':' : ''}${pad2(minute)}:${pad2(second)}`);
         } 
         else setAverageDuration(null)
       }).catch(e => {
