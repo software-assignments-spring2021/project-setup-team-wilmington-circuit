@@ -1,6 +1,6 @@
 const express = require('express')
 const geocode = require('./algo/geocode')
-const geocenter = require('./algo/geocenter')
+const geocenter = require('./algo/geocenter').geoCenter
 const bodyParser = require('body-parser');
 const placeInfo = require('./algo/placeinfo');
 const fetchPhoto = require('./algo/photoReference')
