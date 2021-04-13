@@ -31,7 +31,7 @@ const SearchInput = props => {
     return (
     <div class = "search-container">
     <InputGroup className="origin-input">
-    <FormControl isInvalid={(props.err)} className="custom-input" placeholder="Search for"></FormControl>
+    <FormControl isInvalid={(props.err)} className="custom-input" placeholder="Search for" id="search-input"></FormControl>
     <FormControl.Feedback tooltip={true} type="invalid">{props.err}</FormControl.Feedback>
     <InputGroup.Append>
     <Button variant="light" onClick = {handleShow}>Options</Button>
@@ -102,7 +102,10 @@ const SearchInput = props => {
     </Button>
     </Modal.Footer>
 </Modal>
-<Button onClick={()=> props.onSearch()}>Search</Button>
+<Button onClick={()=> props.onSearch({
+    query: document.getElementById('search-input').value,
+    options: null
+})}>Search</Button>
 </InputGroup.Append>
 </InputGroup>
 

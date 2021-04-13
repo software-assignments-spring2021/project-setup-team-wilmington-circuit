@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const querystring = require('querystring')
 
 const makeArr = async (arr) =>{
         const newArr = [];
@@ -16,11 +17,16 @@ const makeArr = async (arr) =>{
 }
 
 const fetchInfo = async (lat, lng, radius, type, keyword, key) => {
-    const url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+lat+","+lng+"&radius="+radius+"&type="+type+"&keyword="+keyword+"&key="+key;  
+    const url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' + querystring.stringify({
+        location: lat + ',' + lng,
+        radius: radius,
+        keyword: keyword,
+        key: key
+    })
 
     let response = await(fetch(url));
     if(!response.ok){
-        throw new Error('Error fetching places data')
+        throw 'Error fetching places data'
     }
     let res = await response.json();
     const list = await makeArr(res);
@@ -28,9 +34,9 @@ const fetchInfo = async (lat, lng, radius, type, keyword, key) => {
 }
 
 const placeInfo = async(lat, lng, radius, type, keyword) => {
-    console.log('calling');
     const result = await fetchInfo(lat, lng, radius, type, keyword, process.env.GMAPS_APIKEY);
     console.log(result[0])
+    if(result.length === 0) throw 'No results found!'
     return(result);
 }
 

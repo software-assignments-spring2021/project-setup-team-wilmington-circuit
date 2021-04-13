@@ -25,22 +25,26 @@ function App() {
   const loadOriginMarkers = data => {
     setMapLoaded(!mapLoaded)
     setOrigins(data)
+    setPlaces([])
     console.log(origins)
   }
 
-  const onSearch = data => {
+  const onSearch = searchData => {
     if(origins.length>=2){
-      getTestData.search(origins).then(data => {
+      if(searchData.query.length < 3){
+        setSearchError('Search query is too short')
+        return
+      }
+      getTestData.search(origins, searchData).then(data => {
         setCenterPoint(data.loc)
         setSearchError(null)
         setPlaces(data.placeList)
-        
       }).catch(e => {
         const err = e.response.data
         setSearchError(err)
       })
     }
-    setSearchError('Must enter at least 2 valid starting locations')
+    else setSearchError('Must enter at least 2 valid starting locations')
   }
   
 
@@ -74,6 +78,7 @@ function App() {
               origin10={(origins[9] && origins[9].loc) || null}
 
               centerPoint={centerPoint}
+              placeList={places}
             ></MapDisplay>
             
             {places.length>0 &&

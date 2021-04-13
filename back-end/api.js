@@ -3,6 +3,7 @@ const geocode = require('./algo/geocode')
 const geocenter = require('./algo/geocenter')
 const bodyParser = require('body-parser');
 const placeInfo = require('./algo/placeinfo');
+const fetchPhoto = require('./algo/photoReference')
 const router = express.Router();
 
 router.use(bodyParser.json())
@@ -28,21 +29,45 @@ router.get('/geocode', (req, res) => {
     } 
 })
 
+router.get('/photo', (req, res) => {
+    let query = req.query.photoreference;
+    if(!query) {
+        res.status(400);
+        res.send('No query found');
+    }
+    fetchPhoto(query).then(img => {
+        res.send(img)
+    }).catch(e => {
+        console.error(e)
+            res.status(500);
+            res.send('Image not found')
+    })
+})
+
 router.post('/search', (req, res) => {
     let origins = req.body.origins;
+    let search = req.body.search;
     if(!origins){
         res.status(400);
         res.send('No origins found');
+    }
+    if(!search){
+        res.status(400);
+        res.send('No search found');
     }
     else {
         geocenter(origins).then(loc => {
             if(loc){
 
-                placeInfo(loc.lat, loc.lng, 1000, "restaurant", "burger").then(places => {
+                placeInfo(loc.lat, loc.lng, 1000, search.query, search.query).then(places => {
                     if(places){
                         res.send({loc:loc, placeList: places}) 
                         //Sends both location and nearby places in one response
                     }
+                }).catch(e => {
+                    console.error(e)
+                    res.status(500);
+                    res.send('Internal error finding places: ' + e)
                 });
                
              
