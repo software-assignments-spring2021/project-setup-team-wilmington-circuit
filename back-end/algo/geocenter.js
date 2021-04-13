@@ -14,6 +14,8 @@ const getGeoCentriod = locs => {
 }
 
 const cutPath = (pathData, candidate) => {
+    if(pathData.length < 2) throw 'Input must contain at least 2 locs';
+    if(!candidate || !(candidate.type === 'Feature')) throw 'Invalid candidate point'
     let maxPath = pathData[0].polyline, maxDuration = pathData[0].duration, averageDuration = 0, averageDistance = 0;
     pathData.forEach((path, i) => {
         averageDuration += path.duration/pathData.length;
