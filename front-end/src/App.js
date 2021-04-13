@@ -19,12 +19,14 @@ function App() {
   const [origins, setOrigins] = useState([]);
   const [centerPoint, setCenterPoint] = useState(null);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [averageDuration, setAverageDuration] = useState(null)
   const [searchError, setSearchError] = useState(null)
   const [places, setPlaces] = useState([])
 
-  const loadOriginMarkers = data => {
+  const loadOriginMarkers = originData => {
+    const filteredOrigins = originData.filter(origin => origin.loc)
     setMapLoaded(!mapLoaded)
-    setOrigins(data)
+    setOrigins(filteredOrigins)
     setPlaces([])
     console.log(origins)
   }
@@ -39,9 +41,16 @@ function App() {
         setCenterPoint(data.loc)
         setSearchError(null)
         setPlaces(data.placeList)
+        if(data.averageDuration){
+          const hour = Math.floor(data.averageDuration/3600), minute = Math.floor(data.averageDuration/60), second=data.averageDuration%60;
+          setAverageDuration(`${hour > 0 ? hour + ':' : ''}${minute}:${second}`);
+        } 
+        else setAverageDuration(null)
       }).catch(e => {
         const err = e.response.data
         setSearchError(err)
+        setPlaces([])
+        setAverageDuration(null)
       })
     }
     else setSearchError('Must enter at least 2 valid starting locations')
@@ -59,7 +68,11 @@ function App() {
           <div id="input-container">
           <SearchInput err={searchError} onSearch={onSearch}></SearchInput>
           <OriginPoints onChange={loadOriginMarkers}></OriginPoints>
+          <div>
           <a id="share-link">Share this map</a>
+          <p id="average-duration">{averageDuration ? 'Average Travel Time: ' + averageDuration : null}</p>
+          
+          </div>
           </div>
           <div className='map-result-container'>
             <MapDisplay

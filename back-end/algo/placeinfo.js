@@ -1,5 +1,6 @@
 const fetch = require("node-fetch");
-const querystring = require('querystring')
+const querystring = require('querystring');
+const turf = require('@turf/turf');
 
 const makeArr = async (arr) =>{
         const newArr = [];
@@ -16,7 +17,7 @@ const makeArr = async (arr) =>{
        return(newArr)   
 }
 
-const fetchInfo = async (lat, lng, radius, type, keyword, key) => {
+const fetchInfo = async (lat, lng, radius, keyword, key) => {
     const url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' + querystring.stringify({
         location: lat + ',' + lng,
         radius: radius,
@@ -33,8 +34,9 @@ const fetchInfo = async (lat, lng, radius, type, keyword, key) => {
     return list;
 }
 
-const placeInfo = async(lat, lng, radius, type, keyword) => {
-    const result = await fetchInfo(lat, lng, radius, type, keyword, process.env.GMAPS_APIKEY);
+const placeInfo = async(lat, lng, averageDistance, keyword) => {
+    const radius = averageDistance * 0.1;
+    const result = await fetchInfo(lat, lng, radius, keyword, process.env.GMAPS_APIKEY);
     console.log(result[0])
     if(result.length === 0) throw 'No results found!'
     return(result);
