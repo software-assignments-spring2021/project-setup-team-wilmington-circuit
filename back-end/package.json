@@ -9,6 +9,7 @@
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "mongoose": "^5.12.3",
     "querystring": "^0.2.1",
     "scikit-node": "^0.2.2",
     "turf": "^3.0.14"
