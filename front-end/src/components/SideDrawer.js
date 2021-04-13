@@ -1,4 +1,5 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useRef, useEffect } from 'react'
+import { Button } from 'react-bootstrap'
 import './SideDrawer.css'
 import Profile from './Profile'
 import getMockData from '../testData';
@@ -8,47 +9,58 @@ import {
     Switch,
     Route,
     Link
-  } from "react-router-dom";
+} from "react-router-dom";
 
-
-const SideDrawer = props => {
+const SideDrawer = function (props) {
     let drawerClasses = 'side-drawer'
     if (props.show) {
         drawerClasses = 'side-drawer open'
     }
 
-    const [toggle, setToggle] = useState(false)
-    const [toggle2, setToggle2] = useState(false)
+    const [clickedOutside, setClickedOutside] = useState(false);
+    const myRef = useRef();
 
-    const [friends, setFriend] = useState([])
-    const [groups, setGroup] = useState([])
+    const handleClickInside = () => setClickedOutside(false);
 
-    useEffect(()=>{
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    });
+
+    const [toggle, setToggle] = useState(false);
+    const [toggle2, setToggle2] = useState(false);
+    const [toggle3, setToggle3] = useState(false);
+
+    const [friends, setFriend] = useState([]);
+    const [groups, setGroup] = useState([]);
+
+    const handleClickOutside = e => {
+        if (!myRef.current.contains(e.target) && (!document.getElementById('hamburger-btn').contains(e.target))) {
+            setClickedOutside(true);
+            props.setShow(false);
+            setToggle(false);
+            setToggle2(false);
+            setToggle3(false);
+        }
+    };
+
+    useEffect(() => {
         getMockData.getFriends_mock().then(res => {
             setFriend(res);
         }
         )
-    }, [])
+    }, []);
 
-    useEffect(()=>{
+    useEffect(() => {
         getMockData.getGroups_mock().then(res => {
             setGroup(res);
         }
-        )
-    }, [])
+        );
+    }, []);
 
-    /*
-    useEffect(async () => {
-        const response = await fetch('https://my.api.mockaroo.com/friends.json?key=b3baae00')
-        const data = await response.json()
-        console.log(data)
-        const item = data
-        setFriend(item)
-    }, []) */
-
-
+   
     return (
-        <nav className={drawerClasses}>
+        <nav className={drawerClasses} ref={myRef} onClick={handleClickInside}>
             <ul>
                 <li><ProfilePage /></li>
 
@@ -57,26 +69,50 @@ const SideDrawer = props => {
                     {toggle && (
                         <div>
                             <ul>
-                            {friends.map((friend) => {
-                                return (
-                                    <li className="item">{friend.first_name}</li>
-                                )
-                            })}
+                                {friends.map((friend) => {
+                                    return (
+                                        <li className="item">{friend.first_name}</li>
+                                    )
+                                })}
                             </ul>
                         </div>
                     )}
                 </div>
 
                 <div>
-                    <li><a onClick={() => setToggle2(!toggle2)}>Groups +</a></li>
+                    <li><a onClick={() => {
+                        const savedGroups = JSON.parse(sessionStorage.getItem('groups'));
+                        if (savedGroups) {
+                            savedGroups.map((group) => {
+                                groups.push(group);
+                            });
+                            sessionStorage.removeItem('groups');
+                        }
+                        setToggle2(!toggle2);
+                        setToggle3(false);
+                    }
+                    }>Groups +</a>{toggle2 && (<Button className='edit' onClick={() => {
+                        setToggle3(!toggle3);
+                        setToggle2(true);
+                    }}>{toggle3 ? 'Done' : 'Edit'}</Button>)}
+                    </li>
                     {toggle2 && (
                         <div>
                             <ul>
-                            {groups.map((group) => {
-                                return (
-                                    <li className="item">{group.group_name}</li>
-                                )
-                            })}
+                                {groups.map((group) => {
+                                    return (
+                                        <li className="item">
+                                            {group.group_name}
+                                            {toggle3 && (
+                                                <button type='button' class='btn btn-danger float-right' onClick={() => {
+                                                    groups.splice(groups.indexOf(group), 1)
+                                                    setGroup([...groups]);
+                                                }}>Delete</button>
+                                            )}
+
+                                        </li>
+                                    )
+                                })}
                             </ul>
                         </div>
                     )}
@@ -84,9 +120,10 @@ const SideDrawer = props => {
 
             </ul>
         </nav>
-    )}
+    )
+}
 
 function ProfilePage() {
     return <Profile />;
 }
-export default SideDrawer
+export default SideDrawer;
