@@ -1,15 +1,14 @@
 import React, {useState} from 'react';
 import {GoogleLogin, GoogleLogout} from 'react-google-login';
 
-const clientId = '943141841763-aiogdumhgsrv58o0o27gmu2pquiro6gm.apps.googleusercontent.com';
-
 function Login() {
   
   const [user, setUser] = useState(null);
-  
+
   const loginSuccess = (res) => {
     console.log('Login success', res);
     setUser(res.profileObj);
+    localStorage.setItem('userObj', JSON.stringify(res.profileObj));
   };
   
   const loginFailure = error => {
@@ -19,6 +18,7 @@ function Login() {
   const logoutSuccess = (res) => {
     console.log('Logout success', res);
     setUser(null);
+    localStorage.removeItem('userObj');
   };
   
   const logoutFailure = error => {
@@ -29,13 +29,13 @@ function Login() {
      <div>
       {user ? <div>
         <GoogleLogout
-          clientId={clientId}
+          clientId={'943141841763-aiogdumhgsrv58o0o27gmu2pquiro6gm.apps.googleusercontent.com'}
           onLogoutSuccess={logoutSuccess}
           onFailure={logoutFailure}
         />
       </div> :
         <GoogleLogin
-          clientId={clientId}
+          clientId={'943141841763-aiogdumhgsrv58o0o27gmu2pquiro6gm.apps.googleusercontent.com'}
           buttonText="Login"
           onSuccess={loginSuccess}
           onFailure={loginFailure}
