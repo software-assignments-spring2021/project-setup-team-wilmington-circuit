@@ -1,23 +1,61 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {Button, Modal, Dropdown, DropdownButton, FormControl, InputGroup} from 'react-bootstrap';
+import axios from 'axios'
 import getTestData from '../testData'
-
 import './OriginInput.css'
+require('dotenv').config()
+
+const watchPosition = async () => {
+    console.log('watchPosition');        
+    await navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log('Position -> ',position);
+        },
+        (error) => console.log(error),
+        {enableHighAccuracy: false, timeout: 50000}
+    );
+}
 
 const OriginInput = props => {
     useEffect(() => {
+        watchPosition()
+        var options = {
+            enableHighAccuracy: false,
+            timeout: 50000,
+            //maximumAge: 0
+          };
+          
+          function success(pos) {
+            var crd = pos.coords;
+          
+            console.log('Your current position is:');
+            console.log(`Latitude : ${crd.latitude}`);
+            console.log(`Longitude: ${crd.longitude}`);
+            console.log(`More or less ${crd.accuracy} meters.`);
+          };
+          
+          function error(err) {
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+          };
+          
+          navigator.geolocation.getCurrentPosition(success, error, options);
+       /* console.log('useeffect was called')
         navigator.geolocation.getCurrentPosition(function(position) {
-            console.log("Latitude is :", position.coords.latitude);
+            console.log(position)
+            /*console.log("Latitude is :", position.coords.latitude);
             setLat(position.coords.latitude)
             console.log("Longitude is :", position.coords.longitude);
             setLng(position.coords.longitude)
             //setHaveLocation(true)
           });
+          */
       });
+
+    const APIKEY = '66fd1840-9805-11eb-847b-6b6f38884161'
     
+
     const [tranportMode, setTransportMode] = useState(null);
 
-    const [name, setName] = useState(''); 
     const [haveLocation, setHaveLocation] = useState(false)
     const [haveAddress, setHaveAddress] = useState(false)
     const [latitude, setLat] = useState(null)
@@ -66,30 +104,43 @@ const OriginInput = props => {
         haveLocation(true)
     }
 
-    // get address reverse geocodes the coordinates obtained through navigator.geolocation
+    
+/*
     const getAddress = (lng, lat) => {
         if(lng == null) {
             alert("Could not get your location. lease manually enter your current address or change your browser settings. ")
             
         } else {
-            //https://app.geocodeapi.io/api/v1/reverse?point.lat=${latitude}&point.lon=${longitude}&apikey=66fd1840-9805-11eb-847b-6b6f38884161
-        let url = `https://app.geocodeapi.io/api/v1/reverse?apikey=66fd1840-9805-11eb-847b-6b6f38884161&point.lat=${lat}&point.lon=${lng}`
-        fetch(url)
-        .then(response => response.json())
-        .then(data => setAddress(data.features[0].properties.label))
-        //setAddress(data.features[0].properties.label)
-        .catch(error => alert(error))
-        console.log({url})
+            
+        setAddress(getTestData.getPlaceAddress(longitude,latitude))
+        console.log("looook:" + JSON.stringify(getTestData.getPlaceAddress(longitude,latitude)))
         setHaveAddress(true)
+        
         }
         
-    }
-    
-
-  /*  const getLocation = () => {
-        setAddress("My Current Address")
-        setHaveLocation(true)
     }*/
+
+
+    // get address reverse geocodes the coordinates obtained through navigator.geolocation
+    //`https://app.geocodeapi.io/api/v1/reverse?apikey=${APIKEY}&point.lat=${lat}&point.lon=${lng}`
+    //getTestData.getPlaceAddress(longitude,latitude)
+   const getAddress = async (lng, lat) => {
+        /*if(lng == null) {
+            alert("Could not get your location. lease manually enter your current address or change your browser settings. ")
+            
+        } else {
+            console.log(process.env)
+        let url = fetch(`https://app.geocodeapi.io/api/v1/reverse?apikey=${APIKEY}&point.lat=${lat}&point.lon=${lng}`)
+        .then(response => response.json())
+        .then(data => setAddress(data.features[0].properties.label))
+        .catch(error => alert(error))
+        console.log({url})*/
+        let body = {lat: 1, lng: 10}
+        let data = await axios.post('/api/reverse-geocode', body)
+        console.log(data.body)
+        setHaveAddress(true)   
+    }
+
 
     const handleError = (error) => {
         switch(error.code) {

@@ -30,6 +30,13 @@ const getPlaceLocation = async (query) => {
     return data;
 }
 
+const getPlaceAddress = (lat, lng) => {
+    const res = axios.post('/api/reverse-geocode');
+    const data = res;
+    console.log('data from get place address:' + data);
+    return data;
+}
+
 const search = async (origins, search) => {
     const res = await axios.post('/api/search',
         {
@@ -41,4 +48,4 @@ const search = async (origins, search) => {
     console.log(data);
     return data;
 }
-export default {getResults_mock, getPlaceLocation, getFriends_mock, getGroups_mock, search}
+export default {getResults_mock, getPlaceLocation, getPlaceAddress, getFriends_mock, getGroups_mock, search}

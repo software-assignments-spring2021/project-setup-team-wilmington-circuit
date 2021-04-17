@@ -12,7 +12,7 @@ import getTestData from './testData'
 import { Button, ButtonGroup, ButtonToolbar } from 'react-bootstrap';
 
 import SearchInput from './components/SearchInput'
-
+require('dotenv').config()
 
 function App() {
   const [toggle, setToggle] = useState(false)

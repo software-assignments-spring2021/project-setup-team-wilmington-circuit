@@ -37,15 +37,6 @@ const SideDrawer = props => {
         )
     }, [])
 
-    /*
-    useEffect(async () => {
-        const response = await fetch('https://my.api.mockaroo.com/friends.json?key=b3baae00')
-        const data = await response.json()
-        console.log(data)
-        const item = data
-        setFriend(item)
-    }, []) */
-
 
     return (
         <nav className={drawerClasses}>
