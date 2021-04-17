@@ -67,3 +67,8 @@
 li {
     cursor: pointer;
 }
+
+#group-select-guide{
+    font-size: small;
+    margin-bottom: 0;
+}
