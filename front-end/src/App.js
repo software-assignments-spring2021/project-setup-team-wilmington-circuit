@@ -46,7 +46,7 @@ function App() {
         setSearchError(null)
         setPlaces(data.placeList)
         if(data.averageDuration){
-          const hour = Math.floor(data.averageDuration/3600), minute = (Math.floor(data.averageDuration/60))%60, second=data.averageDuration%60;
+          const hour = Math.floor(data.averageDuration/3600), minute = (Math.floor(data.averageDuration/60))%60, second=(Math.floor(data.averageDuration/3600))% 60;
           setAverageDuration(`${hour > 0 ? hour + ':' : ''}${pad2(minute)}:${pad2(second)}`);
         } 
         else setAverageDuration(null)
@@ -67,7 +67,7 @@ function App() {
         <button class="header-btn">
           <Header show ={toggle} setShow={setToggle} />
         </button>
-        <SideDrawer show={toggle} setShow={setToggle}/>
+        <SideDrawer onGroupSelect={origins => {loadOriginMarkers(origins)}} show={toggle} setShow={setToggle}/>
         <div className="content" id="main-container">
           <div id="input-container">
           <SearchInput err={searchError} onSearch={onSearch}></SearchInput>
