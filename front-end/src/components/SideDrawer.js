@@ -62,7 +62,7 @@ const SideDrawer = function (props) {
     return (
         <nav className={drawerClasses} ref={myRef} onClick={handleClickInside}>
             <ul>
-                <li><ProfilePage /></li>
+                <li><Profile user={props.user} /></li>
 
                 <div>
                     <li><a onClick={() => setToggle(!toggle)}>Friends +</a></li>
@@ -123,7 +123,4 @@ const SideDrawer = function (props) {
     )
 }
 
-function ProfilePage() {
-    return <Profile />;
-}
 export default SideDrawer;

@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
 import {GoogleLogin, GoogleLogout} from 'react-google-login';
 
-function Login() {
+function Login(props) {
   
   const [user, setUser] = useState(null);
 
   const loginSuccess = (res) => {
     console.log('Login success', res);
     setUser(res.profileObj);
-    localStorage.setItem('userObj', JSON.stringify(res.profileObj));
+    props.onAuth(res.profileObj);
   };
   
   const loginFailure = error => {
@@ -18,6 +18,7 @@ function Login() {
   const logoutSuccess = (res) => {
     console.log('Logout success', res);
     setUser(null);
+    props.onAuth(null);
     localStorage.removeItem('userObj');
   };
   

@@ -13,13 +13,14 @@ const Profile = (props) => {
 const [profileData, setData] = useState([]);
 
 useEffect(()=>{
-    if (localStorage.getItem('userObj')) {
-        setData([JSON.parse(localStorage.getItem('userObj'))][0]);
+    console.log(props.user)
+    if (props.user) {
+        setData(props.user);
     }
     else {
         setData([{'name': 'Your Profile', 'imageUrl': defaultAvatar}][0]);
     }   
-}, [])
+}, [props.user])
 
 return(
     (false && !props) ? (
