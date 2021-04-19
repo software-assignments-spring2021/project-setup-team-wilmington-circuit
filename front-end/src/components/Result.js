@@ -79,7 +79,7 @@ const Result = (props) => {
                                             Rating: {props.result.rating}<br></br>
                                             Price Level: {price}<br></br>
                                         </p>
-                                        <a href={infoLink}><small class='text-muted'><u>More Info</u></small></a>
+                                        <a target="_blank" href={infoLink}><small class='text-muted'><u>More Info</u></small></a>
                                     </div>
                                 </div>
                             </div>
