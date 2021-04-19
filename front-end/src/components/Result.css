@@ -12,3 +12,8 @@ img {
   width: 150px;
   object-fit: contain;
 }
+
+.directions {
+  margin-right: 1em;
+  float: right;
+}

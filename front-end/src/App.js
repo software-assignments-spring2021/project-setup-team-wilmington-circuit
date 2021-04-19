@@ -101,7 +101,7 @@ function App() {
             ></MapDisplay>
             
             {places.length>0 &&
-            <ResultList results={places}></ResultList>
+            <ResultList results={places} origins={origins}></ResultList>
             }
           </div>
         </div>
