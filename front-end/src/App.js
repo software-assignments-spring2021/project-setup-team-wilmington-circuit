@@ -22,6 +22,8 @@ function App() {
   const [averageDuration, setAverageDuration] = useState(null)
   const [searchError, setSearchError] = useState(null)
   const [places, setPlaces] = useState([])
+  const [user, setUser] = useState(null);
+
 
   const loadOriginMarkers = originData => {
     const filteredOrigins = originData.filter(origin => origin.loc)
@@ -65,9 +67,9 @@ function App() {
     <>
       <div className="html">
         <button class="header-btn">
-          <Header show ={toggle} setShow={setToggle} />
+          <Header onAuth={(user) => setUser(user)} show ={toggle} setShow={setToggle} />
         </button>
-        <SideDrawer onGroupSelect={origins => {loadOriginMarkers(origins)}} show={toggle} setShow={setToggle}/>
+        <SideDrawer onGroupSelect={origins => {loadOriginMarkers(origins)}} show={toggle} user={user} setShow={setToggle}/>
         <div className="content" id="main-container">
           <div id="input-container">
           <SearchInput err={searchError} onSearch={onSearch}></SearchInput>

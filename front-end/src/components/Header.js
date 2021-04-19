@@ -24,7 +24,7 @@ const Header = props => {
                     <DrawerToggleButton show={props.show} setShow={props.setShow}/>
                 </div>
                 <div className="login">
-                    <Login></Login>
+                    <Login onAuth={props.onAuth}></Login>
                 </div>
             </nav>
         </header>
