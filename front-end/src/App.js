@@ -69,7 +69,7 @@ function App() {
         <button class="header-btn">
           <Header onAuth={(user) => setUser(user)} show ={toggle} setShow={setToggle} />
         </button>
-        <SideDrawer user={user} show={toggle} setShow={setToggle}/>
+        <SideDrawer onGroupSelect={origins => {loadOriginMarkers(origins)}} show={toggle} user={user} setShow={setToggle}/>
         <div className="content" id="main-container">
           <div id="input-container">
           <SearchInput err={searchError} onSearch={onSearch}></SearchInput>

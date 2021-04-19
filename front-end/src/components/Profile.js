@@ -14,12 +14,7 @@ const [profileData, setData] = useState([]);
 
 useEffect(()=>{
     console.log(props.user)
-    if (props.user) {
-        setData(props.user);
-    }
-    else {
-        setData([{'name': 'Your Profile', 'imageUrl': defaultAvatar}][0]);
-    }   
+    setData(props.user);
 }, [props.user])
 
 return(
