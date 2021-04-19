@@ -57,62 +57,66 @@ const OriginPoints = props => {
                 </Button>
               ) : null}
             </ButtonGroup>
-            <Button onClick={handleShow}>Save Locations as Group</Button>
+            <Button onClick={handleShow} disabled={(()=>{
+              for(origin of origins){
+                if(!origin.loc) {
+                  return true;
+                }
+              }
+              return false;
+            })()}>Save Locations as Group</Button>
             <Modal show={show} onHide={handleClose}>
               <Modal.Header closeButton>
                 <Modal.Title>Save Group</Modal.Title>
-                <Modal.Body>
-                  <br></br>
-                  <br></br>
-
-                  <br></br>
-                  <input
-                    type="input"
-                    id="group_name"
-                    name="group_name"
-                    placeholder="Group Name"
-                  ></input>
-                  <br></br>
-                  <br></br>
-                  <Button variant="secondary" onClick={handleClose}>
-                    Close
-                  </Button>
-                  <Button
-                    variant="primary"
-                    onClick={() => {
-                      //not checking validity yet
-                      //if(origins[0].loc !== null && origins[1].loc !== null){
-                      const groupName = document.getElementById("group_name");
-                      if (groupName !== "") {
-                        const newGroup = {
-                          group_name: groupName.value,
-                          origins: origins,
-                        };
-                        const currentGroups = sessionStorage.getItem("groups");
-                        if (currentGroups) {
-                          const parsedGroup = JSON.parse(currentGroups);
-                          parsedGroup.push(newGroup);
-                          sessionStorage.setItem(
-                            "groups",
-                            JSON.stringify(parsedGroup)
-                          );
-                        } else {
-                          const newSession = [newGroup];
-                          sessionStorage.setItem(
-                            "groups",
-                            JSON.stringify(newSession)
-                          );
-                        }
-                      }
-                      //}
-                      handleClose();
-                    }}
-                  >
-                    Save
-                  </Button>
-                  <br></br>
-                </Modal.Body>
               </Modal.Header>
+              <Modal.Body>
+                <p>If you are not logged in, your location group will still be saved locally on this device, so you can access it later.</p>
+                <input
+                  type="input"
+                  id="group_name"
+                  name="group_name"
+                  placeholder="Group Name"
+                ></input>
+                <br></br>
+                <br></br>
+                <ButtonGroup>
+                <Button variant="secondary" onClick={handleClose}>
+                  Close
+                </Button>
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    const groupName = document.getElementById("group_name");
+                    if (groupName !== "") {
+                      const newGroup = {
+                        group_name: groupName.value,
+                        origins: origins,
+                      };
+                      const currentGroups = localStorage.getItem("groups");
+                      if (currentGroups) {
+                        const parsedGroup = JSON.parse(currentGroups);
+                        parsedGroup.push(newGroup);
+                        localStorage.setItem(
+                          "groups",
+                          JSON.stringify(parsedGroup)
+                        );
+                      } else {
+                        const newSession = [newGroup];
+                        localStorage.setItem(
+                          "groups",
+                          JSON.stringify(newSession)
+                        );
+                      }
+                    }
+                    //}
+                    handleClose();
+                  }}
+                >
+                  Save
+                </Button>
+                </ButtonGroup>
+                <br></br>
+              </Modal.Body>
             </Modal>
           </ButtonToolbar>
         </div>
