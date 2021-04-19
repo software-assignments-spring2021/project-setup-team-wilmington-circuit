@@ -61,6 +61,7 @@ const SideDrawer = function (props) {
    
     return (
         <nav className={drawerClasses} ref={myRef} onClick={handleClickInside}>
+            {props.user ?
             <ul>
                 <li><Profile user={props.user} /></li>
 
@@ -117,8 +118,12 @@ const SideDrawer = function (props) {
                         </div>
                     )}
                 </div>
-
             </ul>
+            :
+            <div class="logged-out-text">
+                <h3>Log in to save locations, friends, and more!</h3>
+            </div>
+            }
         </nav>
     )
 }
