@@ -7,7 +7,7 @@ const makeArr = async (arr) =>{
         for(let i = 0;i<arr.results.length; i++){
             let obj = {
                 name: arr.results[i].name,
-                location: arr.results[i].geometry.location,
+                loc: arr.results[i].geometry.location,
                 rating: arr.results[i].rating,
                 photoreference: arr.results[i].photos,
                 icon: arr.results[i].icon,
