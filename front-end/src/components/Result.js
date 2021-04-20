@@ -60,7 +60,7 @@ const Result = (props) => {
         !props ? (
             <div>Loading...</div>
         ) : (
-            <div>
+            <div id={props.result.placeId}>
                 <div class='container-fluid'>
                     <div class='row'>
                         <div class='col-12 mt-3'>
