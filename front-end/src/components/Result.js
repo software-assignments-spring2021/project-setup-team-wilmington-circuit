@@ -22,7 +22,7 @@ const Result = (props) => {
 
     let hours;
     if(typeof props.result.hours !== 'undefined'){
-        console.log("gothours")
+        //console.log("gothours")
         if(props.result.hours.open_now){
             hours = "Open"
         }else{
@@ -54,8 +54,8 @@ const Result = (props) => {
             break;
     }
     const infoLink = "https://www.google.com/maps/place/?q=place_id:" + props.result.placeId;
-    console.log(props.result)
-    console.log(hours)
+    //console.log(props.result)
+    //console.log(hours)
     return (
         !props ? (
             <div>Loading...</div>

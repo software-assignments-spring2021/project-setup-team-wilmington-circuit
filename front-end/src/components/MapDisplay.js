@@ -21,6 +21,13 @@ const MapDisplay = props => {
 
     const initMap = (mapProps, mapElement) => {
         map = mapElement;
+        var markerBounds = new props.google.maps.LatLngBounds();
+        props.originlocs.forEach(loc => {
+            if(loc){
+               markerBounds.extend(loc) 
+            }
+        })
+        if(!markerBounds.isEmpty() && map) map.fitBounds(markerBounds);
     }
 
     return (
@@ -39,7 +46,7 @@ const MapDisplay = props => {
 
         {props.centerPoint ? (<Marker animation={props.google.maps.Animation.DROP} icon={iconBase + 'star.png'} position={props.centerPoint} title="centerPoint" label="X"></Marker>) : null}
         {props.placeList ? props.placeList.map(place => {
-            return (<Marker animation={props.google.maps.Animation.DROP} position={place.location} title={place.name} label={place.name[0]}></Marker>)
+            return (<Marker animation={props.google.maps.Animation.DROP} position={place.loc} title={place.name} label={place.name[0]}></Marker>)
         }): null}
         </Map>
     )

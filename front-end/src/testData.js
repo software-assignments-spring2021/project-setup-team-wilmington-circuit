@@ -69,4 +69,27 @@ const search = async (origins, search) => {
     //console.log(data);
     return data;
 }
-export default {getResults_mock, getPlaceLocation, getFriends_mock, getPlaceImage, getGroups_mock, search}
+
+const uploadSharelink = async(origins, searchData, places, averageDuration, link_id) => {
+    const res = await axios.post('/sharelink/create', {
+        origins: origins,
+        searchData: searchData,
+        places: places, 
+        averageDuration: averageDuration,
+        link_id: link_id
+    }
+        
+    )
+    const sharelink = res.data;
+    console.log(sharelink)
+    return sharelink;
+}
+
+const getSharelink = async(link_id) => {
+    const res = await axios.get('/sharelink/get?link_id='+link_id);
+    const data = res.data;
+    console.log(data)
+    return data;
+}
+
+export default {getResults_mock, getPlaceLocation, getFriends_mock, getPlaceImage, getGroups_mock, search, getSharelink, uploadSharelink}
