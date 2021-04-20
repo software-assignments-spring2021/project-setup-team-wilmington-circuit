@@ -33,6 +33,7 @@ const SideDrawer = function (props) {
 
     const [friends, setFriend] = useState([]);
     const [groups, setGroup] = useState([]);
+    const savedGroups = JSON.parse(localStorage.getItem('groups'));
 
     const handleClickOutside = e => {
         if (!myRef.current.contains(e.target) && (!document.getElementById('hamburger-btn').contains(e.target))) {
@@ -61,8 +62,9 @@ const SideDrawer = function (props) {
    
     return (
         <nav className={drawerClasses} ref={myRef} onClick={handleClickInside}>
+            {props.user ?
             <ul>
-                <li><ProfilePage /></li>
+                <li><Profile user={props.user} /></li>
 
                 <div>
                     <li><a onClick={() => setToggle(!toggle)}>Friends +</a></li>
@@ -81,20 +83,23 @@ const SideDrawer = function (props) {
 
                 <div>
                     <li><a onClick={() => {
-                        const savedGroups = JSON.parse(sessionStorage.getItem('groups'));
                         if (savedGroups) {
+                            setGroup([])
                             savedGroups.map((group) => {
-                                groups.push(group);
+                                setGroup(prev => [...prev,group]);
                             });
-                            sessionStorage.removeItem('groups');
                         }
                         setToggle2(!toggle2);
                         setToggle3(false);
                     }
-                    }>Groups +</a>{toggle2 && (<Button className='edit' onClick={() => {
+                    }>Groups +</a>{toggle2 && (<><Button className='edit' onClick={() => {
                         setToggle3(!toggle3);
                         setToggle2(true);
-                    }}>{toggle3 ? 'Done' : 'Edit'}</Button>)}
+                    }}>{toggle3 ? 'Done' : 'Edit'}</Button>
+                    <p id="group-select-guide">Click a group to automatically set locations in the map</p>
+                    </>
+                    )}
+                    
                     </li>
                     {toggle2 && (
                         <div>
@@ -102,9 +107,13 @@ const SideDrawer = function (props) {
                                 {groups.map((group) => {
                                     return (
                                         <li className="item">
-                                            {group.group_name}
+                                            <a onClick={()=>{
+                                                if(group.origins){
+                                                    props.onGroupSelect(group.origins)
+                                                }
+                                            }}>{group.group_name}</a>
                                             {toggle3 && (
-                                                <button type='button' class='btn btn-danger float-right' onClick={() => {
+                                                <button type='button' className='btn btn-danger float-right' onClick={() => {
                                                     groups.splice(groups.indexOf(group), 1)
                                                     setGroup([...groups]);
                                                 }}>Delete</button>
@@ -117,13 +126,14 @@ const SideDrawer = function (props) {
                         </div>
                     )}
                 </div>
-
             </ul>
+            :
+            <div class="logged-out-text">
+                <h3>Log in to save locations, friends, and more!</h3>
+            </div>
+            }
         </nav>
     )
 }
 
-function ProfilePage() {
-    return <Profile />;
-}
 export default SideDrawer;
