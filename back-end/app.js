@@ -1,10 +1,16 @@
 const express = require('express');
 const app = express();
-const api = require('./api')
+const api = require('./api');
+const sharelink = require('./sharelink');
+const db = require('./db');
 
-app.use(express.static('public'))
+db.connect()
 
-app.use('/api', api)
+app.use(express.static('public'));
+
+app.use('/api', api);
+
+app.use('/sharelink', sharelink);
 
 app.get('/', (req, res) => {
   res.send('MeetMe App')
