@@ -10,10 +10,10 @@ const User = new mongoose.Schema({
 mongoose.model("User", User);
 
 const Group = new mongoose.Schema({
-	"group_id": {type: String, required: true},
+	//"group_id": {type: String, required: true},
 	"name": {type: String},
 	"locations": [String], // stored as coords
-	"members": [String] // stored as google_id
+	//"members": [String] // stored as google_id
 }, {collection: "Group"});
 mongoose.model("Group", Group);
 
