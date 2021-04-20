@@ -5,11 +5,10 @@ import getTestData from '../testData'
 import './OriginInput.css'
 require('dotenv').config()
 
-const watchPosition = async () => {
-    console.log('watchPosition');        
+const watchPosition = async () => {      
     await navigator.geolocation.getCurrentPosition(
         (position) => {
-          console.log('Position -> ',position);
+          //console.log('Position -> ',position);
         },
         (error) => console.log(error),
         {enableHighAccuracy: false, timeout: 50000}
@@ -17,21 +16,18 @@ const watchPosition = async () => {
 }
 
 const OriginInput = props => {
+    
     useEffect(() => {
         watchPosition()
         var options = {
             enableHighAccuracy: false,
             timeout: 50000,
-            //maximumAge: 0
           };
           
           function success(pos) {
             var crd = pos.coords;
-          
-            console.log('Your current position is:');
-            console.log(`Latitude : ${crd.latitude}`);
-            console.log(`Longitude: ${crd.longitude}`);
-            console.log(`More or less ${crd.accuracy} meters.`);
+            setLat(crd.latitude)
+            setLng(crd.longitude) 
           };
           
           function error(err) {
@@ -39,34 +35,16 @@ const OriginInput = props => {
           };
           
           navigator.geolocation.getCurrentPosition(success, error, options);
-       /* console.log('useeffect was called')
-        navigator.geolocation.getCurrentPosition(function(position) {
-            console.log(position)
-            /*console.log("Latitude is :", position.coords.latitude);
-            setLat(position.coords.latitude)
-            console.log("Longitude is :", position.coords.longitude);
-            setLng(position.coords.longitude)
-            //setHaveLocation(true)
-          });
-          */
       });
-
-    const APIKEY = '66fd1840-9805-11eb-847b-6b6f38884161'
     
-
     const [tranportMode, setTransportMode] = useState(null);
-
-    const [haveLocation, setHaveLocation] = useState(false)
-    const [haveAddress, setHaveAddress] = useState(false)
     const [latitude, setLat] = useState(null)
     const [longitude, setLng] = useState(null)
+    const [haveAddress, setHaveAddress] = useState(false)
     const [address, setAddress] = useState(null)
-
     const [name, setName] = useState('');
     const [valid, setValid] = useState(true);
     const [errMessage, setErrMessage] = useState(null)
-
-
     const transportModeNames = {'walking': 'Walk', 'bicycling': 'Bike', 'driving': 'Drive', 'transit': 'Public Transit'}
     const [originData, setOriginData] = useState({loc: null, mode: null, options: null}) 
 
@@ -91,76 +69,19 @@ const OriginInput = props => {
                 props.onChange(props.originNumber, originData);
                 setOriginData(originData)
             })
-            
         }
     } 
 
-    const getCoordinates = (position) => {
-        console.log(position.coords.latitude)
-        setLat(position.coords.latitude)
-        console.log({latitude})
-        setLng(position.coords.longitude)
-        console.log({longitude})
-        haveLocation(true)
-    }
-
-    
-/*
-    const getAddress = (lng, lat) => {
-        if(lng == null) {
-            alert("Could not get your location. lease manually enter your current address or change your browser settings. ")
-            
-        } else {
-            
-        setAddress(getTestData.getPlaceAddress(longitude,latitude))
-        console.log("looook:" + JSON.stringify(getTestData.getPlaceAddress(longitude,latitude)))
-        setHaveAddress(true)
-        
-        }
-        
-    }*/
-
-
-    // get address reverse geocodes the coordinates obtained through navigator.geolocation
-    //`https://app.geocodeapi.io/api/v1/reverse?apikey=${APIKEY}&point.lat=${lat}&point.lon=${lng}`
-    //getTestData.getPlaceAddress(longitude,latitude)
    const getAddress = async (lng, lat) => {
-        /*if(lng == null) {
-            alert("Could not get your location. lease manually enter your current address or change your browser settings. ")
-            
-        } else {
-            console.log(process.env)
-        let url = fetch(`https://app.geocodeapi.io/api/v1/reverse?apikey=${APIKEY}&point.lat=${lat}&point.lon=${lng}`)
-        .then(response => response.json())
-        .then(data => setAddress(data.features[0].properties.label))
-        .catch(error => alert(error))
-        console.log({url})*/
-        let body = {lat: 1, lng: 10}
+       if(!lat || !lng) {
+           alert("There was an issue finding your coordinates. Please either wait a few seconds or check your brower's location access settings and try again.")
+       }
+        let body = {latitude, longitude}
         let data = await axios.post('/api/reverse-geocode', body)
-        console.log(data.body)
+        data = JSON.parse(JSON.stringify(data.data.address))
+        setAddress(data)
         setHaveAddress(true)   
     }
-
-
-    const handleError = (error) => {
-        switch(error.code) {
-          case error.PERMISSION_DENIED:
-            alert("Your browser denied the request for Geolocation. Please manually enter your current address or change your browser settings.")
-            break;
-          case error.POSITION_UNAVAILABLE:
-            alert("Location information is unavailable. Please manually enter your current address.")
-            break;
-          case error.TIMEOUT:
-            alert("The request to get user location timed out. Please manually enter your current address.")
-            break;
-          case error.UNKNOWN_ERROR:
-            alert("An unknown error occurred. Please manually enter your current address.")
-            break;
-            default:
-            alert("An unknown error occurred. Please manually enter your current address.")
-        }
-      }
-
 
     const handleTransportModeChange = mode => {
         setTransportMode(mode);
@@ -169,14 +90,10 @@ const OriginInput = props => {
         setOriginData(originData)
     }
 
-
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
-    
-    
 
     return (
         <>
