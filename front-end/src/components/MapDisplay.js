@@ -50,15 +50,15 @@ const MapDisplay = props => {
 
             return (
                 <Marker
-                    onClick={() => {
+                    onClick={(props, marker) => {
                         const result = document.getElementById(place.placeId);
                         result.scrollIntoView({behavior: 'smooth', inline: 'nearest'});
+                        marker.setAnimation(props.google.maps.Animation.BOUNCE);
+                        setTimeout(()=>marker.setAnimation(null), 100)
                     }}
-                    animation={props.google.maps.Animation.DROP} position={place.location} title={place.name} label={place.name[0]}>
+                    animation={props.google.maps.Animation.DROP} position={place.loc} title={place.name} label={place.name[0]}>
                 </Marker>
             )
-
-            return (<Marker animation={props.google.maps.Animation.DROP} position={place.loc} title={place.name} label={place.name[0]}></Marker>)
 
         }): null}
         </Map>

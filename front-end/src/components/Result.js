@@ -90,7 +90,7 @@ const Result = (props) => {
                                             Rating: {props.result.rating}<br></br>
                                             Price Level: {price}<br></br>
                                         </p>
-                                        <a target="_blank" href={infoLink}><small class='text-muted'><u>More Info</u></small></a>
+                                        <a target="_blank" href={infoLink}><small class='text-muted'><u>View on GMaps</u></small></a>
                                         <a className='directions' href='#' onClick={handleShow}><small class='text-muted'><u>Directions</u></small></a>
                                         <Modal show={show} onHide={handleClose}>
                                             <Modal.Header closeButton>
@@ -100,15 +100,18 @@ const Result = (props) => {
                                                 From: <br></br>
                                                 <ul>
                                                 {props.origins.map((origin, index) => {
-                                                    return (
-                                                    <li><a target="_blank" href={generateMapsURL(
-                                                        origin.loc.lat + ',' + origin.loc.lng, 
-                                                        props.result.location.lat + ', ' + props.result.location.lng, 
-                                                        origin.placeId, 
-                                                        props.result.placeId, 
-                                                        origin.mode)
-                                                    }>Origin {index + 1}</a></li>
-                                                    )
+                                                    console.log(origin)
+                                                    if(origin.loc){
+                                                        return (
+                                                            <li><a target="_blank" href={generateMapsURL(
+                                                                origin.loc.lat + ',' + origin.loc.lng, 
+                                                                props.result.loc.lat + ', ' + props.result.loc.lng, 
+                                                                origin.placeId, 
+                                                                props.result.placeId, 
+                                                                origin.mode)
+                                                            }>Starting Location {index + 1}</a></li>
+                                                            )
+                                                    }
                                                 })}
                                                 </ul>
                                             </Modal.Body> 
