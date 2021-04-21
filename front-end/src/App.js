@@ -28,6 +28,7 @@ function App() {
   const [sharelink, setSharelink] = useState(null)
   const [sharelinkError, setSharelinkError]  = useState(false);
   const [user, setUser] = useState(null);
+  const [searching, setSearching] = useState(false);
 
   let link_id;
 
@@ -53,7 +54,9 @@ function App() {
       setSearchData(searchData)
       setSharelink(null)
       setSharelinkError(false)
-      getTestData.search(origins, searchData).then(data => {
+      setSearching(true);
+      getTestData.search(origins, searchData).then(data => { 
+        setSearching(false);
         setCenterPoint(data.loc)
         setSearchError(null)
         setPlaces(data.placeList)
@@ -63,6 +66,7 @@ function App() {
         } 
         else setAverageDuration(null)
       }).catch(e => {
+        setSearching(false);
         const err = e.response.data
         setSearchError(err)
         setPlaces([])
@@ -138,6 +142,7 @@ function App() {
           </OverlayTrigger>
           
           <p id="average-duration">{averageDuration ? 'Average Travel Time: ' + averageDuration : null}</p>
+          <p style={{display: searching ? 'block' : 'none'}} id="searching">Searching...</p>
           
           </div>
           </div>
