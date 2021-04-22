@@ -23,13 +23,13 @@ app.post('/savegroup', async (req, res)=>{
   console.log(group.group_name);
   //console.log(group.origins)
   console.log(req.body.user.email)
-  
+  console.log(group.origins)
   let locations = group.origins.map( a => a.loc);
   
   try{
     const newGroup = new Group({
       name: group.group_name,
-      locations: locations,
+      locations: group.origins,
       userId: req.body.user.email  
       
     });
