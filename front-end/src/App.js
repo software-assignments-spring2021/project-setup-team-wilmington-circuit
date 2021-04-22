@@ -73,7 +73,7 @@ function App() {
         <div className="content" id="main-container">
           <div id="input-container">
           <SearchInput err={searchError} onSearch={onSearch}></SearchInput>
-          <OriginPoints onChange={loadOriginMarkers}></OriginPoints>
+          <OriginPoints user = {user} onChange={loadOriginMarkers}></OriginPoints>
           <div>
           <a id="share-link">Share this map</a>
           <p id="average-duration">{averageDuration ? 'Average Travel Time: ' + averageDuration : null}</p>
