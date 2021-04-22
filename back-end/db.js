@@ -9,12 +9,6 @@ const User = new mongoose.Schema({
 }, {collection: "User"});
 mongoose.model("User", User);
 
-const Group = new mongoose.Schema({
-	"name": {type: String, required: true},
-	"locations": [String], required: true, // stored as coords
-	"userId": String, required: true, // stored as google_id
-}, {collection: "Group"});
-mongoose.model("Group", Group);
 
 const db = (process.env.NODE_ENV === "PRODUCTION") ?
 	`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.w3xow.mongodb.net/myFirstDatabase?retryWrites=true&w=majority` :
@@ -24,7 +18,7 @@ const connect = () => {
 	mongoose.connect(db, {useNewUrlParser: true});
 };
 
-const disconnnect = () => {
+const disconnect = () => {
 	mongoose.disconnect();
 };
 

@@ -4,6 +4,7 @@ const app = express();
 const api = require('./api')
 const bodyParser = require('body-parser')
 const Group = require("./models/Group");
+const db = require("./db.js");
 
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -13,6 +14,8 @@ app.use('/api', api)
 app.get('/', (req, res) => {
   res.send('MeetMe App')
 });
+
+db.connect()
 
 app.post('/savegroup', async (req, res)=>{
   res.send("savegroup");
@@ -33,6 +36,8 @@ app.post('/savegroup', async (req, res)=>{
     newGroup.save(function (err) {
       if (err) {
         console.log(err)
+      } else{
+        console.log("success")
       }
     })
    
