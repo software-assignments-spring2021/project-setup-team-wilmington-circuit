@@ -18,20 +18,24 @@ app.post('/savegroup', async (req, res)=>{
   res.send("savegroup");
   let group = req.body.user.group;
   console.log(group.group_name);
-  console.log(group.origins)
+  //console.log(group.origins)
   console.log(req.body.user.email)
+  
+  let locations = group.origins.map( a => a.loc);
+  
   try{
     const newGroup = new Group({
       name: group.group_name,
-      locations: group.origins,
+      locations: locations,
       userId: req.body.user.email  
+      
     });
     newGroup.save(function (err) {
       if (err) {
-        console.log("error importing data")
+        console.log(err)
       }
     })
-    console.log("data imported");
+   
   } catch (error) {
     console.log("ERROR POSTING GROUP");
   }
