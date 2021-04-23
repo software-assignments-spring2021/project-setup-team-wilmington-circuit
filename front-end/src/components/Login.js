@@ -8,8 +8,7 @@ function Login(props) {
   const loginSuccess = (res) => {
     console.log('Login success', res);
     setUser(res.profileObj);
-    props.onAuth(res.profileObj);
-    console.log(user);
+    props.onAuth(res.profileObj, res.tokenId);
   };
   
   const loginFailure = error => {

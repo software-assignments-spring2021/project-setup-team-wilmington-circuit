@@ -92,4 +92,21 @@ const getSharelink = async(link_id) => {
     return data;
 }
 
-export default {getResults_mock, getPlaceLocation, getFriends_mock, getPlaceImage, getGroups_mock, search, getSharelink, uploadSharelink}
+const getGroups = async(id_token) => {
+    const res = await axios.get('/group/get', {headers: {
+        'Authorization': id_token
+    }})
+    const data = res.data;
+    console.log(data);
+    return data;
+}
+
+const deleteGroup = async(groupName, id_token) => {
+    const res = await axios.delete('group/delete?q=' + groupName, {headers: {
+        'Authorization': id_token
+    }})
+    const data = res.data;
+    console.log(data);
+}
+
+export default {getResults_mock, getPlaceLocation, getFriends_mock, getPlaceImage, getGroups_mock, search, getSharelink, uploadSharelink, getGroups, deleteGroup}

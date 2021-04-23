@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Button } from 'react-bootstrap'
 import './SideDrawer.css'
 import Profile from './Profile'
-import getMockData from '../testData';
+import getTestData from '../testData';
 
 import {
     BrowserRouter as Router,
@@ -33,6 +33,7 @@ const SideDrawer = function (props) {
 
     const [friends, setFriend] = useState([]);
     const [groups, setGroup] = useState([]);
+
     const savedGroups = JSON.parse(localStorage.getItem('groups'));
 
     const handleClickOutside = e => {
@@ -45,19 +46,29 @@ const SideDrawer = function (props) {
         }
     };
 
+    useEffect(()=>{
+        if (savedGroups) {
+            savedGroups.map((group) => {
+                setGroup(prev => [...prev,group]);
+            });
+        }
+    }, [])
+
     useEffect(() => {
-        getMockData.getFriends_mock().then(res => {
+        getTestData.getFriends_mock().then(res => {
             setFriend(res);
         }
         )
     }, []);
 
     useEffect(() => {
-        getMockData.getGroups_mock().then(res => {
+        getTestData.getGroups(props.id_token).then(res => {
             setGroup(res);
         }
-        );
-    }, []);
+        ).catch(e => {
+            console.log('Error getting groups: ' + e)
+        });
+    }, [props.id_token]);
 
    
     return (
@@ -83,12 +94,6 @@ const SideDrawer = function (props) {
 
                 <div>
                     <li><a onClick={() => {
-                        if (savedGroups) {
-                            setGroup([])
-                            savedGroups.map((group) => {
-                                setGroup(prev => [...prev,group]);
-                            });
-                        }
                         setToggle2(!toggle2);
                         setToggle3(false);
                     }
@@ -105,6 +110,7 @@ const SideDrawer = function (props) {
                         <div>
                             <ul>
                                 {groups.map((group) => {
+                                    console.log(group)
                                     return (
                                         <li className="item">
                                             <a onClick={()=>{
@@ -116,6 +122,10 @@ const SideDrawer = function (props) {
                                                 <button type='button' className='btn btn-danger float-right' onClick={() => {
                                                     groups.splice(groups.indexOf(group), 1)
                                                     setGroup([...groups]);
+                                                    localStorage.setItem('groups', JSON.stringify(groups))
+                                                    getTestData.deleteGroup(group.group_name, props.id_token).catch(e => {
+                                                        console.log('Error deleting group; ' + e);
+                                                    })
                                                 }}>Delete</button>
                                             )}
 

@@ -108,22 +108,21 @@ const OriginPoints = props => {
                           JSON.stringify(newSession)
                         );
                       }
-                     
-                        fetch('/savegroup', {
-                          method: 'POST',
-                          headers: {
-                              'Content-Type': 'application/json'
-                          },
-                          body: JSON.stringify({
-                              user: {
-                                  group: newGroup,
-                                  email: props.user.email
-                              }
-                          })
-                      });
 
+											if(props.user && props.id_token){
+												fetch("/group/save", {
+													method: "POST",
+													headers: {
+														"Content-Type": "application/json",
+													},
+													body: JSON.stringify({
+														group: newGroup,
+														email: props.user.email,
+														id_token: props.id_token,
+													}),
+												});
+											}
                     }
-                    //}
                     handleClose();
                   }}
                 >
