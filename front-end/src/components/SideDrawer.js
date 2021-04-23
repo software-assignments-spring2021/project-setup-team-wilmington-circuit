@@ -30,10 +30,11 @@ const SideDrawer = function (props) {
     const [toggle, setToggle] = useState(false);
     const [toggle2, setToggle2] = useState(false);
     const [toggle3, setToggle3] = useState(false);
+    const [toggle4, setToggle4] = useState(false);
 
     const [friends, setFriend] = useState([]);
     const [groups, setGroup] = useState([]);
-
+    const [locations, setLocation] = useState([]);
     const savedGroups = JSON.parse(localStorage.getItem('groups'));
 
     const handleClickOutside = e => {
@@ -43,6 +44,7 @@ const SideDrawer = function (props) {
             setToggle(false);
             setToggle2(false);
             setToggle3(false);
+            setToggle4(false);
         }
     };
 
@@ -53,6 +55,12 @@ const SideDrawer = function (props) {
             });
         }
     }, [])
+  
+    const handleSubmit = e => {
+        e.preventDefault();
+        locations.push({vicinity: e.target.location.value})
+    }
+
 
     useEffect(() => {
         getTestData.getFriends_mock().then(res => {
@@ -70,12 +78,38 @@ const SideDrawer = function (props) {
         });
     }, [props.id_token]);
 
+    useEffect(() => {
+        getMockData.getResults_mock().then(res => {
+            setLocation(res);
+        }
+        );
+    }, []);
+
    
     return (
         <nav className={drawerClasses} ref={myRef} onClick={handleClickInside}>
             {props.user ?
             <ul>
                 <li><Profile user={props.user} /></li>
+                
+                <div>
+                    <li><a onClick={() => setToggle4(!toggle4)}>Locations +</a></li>
+                    {toggle4 && (
+                        <div>
+                            <form onSubmit={handleSubmit}>
+                                <input type="text" name="location"></input>
+                                <input type="submit" value="Add"></input>
+                            </form>
+                            <ul>
+                                {locations.map((location) => {
+                                    return (
+                                        <li className="item">{location.vicinity}</li>
+                                    )
+                                })}
+                            </ul>
+                        </div>
+                    )}
+                </div>
 
                 <div>
                     <li><a onClick={() => setToggle(!toggle)}>Friends +</a></li>
