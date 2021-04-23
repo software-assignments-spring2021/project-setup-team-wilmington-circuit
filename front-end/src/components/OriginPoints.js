@@ -5,11 +5,11 @@ import './OriginPoints.css'
 import SideDrawer from './SideDrawer';
 
 const OriginPoints = props => {
-    const origins = props.origins && props.origins.length > 0 ? props.origins : [{}, {}]
+    let origins = props.origins && props.origins.length > 0 ? props.origins : [{}, {}]
     const [numOrigins, setNumOrigins] = useState(Math.max(props.origins.length, 2))
 
     useEffect(()=>{
-      setNumOrigins(Math.max(props.origins.length, 2))
+      setNumOrigins(Math.max(props.origins.length, numOrigins))
     }, [props.origins])
 
     const onOriginChange = (originNumber, originData) => {
@@ -18,24 +18,25 @@ const OriginPoints = props => {
         props.onChange(origins);
     }
 
-    const displayOriginInputs = () => {
-    	console.log(origins)
-        let inputs = []
-        for (let i = 0; i < Math.max(numOrigins, props.origins.length); i++) inputs.push(<OriginInput origin={props.origins[i] || null} originNumber={i} onChange={onOriginChange}></OriginInput>)
-        return inputs;
+    const displayOriginInputs = (numOrigins) => {
+      let inputs = []
+      for (let i = 0; i < Math.max(numOrigins, props.origins.length); i++) inputs.push(<OriginInput origin={props.origins[i] || null} originNumber={i} onChange={onOriginChange}></OriginInput>)
+      return inputs;
     }
 
     const addOrigin = () => {
         const newOrigins = origins;
         newOrigins.push({ loc: null, mode: null, options: null });
+        origins = newOrigins;
         props.onChange(origins);
         setNumOrigins(numOrigins + 1)
     }
 
     const removeOrigin = () => {
         const newOrigins = origins;
-        newOrigins.pop();
-        props.onChange(origins);
+        newOrigins.splice(origins.length, 1)
+        origins = newOrigins;
+        props.onChange(newOrigins);
         setNumOrigins(numOrigins - 1)
     }
 
@@ -50,7 +51,7 @@ const OriginPoints = props => {
           <p id="origin-input-guide">
             For best results, include ZIP code in location entries
           </p>
-          {displayOriginInputs()}
+          {displayOriginInputs(numOrigins)}
           <ButtonToolbar>
             <ButtonGroup className="mr-2">
               {numOrigins < 10 ? (
