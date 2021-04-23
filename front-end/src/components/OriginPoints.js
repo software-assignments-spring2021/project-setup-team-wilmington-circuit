@@ -5,34 +5,38 @@ import './OriginPoints.css'
 import SideDrawer from './SideDrawer';
 
 const OriginPoints = props => {
-    const [origins, setOrigins] = useState([{}, {}])
+    const origins = props.origins && props.origins.length > 0 ? props.origins : [{}, {}]
+    const [numOrigins, setNumOrigins] = useState(Math.max(props.origins.length, 2))
+
+    useEffect(()=>{
+      setNumOrigins(Math.max(props.origins.length, 2))
+    }, [props.origins])
 
     const onOriginChange = (originNumber, originData) => {
         const newOrigins = origins;
         newOrigins[originNumber] = originData;
-        setOrigins(newOrigins);
         props.onChange(origins);
     }
 
     const displayOriginInputs = () => {
     	console.log(origins)
         let inputs = []
-        for (let i = 0; i < origins.length; i++) inputs.push(<OriginInput origin={props.origins[i] || null} originNumber={i} onChange={onOriginChange}></OriginInput>)
+        for (let i = 0; i < Math.max(numOrigins, props.origins.length); i++) inputs.push(<OriginInput origin={props.origins[i] || null} originNumber={i} onChange={onOriginChange}></OriginInput>)
         return inputs;
     }
 
     const addOrigin = () => {
         const newOrigins = origins;
         newOrigins.push({ loc: null, mode: null, options: null });
-        setOrigins(newOrigins);
         props.onChange(origins);
+        setNumOrigins(numOrigins + 1)
     }
 
     const removeOrigin = () => {
         const newOrigins = origins;
         newOrigins.pop();
-        setOrigins(newOrigins);
         props.onChange(origins);
+        setNumOrigins(numOrigins - 1)
     }
 
     const [show, setShow] = useState(false);
@@ -49,10 +53,10 @@ const OriginPoints = props => {
           {displayOriginInputs()}
           <ButtonToolbar>
             <ButtonGroup className="mr-2">
-              {origins.length < 10 ? (
+              {numOrigins < 10 ? (
                 <Button onClick={addOrigin}>Add Location</Button>
               ) : null}
-              {origins.length > 2 ? (
+              {numOrigins > 2 ? (
                 <Button onClick={removeOrigin} variant="danger">
                   Remove Location
                 </Button>
@@ -108,8 +112,21 @@ const OriginPoints = props => {
                           JSON.stringify(newSession)
                         );
                       }
+
+											if(props.user && props.id_token){
+												fetch("/group/save", {
+													method: "POST",
+													headers: {
+														"Content-Type": "application/json",
+													},
+													body: JSON.stringify({
+														group: newGroup,
+														email: props.user.email,
+														id_token: props.id_token,
+													}),
+												});
+											}
                     }
-                    //}
                     handleClose();
                   }}
                 >

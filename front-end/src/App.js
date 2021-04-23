@@ -28,6 +28,9 @@ function App() {
   const [sharelink, setSharelink] = useState(null)
   const [sharelinkError, setSharelinkError]  = useState(false);
   const [user, setUser] = useState(null);
+  const [id_token, setToken] = useState(null);
+  const [searching, setSearching] = useState(false);
+
 
   let link_id;
 
@@ -53,7 +56,9 @@ function App() {
       setSearchData(searchData)
       setSharelink(null)
       setSharelinkError(false)
-      getTestData.search(origins, searchData).then(data => {
+      setSearching(true);
+      getTestData.search(origins, searchData).then(data => { 
+        setSearching(false);
         setCenterPoint(data.loc)
         setSearchError(null)
         setPlaces(data.placeList)
@@ -63,6 +68,7 @@ function App() {
         } 
         else setAverageDuration(null)
       }).catch(e => {
+        setSearching(false);
         const err = e.response.data
         setSearchError(err)
         setPlaces([])
@@ -123,13 +129,13 @@ function App() {
     <>
       <div className="html">
         <button class="header-btn">
-          <Header onAuth={(user) => setUser(user)} show ={toggle} setShow={setToggle} />
+          <Header onAuth={(user, id_token) => {setUser(user); setToken(id_token);}} show ={toggle} setShow={setToggle} />
         </button>
-        <SideDrawer onGroupSelect={origins => {loadOriginMarkers(origins)}} show={toggle} user={user} setShow={setToggle}/>
+        <SideDrawer onGroupSelect={origins => {loadOriginMarkers(origins)}} show={toggle} user={user} id_token={id_token} setShow={setToggle}/>
         <div className="content" id="main-container">
           <div id="input-container">
           <SearchInput searchData={searchData} err={searchError} onSearch={onSearch}></SearchInput>
-          <OriginPoints origins={origins} onChange={loadOriginMarkers}></OriginPoints>
+          <OriginPoints origins={origins} user={user} id_token={id_token} onChange={loadOriginMarkers}></OriginPoints>
           <div>
           <OverlayTrigger overlay={
             <Tooltip>{sharelink}</Tooltip>
@@ -138,6 +144,7 @@ function App() {
           </OverlayTrigger>
           
           <p id="average-duration">{averageDuration ? 'Average Travel Time: ' + averageDuration : null}</p>
+          <p style={{display: searching ? 'block' : 'none'}} id="searching">Searching...</p>
           
           </div>
           </div>
