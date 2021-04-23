@@ -1,6 +1,6 @@
 import React, {useState, useEffect } from 'react';
 import getTestData from '../testData';
-import defaultAvatar from '../img/default-user.png';
+import './Profile.css'
 
 import {
     BrowserRouter as Router,
@@ -34,12 +34,14 @@ return(
                         <div class="profile-usertitle-name">
                             <h4>{profileData.name} </h4>
                         </div>
+                        {/*
                         <div class="profile-saved-locations">
                             <h5>My Saved Locations:</h5>
                             <p>{profileData.vicinity}</p>
                             <p>{profileData.vicinity}</p>
                             <button type="button" class="btn btn-link mb-2">+ Add Location</button>
                         </div>
+                        */}
                     </div>
                     <button type="button" class="btn btn-danger ">Delete Account</button>                  
                 </div>

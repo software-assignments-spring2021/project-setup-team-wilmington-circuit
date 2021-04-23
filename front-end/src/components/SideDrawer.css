@@ -79,3 +79,7 @@ li {
     font-size: small;
     margin-bottom: 0;
 }
+
+input[type=text] {
+    margin-left: 15px;
+}
