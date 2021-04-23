@@ -102,7 +102,7 @@ const OriginInput = props => {
         
         <InputGroup className="origin-input">
 
-        <FormControl isInvalid={!valid} className="custom-input origin-input-form" onBlur={e=>setOrigin(e.target.value)} onKeyPress={e => {if(e.charCode === 13){setOrigin(e.target.value)}}} placeholder="Enter a starting location" defaultValue={haveAddress ? address : ''} ></FormControl>
+        <FormControl isInvalid={!valid} className="custom-input origin-input-form" onBlur={e=>setOrigin(e.target.value)} onKeyPress={e => {if(e.charCode === 13){setOrigin(e.target.value)}}} placeholder="Enter a starting location" defaultValue={haveAddress ? address : (props.origin ?  props.origin.query : null)} ></FormControl>
 
         <FormControl.Feedback tooltip={true} type="invalid">{errMessage}</FormControl.Feedback>
 
