@@ -6,6 +6,11 @@ import SideDrawer from './SideDrawer';
 
 const OriginPoints = props => {
     const origins = props.origins && props.origins.length > 0 ? props.origins : [{}, {}]
+    const [numOrigins, setNumOrigins] = useState(Math.max(props.origins.length, 2))
+
+    useEffect(()=>{
+      setNumOrigins(Math.max(props.origins.length, 2))
+    }, [props.origins])
 
     const onOriginChange = (originNumber, originData) => {
         const newOrigins = origins;
@@ -16,7 +21,7 @@ const OriginPoints = props => {
     const displayOriginInputs = () => {
     	console.log(origins)
         let inputs = []
-        for (let i = 0; i < origins.length; i++) inputs.push(<OriginInput origin={props.origins[i] || null} originNumber={i} onChange={onOriginChange}></OriginInput>)
+        for (let i = 0; i < Math.max(numOrigins, props.origins.length); i++) inputs.push(<OriginInput origin={props.origins[i] || null} originNumber={i} onChange={onOriginChange}></OriginInput>)
         return inputs;
     }
 
@@ -24,12 +29,14 @@ const OriginPoints = props => {
         const newOrigins = origins;
         newOrigins.push({ loc: null, mode: null, options: null });
         props.onChange(origins);
+        setNumOrigins(numOrigins + 1)
     }
 
     const removeOrigin = () => {
         const newOrigins = origins;
         newOrigins.pop();
         props.onChange(origins);
+        setNumOrigins(numOrigins - 1)
     }
 
     const [show, setShow] = useState(false);
@@ -46,10 +53,10 @@ const OriginPoints = props => {
           {displayOriginInputs()}
           <ButtonToolbar>
             <ButtonGroup className="mr-2">
-              {origins.length < 10 ? (
+              {numOrigins < 10 ? (
                 <Button onClick={addOrigin}>Add Location</Button>
               ) : null}
-              {origins.length > 2 ? (
+              {numOrigins > 2 ? (
                 <Button onClick={removeOrigin} variant="danger">
                   Remove Location
                 </Button>

@@ -83,7 +83,7 @@ const getAverageSquaredError = (durations, average) => {
     return null;
 }
 
-const geoCenter = async(origins, power = 10, tol = 15) => {
+const geoCenter = async(origins, power = 16, tol = 15) => {
     let candidate = getGeoCentriod(origins.map(origin => origin.loc)), i = 0;
     let averageDuration = Infinity;
     while (i < power){
