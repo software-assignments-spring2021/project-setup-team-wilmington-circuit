@@ -52,6 +52,7 @@ router.post('/reverse-geocode', (req, res) => {
         res.status(400);
         res.send('Unknown error.');
     } 
+})
 
 router.get('/photo', (req, res) => {
     let query = req.query.photoreference;
