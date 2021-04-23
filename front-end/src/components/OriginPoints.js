@@ -1,11 +1,11 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button, ButtonGroup, ButtonToolbar, Modal } from "react-bootstrap"
 import OriginInput from "./OriginInput"
 import './OriginPoints.css'
 import SideDrawer from './SideDrawer';
 
 const OriginPoints = props => {
-    const [origins, setOrigins] = useState([{ loc: null, mode: null, options: null }, { loc: null, mode: null, options: null }])
+    const [origins, setOrigins] = useState([{}, {}])
 
     const onOriginChange = (originNumber, originData) => {
         const newOrigins = origins;
@@ -15,8 +15,9 @@ const OriginPoints = props => {
     }
 
     const displayOriginInputs = () => {
+    	console.log(origins)
         let inputs = []
-        for (let i = 0; i < origins.length; i++) inputs.push(<OriginInput originNumber={i} onChange={onOriginChange}></OriginInput>)
+        for (let i = 0; i < origins.length; i++) inputs.push(<OriginInput origin={props.origins[i] || null} originNumber={i} onChange={onOriginChange}></OriginInput>)
         return inputs;
     }
 

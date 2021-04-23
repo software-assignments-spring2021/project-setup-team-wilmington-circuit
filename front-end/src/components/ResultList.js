@@ -22,7 +22,7 @@ const ResultList = (props) => {
             <div class='card-group' style={{'overflowY': scrollStyle}} onMouseOver={()=>setScrollStyle('scroll')} onMouseOut={()=>setScrollStyle('hidden')}>
                 {props.results.map((result) => {
                     return (
-                        <Result result={result}></Result>
+                        <Result result={result} origins={props.origins}></Result>
                     )
                 })}
             </div>

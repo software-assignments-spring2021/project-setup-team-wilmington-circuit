@@ -10,6 +10,15 @@ const User = new mongoose.Schema({
 mongoose.model("User", User);
 
 
+const ShareLink = new mongoose.Schema({
+	"link_id": {type: String, required: true},
+	"origins": [{"loc": {"lat": Number, "lng": Number}, "query": String, "mode": String, "options": Map}],
+	"searchData": {"query": String, "options": Map},
+	"places": [{"name": String, "loc": {"lat": Number, "lng": Number}, "rating": Number, "icon": String, "price": Number, "hours": Map, "placeId": String, "photoreference": [Map]}],
+	"averageDuration": String
+})
+const shareLinkModel = mongoose.model("ShareLink", ShareLink)
+
 const db = (process.env.NODE_ENV === "PRODUCTION") ?
 	`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.w3xow.mongodb.net/myFirstDatabase?retryWrites=true&w=majority` :
 	`mongodb://localhost/MeetMe`;
@@ -22,4 +31,4 @@ const disconnect = () => {
 	mongoose.disconnect();
 };
 
-module.exports = {connect, disconnect};
+module.exports = {connect, disconnect, shareLinkModel};

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import './App.css';
 
@@ -9,9 +9,11 @@ import ResultList from './components/ResultList.js';
 import Header from './components/Header'
 import SideDrawer from './components/SideDrawer'
 import getTestData from './testData'
-import { Button, ButtonGroup, ButtonToolbar } from 'react-bootstrap';
+import { Button, ButtonGroup, ButtonToolbar, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import copyToClipboard from './copyToClipboard'
 
 import SearchInput from './components/SearchInput'
+import testData from './testData';
 
 
 function App() {
@@ -20,17 +22,23 @@ function App() {
   const [centerPoint, setCenterPoint] = useState(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [averageDuration, setAverageDuration] = useState(null)
+  const [searchData, setSearchData] = useState(null)
   const [searchError, setSearchError] = useState(null)
   const [places, setPlaces] = useState([])
+  const [sharelink, setSharelink] = useState(null)
+  const [sharelinkError, setSharelinkError]  = useState(false);
   const [user, setUser] = useState(null);
+  const [id_token, setToken] = useState(null);
 
+  let link_id;
 
   const loadOriginMarkers = originData => {
     const filteredOrigins = originData.filter(origin => origin.loc)
     setMapLoaded(!mapLoaded)
     setOrigins(filteredOrigins)
     setPlaces([])
-    console.log(origins)
+    setSharelink(null);
+    setSharelinkError(false)
   }
 
   const pad2 = (number) => { 
@@ -43,6 +51,9 @@ function App() {
         setSearchError('Search query is too short')
         return
       }
+      setSearchData(searchData)
+      setSharelink(null)
+      setSharelinkError(false)
       getTestData.search(origins, searchData).then(data => {
         setCenterPoint(data.loc)
         setSearchError(null)
@@ -61,21 +72,72 @@ function App() {
     }
     else setSearchError('Must enter at least 2 valid starting locations')
   }
-  
+
+  const createShareLink = () => {
+    if(!sharelink){
+      if(origins && origins.length >= 2 && searchData && places && averageDuration){
+        testData.uploadSharelink(origins, searchData, places, averageDuration, link_id).then(link => {
+          setSharelink(window.location.host + '?sharelink=' + link)
+          setSharelinkError(false)
+        })
+      }
+      else {
+        setSharelink('Cannot share incomplete map')
+        setSharelinkError(true)
+      }
+    }
+    else copyToClipboard(sharelink)
+  }  
+
+  const loadSharelink = () =>{
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      link_id = urlParams.get("sharelink");
+
+      if (link_id) {
+        testData
+          .getSharelink(link_id)
+          .then((res) => {
+            loadOriginMarkers(res.origins);
+            setAverageDuration(res.averageDuration);
+            setPlaces(res.places);
+            setSearchData(res.searchData);
+            setSharelink(window.location.host + "?sharelink=" + res.link_id);
+            setSharelinkError(false);
+          })
+          .then(() => {
+            setMapLoaded(!mapLoaded);
+          })
+          .catch((e) => {
+            alert(
+              "This link appears to be invalid. It may have expired or been deleted."
+            );
+            setSharelink(null);
+            setSharelinkError(false);
+          });
+      }
+  }
+
+  useEffect(loadSharelink, [])
 
   return (
     <>
       <div className="html">
         <button class="header-btn">
-          <Header onAuth={(user) => setUser(user)} show ={toggle} setShow={setToggle} />
+          <Header onAuth={(user, id_token) => {setUser(user); setToken(id_token);}} show ={toggle} setShow={setToggle} />
         </button>
-        <SideDrawer onGroupSelect={origins => {loadOriginMarkers(origins)}} show={toggle} user={user} setShow={setToggle}/>
+        <SideDrawer onGroupSelect={origins => {loadOriginMarkers(origins)}} show={toggle} user={user} id_token={id_token} setShow={setToggle}/>
         <div className="content" id="main-container">
           <div id="input-container">
-          <SearchInput err={searchError} onSearch={onSearch}></SearchInput>
-          <OriginPoints user = {user} onChange={loadOriginMarkers}></OriginPoints>
+          <SearchInput searchData={searchData} err={searchError} onSearch={onSearch}></SearchInput>
+          <OriginPoints origins={origins} user={user} id_token={id_token} onChange={loadOriginMarkers}></OriginPoints>
           <div>
-          <a id="share-link">Share this map</a>
+          <OverlayTrigger overlay={
+            <Tooltip>{sharelink}</Tooltip>
+          } s trigger={sharelink ? ['hover'] : null} delay={500} placement='auto-end'>
+          <a onClick={createShareLink} href={sharelinkError ? null : '#sharelink'} id="share-link">{(sharelink && sharelink.length > 0) ? sharelinkError ? 'Cannot share incomplete map' : 'Click to copy share link' : 'Share this map'}</a>
+          </OverlayTrigger>
+          
           <p id="average-duration">{averageDuration ? 'Average Travel Time: ' + averageDuration : null}</p>
           
           </div>
@@ -96,12 +158,12 @@ function App() {
               origin9={(origins[8] && origins[8].loc) || null}
               origin10={(origins[9] && origins[9].loc) || null}
 
-              centerPoint={centerPoint}
+              //centerPoint={centerPoint}
               placeList={places}
             ></MapDisplay>
             
             {places.length>0 &&
-            <ResultList results={places}></ResultList>
+            <ResultList results={places} origins={origins}></ResultList>
             }
           </div>
         </div>
