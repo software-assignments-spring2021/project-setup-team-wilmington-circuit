@@ -5,12 +5,11 @@ import './OriginPoints.css'
 import SideDrawer from './SideDrawer';
 
 const OriginPoints = props => {
-    const [origins, setOrigins] = useState([{}, {}])
+    const origins = props.origins && props.origins.length > 0 ? props.origins : [{}, {}]
 
     const onOriginChange = (originNumber, originData) => {
         const newOrigins = origins;
         newOrigins[originNumber] = originData;
-        setOrigins(newOrigins);
         props.onChange(origins);
     }
 
@@ -24,14 +23,12 @@ const OriginPoints = props => {
     const addOrigin = () => {
         const newOrigins = origins;
         newOrigins.push({ loc: null, mode: null, options: null });
-        setOrigins(newOrigins);
         props.onChange(origins);
     }
 
     const removeOrigin = () => {
         const newOrigins = origins;
         newOrigins.pop();
-        setOrigins(newOrigins);
         props.onChange(origins);
     }
 
@@ -108,8 +105,21 @@ const OriginPoints = props => {
                           JSON.stringify(newSession)
                         );
                       }
+
+											if(props.user && props.id_token){
+												fetch("/group/save", {
+													method: "POST",
+													headers: {
+														"Content-Type": "application/json",
+													},
+													body: JSON.stringify({
+														group: newGroup,
+														email: props.user.email,
+														id_token: props.id_token,
+													}),
+												});
+											}
                     }
-                    //}
                     handleClose();
                   }}
                 >
