@@ -52,7 +52,7 @@ function App() {
   const onSearch = searchData => {
     if(origins.length>=2){
       if(searchData.query.length < 3){
-        setSearchError('Search query is too short')
+        setSearchError('Search query is too short. Please enter a valid search.')
         return
       }
       setSearchData(searchData)
@@ -77,7 +77,7 @@ function App() {
         setAverageDuration(null)
       })
     }
-    else setSearchError('Must enter at least 2 valid starting locations')
+    else setSearchError('Must enter at least 2 valid starting locations. Double check origins are valid.');
   }
 
   const createShareLink = () => {

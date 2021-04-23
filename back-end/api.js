@@ -14,7 +14,7 @@ router.get('/geocode', (req, res) => {
     let query = req.query.q;
     if(!query) {
         res.status(400);
-        res.send('No query found');
+        res.send('No query found.');
     }
     else if(query.length > 10){
         geocode(query).then(loc => {
@@ -22,12 +22,12 @@ router.get('/geocode', (req, res) => {
         }).catch(e => {
             console.error(e)
             res.status(500);
-            res.send('Internal error geocoding ' + query)
+            res.send('Internal error geocoding ' + query + ', make sure this is a proper address.');
         })
     }
     else{
         res.status(400);
-        res.send('Query is too short to geocode');
+        res.send('Query is too short to geocode, please enter a proper address.');
     } 
 })
 
@@ -101,7 +101,7 @@ router.post('/search', (req, res) => {
             } 
             else {
                 res.status(500);
-                res.send('Internal error geocentering starting locations')
+                res.send('Internal error geocentering starting locations.')
             }
         }).catch(e => {
             console.error(e)
