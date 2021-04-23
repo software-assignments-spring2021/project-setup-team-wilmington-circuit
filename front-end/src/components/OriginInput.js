@@ -58,6 +58,7 @@ const OriginInput = props => {
         else if(!(name == value)) {
             setName(value)
             getTestData.getPlaceLocation(value).then(loc => {
+                originData.query = value
                 originData.loc = loc
                 props.onChange(props.originNumber, originData);
                 setValid(true)
@@ -65,6 +66,7 @@ const OriginInput = props => {
             }).catch(e => {
                 setValid(false)
                 setErrMessage(e.response.data)
+                originData.query = value
                 originData.loc = null
                 props.onChange(props.originNumber, originData);
                 setOriginData(originData)
@@ -101,12 +103,13 @@ const OriginInput = props => {
         <InputGroup className="origin-input">
 
         <FormControl isInvalid={!valid} className="custom-input origin-input-form" onBlur={e=>setOrigin(e.target.value)} onKeyPress={e => {if(e.charCode === 13){setOrigin(e.target.value)}}} placeholder="Enter a starting location" defaultValue={haveAddress ? address : ''} ></FormControl>
+
         <FormControl.Feedback tooltip={true} type="invalid">{errMessage}</FormControl.Feedback>
 
         <InputGroup.Append>
         <Button onClick={() => getAddress(longitude, latitude)}className="input-append" variant="light">My Location</Button>
         </InputGroup.Append>
-        <DropdownButton className="input-append" as={InputGroup.Append} variant="light" title ={tranportMode ? transportModeNames[tranportMode] : 'Transport Mode'} onSelect={mode=>handleTransportModeChange(mode)}>
+        <DropdownButton defaultValue={props.origin && props.origin.mode ? transportModeNames[props.origin.mode] : null} className="input-append" as={InputGroup.Append} variant="light" title ={tranportMode ? transportModeNames[tranportMode] : 'Transport Mode'} onSelect={mode=>handleTransportModeChange(mode)}>
             <Dropdown.Item eventKey="walking">Walk</Dropdown.Item>
             <Dropdown.Item eventKey="bicycling">Bike</Dropdown.Item>
             <Dropdown.Item eventKey="driving">Drive</Dropdown.Item>

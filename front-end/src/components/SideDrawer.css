@@ -45,6 +45,13 @@
 
 }
 
+.logged-out-text h3 {
+    margin-top: 75%;
+    text-align: center;
+    color:#050304;
+    font-size: 1.2rem;
+}
+
 .hamburger-sidedrawer {
     justify-content: flex-end;
     width: 100%;
@@ -59,6 +66,16 @@
     margin: 0px 20px;
 }
 
+.edit {
+    float:right;
+    text-align: right;
+}
+
 li {
     cursor: pointer;
+}
+
+#group-select-guide{
+    font-size: small;
+    margin-bottom: 0;
 }

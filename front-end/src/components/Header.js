@@ -6,7 +6,9 @@ import logo from '../img/logo.png';
 import Login from './Login';
 
 const Header = props => {
-
+    function clicked(){
+        props.setShow(!props.show);
+    }
     return(
         <header class="header">
             <nav class="header_nav">
@@ -16,13 +18,13 @@ const Header = props => {
                 </div>
                 <div className="spacer" />
                 
-                <div class="header_nav_items">
-                    
+                <div class="header_nav_items">    
                 </div>
-                
-                    <DrawerToggleButton />
+                <div onClick={clicked}>
+                    <DrawerToggleButton show={props.show} setShow={props.setShow}/>
+                </div>
                 <div className="login">
-                    <Login></Login>
+                    <Login onAuth={props.onAuth}></Login>
                 </div>
             </nav>
         </header>

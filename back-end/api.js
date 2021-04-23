@@ -1,10 +1,10 @@
 const express = require('express')
 const geocode = require('./algo/geocode')
 const reverseGeocode = require('./algo/reverse-geocode')
-const geocenter = require('./algo/geocenter')
+const geocenter = require('./algo/geocenter').geoCenter
 const bodyParser = require('body-parser');
-
-
+const placeInfo = require('./algo/placeinfo');
+const fetchPhoto = require('./algo/photoReference')
 
 const router = express.Router();
 
@@ -31,6 +31,7 @@ router.get('/geocode', (req, res) => {
     } 
 })
 
+
 router.post('/reverse-geocode', (req, res) => {
     let latitude = req.body.latitude;
     let longitude = req.body.longitude;
@@ -51,17 +52,52 @@ router.post('/reverse-geocode', (req, res) => {
         res.status(400);
         res.send('Unknown error.');
     } 
+
+router.get('/photo', (req, res) => {
+    let query = req.query.photoreference;
+    if(!query) {
+        res.status(400);
+        res.send('No query found');
+    }
+    fetchPhoto(query).then(img => {
+        res.send(img)
+    }).catch(e => {
+        console.error(e)
+            res.status(500);
+            res.send('Image not found')
+    })
+
 })
 
 router.post('/search', (req, res) => {
     let origins = req.body.origins;
+    let search = req.body.search;
+    //console.log(origins, search)
     if(!origins){
         res.status(400);
         res.send('No origins found');
     }
+    if(!search){
+        res.status(400);
+        res.send('No search found');
+    }
     else {
-        geocenter(origins).then(loc => {
-            if(loc) res.json(loc)
+        geocenter(origins).then(data => {
+            if(data.loc){
+
+                placeInfo(data.loc.lat, data.loc.lng, data.averageDistance, search.query).then(places => {
+                    if(places){
+                        res.send({loc:data.loc, averageDuration: data.averageDuration, placeList: places}) 
+                        //Sends both location and nearby places in one response
+                    }
+                }).catch(e => {
+                    console.error(e)
+                    res.status(500);
+                    res.send('Internal error finding places: ' + e)
+                });
+               
+             
+            } 
             else {
                 res.status(500);
                 res.send('Internal error geocentering starting locations')
