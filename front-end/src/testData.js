@@ -58,6 +58,13 @@ const getPlaceImage = async (photoreference) => {
     return data;
 }
 
+const getPlaceAddress = (lat, lng) => {
+    const res = axios.post('/api/reverse-geocode');
+    const data = res;
+    console.log('data from get place address:' + data);
+    return data;
+}
+
 const search = async (origins, search) => {
     const res = await axios.post('/api/search',
         {
@@ -109,4 +116,5 @@ const deleteGroup = async(groupName, id_token) => {
     console.log(data);
 }
 
-export default {getResults_mock, getPlaceLocation, getFriends_mock, getPlaceImage, getGroups_mock, search, getSharelink, uploadSharelink, getGroups, deleteGroup}
+export default {getResults_mock, getPlaceLocation, getPlaceAddress, getFriends_mock, getPlaceImage, getGroups_mock, search, getSharelink, uploadSharelink, getGroups, deleteGroup}
+

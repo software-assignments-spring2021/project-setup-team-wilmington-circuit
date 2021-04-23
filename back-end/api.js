@@ -1,9 +1,11 @@
 const express = require('express')
 const geocode = require('./algo/geocode')
+const reverseGeocode = require('./algo/reverse-geocode')
 const geocenter = require('./algo/geocenter').geoCenter
 const bodyParser = require('body-parser');
 const placeInfo = require('./algo/placeinfo');
 const fetchPhoto = require('./algo/photoReference')
+
 const router = express.Router();
 
 router.use(bodyParser.json())
@@ -29,6 +31,29 @@ router.get('/geocode', (req, res) => {
     } 
 })
 
+
+router.post('/reverse-geocode', (req, res) => {
+    let latitude = req.body.latitude;
+    let longitude = req.body.longitude;
+    if(!longitude || !latitude) {
+        res.status(400);
+        res.send('No query found');
+    }
+    else if(longitude){
+        reverseGeocode(latitude, longitude).then(address => {
+            return res.status(200).json({address, okay: true})
+        }).catch(e => {
+            console.error(e)
+            res.status(500);
+            res.send('Internal error reverse geocoding latitude ' + latitude + ' and longitude ' + longitude)
+        })
+    }
+    else{
+        res.status(400);
+        res.send('Unknown error.');
+    } 
+})
+
 router.get('/photo', (req, res) => {
     let query = req.query.photoreference;
     if(!query) {
@@ -42,6 +67,7 @@ router.get('/photo', (req, res) => {
             res.status(500);
             res.send('Image not found')
     })
+
 })
 
 router.post('/search', (req, res) => {

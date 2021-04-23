@@ -1,15 +1,50 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {Button, Modal, Dropdown, DropdownButton, FormControl, InputGroup} from 'react-bootstrap';
+import axios from 'axios'
 import getTestData from '../testData'
-
 import './OriginInput.css'
+require('dotenv').config()
+
+const watchPosition = async () => {      
+    await navigator.geolocation.getCurrentPosition(
+        (position) => {
+          //console.log('Position -> ',position);
+        },
+        (error) => console.log(error),
+        {enableHighAccuracy: false, timeout: 50000}
+    );
+}
 
 const OriginInput = props => {
+    
+    useEffect(() => {
+        watchPosition()
+        var options = {
+            enableHighAccuracy: false,
+            timeout: 50000,
+          };
+          
+          function success(pos) {
+            var crd = pos.coords;
+            setLat(crd.latitude)
+            setLng(crd.longitude) 
+          };
+          
+          function error(err) {
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+          };
+          
+          navigator.geolocation.getCurrentPosition(success, error, options);
+      });
+    
     const [tranportMode, setTransportMode] = useState(null);
+    const [latitude, setLat] = useState(null)
+    const [longitude, setLng] = useState(null)
+    const [haveAddress, setHaveAddress] = useState(false)
+    const [address, setAddress] = useState(null)
     const [name, setName] = useState('');
     const [valid, setValid] = useState(true);
     const [errMessage, setErrMessage] = useState(null)
-
     const transportModeNames = {'walking': 'Walk', 'bicycling': 'Bike', 'driving': 'Drive', 'transit': 'Public Transit'}
     const [originData, setOriginData] = useState({loc: null, mode: null, options: null}) 
 
@@ -36,9 +71,19 @@ const OriginInput = props => {
                 props.onChange(props.originNumber, originData);
                 setOriginData(originData)
             })
-            
         }
     } 
+
+   const getAddress = async (lng, lat) => {
+       if(!lat || !lng) {
+           alert("There was an issue finding your coordinates. Please either wait a few seconds or check your brower's location access settings and try again.")
+       }
+        let body = {latitude, longitude}
+        let data = await axios.post('/api/reverse-geocode', body)
+        data = JSON.parse(JSON.stringify(data.data.address))
+        setAddress(data)
+        setHaveAddress(true)   
+    }
 
     const handleTransportModeChange = mode => {
         setTransportMode(mode);
@@ -51,15 +96,18 @@ const OriginInput = props => {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    
 
     return (
         <>
+        
         <InputGroup className="origin-input">
-        <FormControl defaultValue={props.origin ?  props.origin.query : null} isInvalid={!valid} className="custom-input origin-input-form" onBlur={e=>setOrigin(e.target.value)} onKeyPress={e => {if(e.charCode === 13){setOrigin(e.target.value)}}} placeholder="Enter a starting location"></FormControl>
+
+        <FormControl isInvalid={!valid} className="custom-input origin-input-form" onBlur={e=>setOrigin(e.target.value)} onKeyPress={e => {if(e.charCode === 13){setOrigin(e.target.value)}}} placeholder="Enter a starting location" defaultValue={haveAddress ? address : (props.origin ?  props.origin.query : null)} ></FormControl>
+
         <FormControl.Feedback tooltip={true} type="invalid">{errMessage}</FormControl.Feedback>
+
         <InputGroup.Append>
-        <Button className="input-append" variant="light">My Location</Button>
+        <Button onClick={() => getAddress(longitude, latitude)}className="input-append" variant="light">My Location</Button>
         </InputGroup.Append>
         <DropdownButton defaultValue={props.origin && props.origin.mode ? transportModeNames[props.origin.mode] : null} className="input-append" as={InputGroup.Append} variant="light" title ={tranportMode ? transportModeNames[tranportMode] : 'Transport Mode'} onSelect={mode=>handleTransportModeChange(mode)}>
             <Dropdown.Item eventKey="walking">Walk</Dropdown.Item>

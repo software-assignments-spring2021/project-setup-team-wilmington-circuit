@@ -54,6 +54,7 @@ const SideDrawer = function (props) {
         }
     }, [])
 
+
     useEffect(() => {
         getTestData.getFriends_mock().then(res => {
             setFriend(res);
@@ -69,6 +70,7 @@ const SideDrawer = function (props) {
             console.log('Error getting groups: ' + e)
         });
     }, [props.id_token]);
+
 
    
     return (
