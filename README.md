@@ -26,11 +26,11 @@ Also, our MVP should have:
 - Filter results by rating (GMaps), price, open hours
 
 ## Members
-- [Santiage Darré](https://github.com/sdarre) 
-- [Ari Khaytser](https://github.com/ajk745) 
-- [Maggie Pierce](https://github.com/m-ggie) (Sprint 1, 2 Product Owner)
-- [Alex Hammer](https://github.com/ah4597)
-- [Luis Cordova](https://github.com/LGCX) (Sprint 1, 2 Scrum Master)
+- [Santiage Darré](https://github.com/sdarre) (Sprint 1 Product Owner, Sprint 3 Scrum Master)
+- [Ari Khaytser](https://github.com/ajk745) (Sprint 2 Scrum Master, Sprint 3 Product Owner)
+- [Maggie Pierce](https://github.com/m-ggie) (Sprint 2.5 Product Owner, Sprint 4 Scrum Master)
+- [Alex Hammer](https://github.com/ah4597) (Sprint 2, 4 Product Owner)
+- [Luis Cordova](https://github.com/LGCX) (Sprint 1, 2.5  Scrum Master)
 
 ## History
 Finding a "fair" place to meet has long been a source of unnessessary dispute. This project aims to solve this with a fair and optimal solution. 
