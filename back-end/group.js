@@ -83,4 +83,30 @@ router.delete("/delete", (req, res) => {
   })
 })
 
+router.post('/update', (req, res) => {
+  const originalGroup = req.body.originalGroup;
+  const newGroup = req.body.newGroup;
+
+  verifyToken(req.body.id_token).then(payload => {
+    try {
+      Group.findOne({_id: originalGroup._id, user_id: originalGroup.user_id}, (err, group) => {
+        if(err){
+          console.log(err);
+        } else {
+          group.group_name = newGroup.group_name;
+          group.origins = newGroup.origins;
+          group.save(err=>{if(err)console.log(err)});
+          res.json('Successfully updated!');
+          res.status(200);
+        }
+      });
+    } catch (error) {
+      console.log("ERROR UPDATING GROUP");
+      res.status(500)
+    }
+  }).catch(e => {
+    res.status(500);
+  });
+});
+
 module.exports = router
