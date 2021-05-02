@@ -108,13 +108,30 @@ const getGroups = async(id_token) => {
     return data;
 }
 
-const deleteGroup = async(groupName, id_token) => {
-    const res = await axios.delete('group/delete?q=' + groupName, {headers: {
+const deleteGroup = async(_id, id_token) => {
+    const res = await axios.delete('group/delete?q=' + _id, {headers: {
         'Authorization': id_token
     }})
     const data = res.data;
     console.log(data);
 }
 
-export default {getResults_mock, getPlaceLocation, getPlaceAddress, getFriends_mock, getPlaceImage, getGroups_mock, search, getSharelink, uploadSharelink, getGroups, deleteGroup}
+const getLocations = async(id_token) => {
+    const res = await axios.get('/location/get', {headers: {
+        'Authorization': id_token
+    }})
+    const data = res.data;
+    console.log(data);
+    return data;
+}
+
+const deleteLocation = async(_id, id_token) => {
+    const res = await axios.delete('location/delete?q=' + _id, {headers: {
+        'Authorization': id_token
+    }})
+    const data = res.data;
+    console.log(data);
+}
+
+export default {getResults_mock, getPlaceLocation, getPlaceAddress, getFriends_mock, getPlaceImage, getGroups_mock, search, getSharelink, uploadSharelink, getGroups, deleteGroup, getLocations, deleteLocation}
 

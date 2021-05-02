@@ -45,6 +45,10 @@ function App() {
     setSharelinkError(false)
   }
 
+  const addOrigin = originData => {
+    loadOriginMarkers([...origins, originData])
+  }
+
   const pad2 = (number) => { 
     return (number < 10 ? '0' : '') + number 
   }
@@ -133,7 +137,7 @@ function App() {
         <button class="header-btn">
           <Header onAuth={(user, id_token) => {setUser(user); setToken(id_token);}} show ={toggle} setShow={setToggle} />
         </button>
-        <SideDrawer onGroupSelect={origins => {loadOriginMarkers(origins)}} show={toggle} user={user} id_token={id_token} setShow={setToggle}/>
+        <SideDrawer onGroupSelect={origins => {loadOriginMarkers(origins)}} onLocationSelect={origin => {addOrigin(origin)}}show={toggle} user={user} id_token={id_token} setShow={setToggle}/>
         <div className="content" id="main-container">
           <div id="input-container">
           <SearchInput searchData={searchData} err={searchError} onSearch={onSearch}></SearchInput>
