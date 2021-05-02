@@ -77,22 +77,7 @@ const SideDrawer = function (props) {
         <nav className={drawerClasses} ref={myRef} onClick={handleClickInside}>
             {props.user ?
             <ul>
-                <li><Profile user={props.user} /></li>
-
-                <div>
-                    <li><a onClick={() => setToggle(!toggle)}>Friends +</a></li>
-                    {toggle && (
-                        <div>
-                            <ul>
-                                {friends.map((friend) => {
-                                    return (
-                                        <li className="item">{friend.first_name}</li>
-                                    )
-                                })}
-                            </ul>
-                        </div>
-                    )}
-                </div>
+                <li><Profile id_token={props.id_token} user={props.user} onLocationSelect={props.onLocationSelect} /></li>
 
                 <div>
                     <li><a onClick={() => {
@@ -125,7 +110,7 @@ const SideDrawer = function (props) {
                                                     groups.splice(groups.indexOf(group), 1)
                                                     setGroup([...groups]);
                                                     localStorage.setItem('groups', JSON.stringify(groups))
-                                                    getTestData.deleteGroup(group.group_name, props.id_token).catch(e => {
+                                                    getTestData.deleteGroup(group._id, props.id_token).catch(e => {
                                                         console.log('Error deleting group; ' + e);
                                                     })
                                                 }}>Delete</button>

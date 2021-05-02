@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Button, Modal, Dropdown, DropdownButton, FormControl, InputGroup} from 'react-bootstrap';
+import {Button, ButtonGroup, Modal, Dropdown, DropdownButton, FormControl, InputGroup} from 'react-bootstrap';
 import axios from 'axios'
 import getTestData from '../testData'
 import './OriginInput.css'
@@ -37,7 +37,7 @@ const OriginInput = props => {
           navigator.geolocation.getCurrentPosition(success, error, options);
       });
     
-    const [tranportMode, setTransportMode] = useState(null);
+    const [tranportMode, setTransportMode] = useState('driving');
     const [latitude, setLat] = useState(null)
     const [longitude, setLng] = useState(null)
     const [haveAddress, setHaveAddress] = useState(false)
@@ -46,7 +46,8 @@ const OriginInput = props => {
     const [valid, setValid] = useState(true);
     const [errMessage, setErrMessage] = useState(null)
     const transportModeNames = {'walking': 'Walk', 'bicycling': 'Bike', 'driving': 'Drive', 'transit': 'Public Transit'}
-    const [originData, setOriginData] = useState({loc: null, mode: null, options: null}) 
+    const [originData, setOriginData] = useState({loc: null, mode: null, options: null});
+    const [toggleSave, setToggleSave] = useState(false);
 
     const setOrigin = value => {
         if(value.length === 0){
@@ -98,72 +99,177 @@ const OriginInput = props => {
     const handleShow = () => setShow(true);
 
     return (
-        <>
-        
-        <InputGroup className="origin-input">
+			<>
+				<InputGroup className="origin-input">
+					<FormControl
+						isInvalid={!valid}
+						className="custom-input origin-input-form"
+						onBlur={(e) => setOrigin(e.target.value)}
+						onKeyPress={(e) => {
+							if (e.charCode === 13) {
+								setOrigin(e.target.value);
+							}
+						}}
+						placeholder="Enter a starting location"
+						defaultValue={
+							haveAddress ? address : props.origin ? props.origin.query : null
+						}
+					></FormControl>
 
-        <FormControl isInvalid={!valid} className="custom-input origin-input-form" onBlur={e=>setOrigin(e.target.value)} onKeyPress={e => {if(e.charCode === 13){setOrigin(e.target.value)}}} placeholder="Enter a starting location" defaultValue={haveAddress ? address : (props.origin ?  props.origin.query : null)} ></FormControl>
+					<FormControl.Feedback tooltip={true} type="invalid">
+						{errMessage}
+					</FormControl.Feedback>
 
-        <FormControl.Feedback tooltip={true} type="invalid">{errMessage}</FormControl.Feedback>
+					<InputGroup.Append>
+						<Button
+							onClick={() => getAddress(longitude, latitude)}
+							className="input-append"
+							variant="light"
+						>
+							My Location
+						</Button>
+					</InputGroup.Append>
+					<DropdownButton
+						defaultValue={
+							props.origin && props.origin.mode
+								? transportModeNames[props.origin.mode]
+								: null
+						}
+						className="input-append"
+						as={InputGroup.Append}
+						variant="light"
+						title={
+							tranportMode ? transportModeNames[tranportMode] : "Transport Mode"
+						}
+						onSelect={(mode) => handleTransportModeChange(mode)}
+					>
+						<Dropdown.Item eventKey="walking">Walk</Dropdown.Item>
+						<Dropdown.Item eventKey="bicycling">Bike</Dropdown.Item>
+						<Dropdown.Item eventKey="driving">Drive</Dropdown.Item>
+						<Dropdown.Item eventKey="transit">Public Transit</Dropdown.Item>
+					</DropdownButton>
+					<InputGroup.Append>
+						<Button
+							className="input-append"
+							variant="light"
+							onClick={handleShow}
+						>
+							More Options
+						</Button>
+						<Modal show={show} onHide={handleClose}>
+							<Modal.Header closeButton>
+								<Modal.Title>More Options</Modal.Title>
+							</Modal.Header>
+							<Modal.Body>
+								<Dropdown class="dropselect">
+									<Dropdown.Toggle variant="light" id="dropdown-basic">
+										Leave at:
+									</Dropdown.Toggle>
+									<Dropdown.Menu>
+										<Dropdown.Item href="#">Now</Dropdown.Item>
+										<Dropdown.Item href="#">In 1 hour</Dropdown.Item>
+										<Dropdown.Item href="#">In 2 hours</Dropdown.Item>
+										<Dropdown.Item href="#">In 3 hours</Dropdown.Item>
+										<Dropdown.Item href="#">In 4 hours</Dropdown.Item>
+										<Dropdown.Item href="#">In 5 hours</Dropdown.Item>
+									</Dropdown.Menu>
+								</Dropdown>
 
-        <InputGroup.Append>
-        <Button onClick={() => getAddress(longitude, latitude)}className="input-append" variant="light">My Location</Button>
-        </InputGroup.Append>
-        <DropdownButton defaultValue={props.origin && props.origin.mode ? transportModeNames[props.origin.mode] : null} className="input-append" as={InputGroup.Append} variant="light" title ={tranportMode ? transportModeNames[tranportMode] : 'Transport Mode'} onSelect={mode=>handleTransportModeChange(mode)}>
-            <Dropdown.Item eventKey="walking">Walk</Dropdown.Item>
-            <Dropdown.Item eventKey="bicycling">Bike</Dropdown.Item>
-            <Dropdown.Item eventKey="driving">Drive</Dropdown.Item>
-            <Dropdown.Item eventKey="transit">Public Transit</Dropdown.Item>
-        </DropdownButton>
-        <InputGroup.Append>
-        <Button className="input-append" variant="light" onClick = {handleShow}>More Options</Button>
-        <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-            <Modal.Title>More Options</Modal.Title>
-            </Modal.Header>
-                <Modal.Body>
-                    <Dropdown class="dropselect">
-                    <Dropdown.Toggle variant="light" id="dropdown-basic">
-                        Leave at:
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                        <Dropdown.Item href="#">Now</Dropdown.Item>
-                        <Dropdown.Item href="#">In 1 hour</Dropdown.Item>
-                        <Dropdown.Item href="#">In 2 hours</Dropdown.Item>
-                        <Dropdown.Item href="#">In 3 hours</Dropdown.Item>
-                        <Dropdown.Item href="#">In 4 hours</Dropdown.Item>
-                        <Dropdown.Item href="#">In 5 hours</Dropdown.Item>
-                    </Dropdown.Menu>
-                    </Dropdown>
-                    
-                    <form action="/action_page.php">
-  <br></br>
-  <h5>Avoid:</h5>
-  <input type="radio" id="male" name="gender" value="male"></input>
-  <label for="male">Tolls</label>
-  <br></br>
-  <input type="radio" id="female" name="gender" value="female"></input>
-  <label for="female">Highways</label>
-  <br></br>
+								<form action="/action_page.php">
+									<br></br>
+									<h5>Avoid:</h5>
+									<input
+										type="radio"
+										id="male"
+										name="gender"
+										value="male"
+									></input>
+									<label for="male">Tolls</label>
+									<br></br>
+									<input
+										type="radio"
+										id="female"
+										name="gender"
+										value="female"
+									></input>
+									<label for="female">Highways</label>
+									<br></br>
+								</form>
+							</Modal.Body>
+							<Modal.Footer>
+								<Button variant="secondary" onClick={handleClose}>
+									Close
+								</Button>
+								<Button variant="primary" onClick={handleClose}>
+									Save Changes
+								</Button>
+							</Modal.Footer>
+						</Modal>
+						{props.user ? (
+							<>
+								<Button
+									onClick={() => {
+										if (originData.loc && valid) setToggleSave(true);
+									}}
+									variant="light"
+								>
+									Save
+								</Button>
+								<Modal show={toggleSave} onHide={() => setToggleSave(false)}>
+									<Modal.Header closeButton>
+										<Modal.Title>{`Save ${name}`}</Modal.Title>
+									</Modal.Header>
+									<Modal.Body>
+										<input
+											type="input"
+											id="location_name"
+											name="location_name"
+											placeholder="Location Name"
+										></input>
+										<br></br>
+										<br></br>
+										<ButtonGroup>
+											<Button variant="secondary" onClick={handleClose}>
+												Close
+											</Button>
+											<Button
+												variant="primary"
+												onClick={() => {
+													const locationName = document.getElementById(
+														"location_name"
+													).value;
 
-</form>
-    
-                </Modal.Body>
-            <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-                Close
-            </Button>
-            <Button variant="primary" onClick={handleClose}>
-                Save Changes
-            </Button>
-            </Modal.Footer>
-        </Modal>
-        </InputGroup.Append>
-        
-        </InputGroup>
-        
-        </>
-    )
+													if (props.user && props.id_token) {
+														fetch("/location/save", {
+															method: "POST",
+															headers: {
+																"Content-Type": "application/json",
+															},
+															body: JSON.stringify({
+																location: {
+																	location_name: locationName,
+																	origin: originData,
+																},
+																email: props.user.email,
+																id_token: props.id_token,
+															}),
+														});
+													}
+
+													setToggleSave(false);
+												}}
+											>
+												Save
+											</Button>
+										</ButtonGroup>
+									</Modal.Body>
+								</Modal>
+							</>
+						) : null}
+					</InputGroup.Append>
+				</InputGroup>
+			</>
+		);
 }
 
 export default OriginInput;
