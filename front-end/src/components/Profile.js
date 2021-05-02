@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import getTestData from "../testData";
-import defaultAvatar from "../img/default-user.png";
 import "./Profile.css";
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 
 const Profile = (props) => {
 	const [profileData, setData] = useState([]);
 	const [editMode, setEditMode] = useState(false);
 	const [locations, setLocations] = useState([]);
+
+	const [show, setShow] = useState(false);
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
 
 	useEffect(() => {
 		getTestData
@@ -76,9 +79,28 @@ const Profile = (props) => {
 									</Button>
 								</div>
 							</div>
-							<Button variant="link" id="delete-button">
+							<Button variant="link" id="delete-button" onClick={handleShow}>
 								Delete Account Data
 							</Button>
+							<Modal show={show} onHide={handleClose}>
+								<Modal.Body>Are you sure you want to delete your profile data? This will clear your saved groups and locations.</Modal.Body>
+								<Modal.Footer>
+									<Button variant="secondary" onClick={handleClose}>
+										Cancel
+									</Button>
+									<Button variant="danger" onClick={() => {
+										getTestData.deleteAllGroups(props.id_token).catch(e => {
+											console.log('Error deleting groups');
+										})
+										getTestData.deleteAllLocations(props.id_token).catch(e => {
+											console.log('Error deleting locations');
+										})
+										handleClose();
+									}}>
+										Delete Account Data
+									</Button>
+								</Modal.Footer>
+							</Modal>
 						</div>
 					</div>
 				</div>
