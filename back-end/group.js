@@ -83,6 +83,30 @@ router.delete("/delete", (req, res) => {
   })
 })
 
+router.delete("/deleteAll", (req, res) => {
+  verifyToken(req.headers.authorization).then(payload => {
+    const userId = payload['sub'];
+    try {
+      Group.deleteMany({user_id: userId}, (e, deleted) => {
+        if(e){
+          res.status(500);
+          res.send('Internal error retrieving groups from db')
+        }
+        else{
+          res.send('Deleted all groups (User: ' + userId + ')');
+        }
+
+      })
+    } catch(e) {
+      res.status(500);
+      res.send('Internal error retrieving groups from db')
+    }
+  }).catch(e => {
+    res.status(401);
+    res.send('Unauthorized user')
+  })
+})
+
 router.post('/update', (req, res) => {
   const originalGroup = req.body.originalGroup;
   const newGroup = req.body.newGroup;

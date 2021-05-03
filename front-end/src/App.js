@@ -37,7 +37,8 @@ function App() {
   let link_id;
 
   const loadOriginMarkers = originData => {
-    const filteredOrigins = originData.filter(origin => origin.loc)
+    let filteredOrigins = originData.filter(origin => origin.loc)
+    if (filteredOrigins.length > 10) filteredOrigins = filteredOrigins.slice(0, 10)
     setMapLoaded(!mapLoaded)
     setOrigins(filteredOrigins)
     setPlaces([])
