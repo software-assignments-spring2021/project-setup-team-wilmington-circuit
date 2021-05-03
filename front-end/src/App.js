@@ -53,6 +53,7 @@ function App() {
       setSearchData(searchData)
       setSharelink(null)
       setSharelinkError(false)
+      console.log("searchData being passed: " + JSON.stringify(searchData))
       getTestData.search(origins, searchData).then(data => {
         setCenterPoint(data.loc)
         setSearchError(null)

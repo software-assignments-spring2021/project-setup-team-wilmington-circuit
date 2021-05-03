@@ -59,6 +59,7 @@ const getPlaceImage = async (photoreference) => {
 }
 
 const search = async (origins, search) => {
+    console.log("search being passed: " + JSON.stringify(search))
     const res = await axios.post('/api/search',
         {
             origins: origins,
