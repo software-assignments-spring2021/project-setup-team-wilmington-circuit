@@ -1,0 +1,18 @@
+#profile-container {
+  margin: auto;
+}
+
+#profile {
+  text-align: center !important;
+  margin: auto;
+  align-items: center;
+  width: 100%;
+}
+
+#locations-select-guide{
+  font-size: small;
+}
+
+#delete-button{
+  color: #dc3545;
+}

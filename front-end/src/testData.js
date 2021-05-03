@@ -58,6 +58,13 @@ const getPlaceImage = async (photoreference) => {
     return data;
 }
 
+const getPlaceAddress = (lat, lng) => {
+    const res = axios.post('/api/reverse-geocode');
+    const data = res;
+    console.log('data from get place address:' + data);
+    return data;
+}
+
 const search = async (origins, search) => {
     console.log("search being passed: " + JSON.stringify(search))
     const res = await axios.post('/api/search',
@@ -93,4 +100,55 @@ const getSharelink = async(link_id) => {
     return data;
 }
 
-export default {getResults_mock, getPlaceLocation, getFriends_mock, getPlaceImage, getGroups_mock, search, getSharelink, uploadSharelink}
+const getGroups = async(id_token) => {
+    const res = await axios.get('/group/get', {headers: {
+        'Authorization': id_token
+    }})
+    const data = res.data;
+    console.log(data);
+    return data;
+}
+
+const deleteGroup = async(_id, id_token) => {
+    const res = await axios.delete('group/delete?q=' + _id, {headers: {
+        'Authorization': id_token
+    }})
+    const data = res.data;
+    console.log(data);
+}
+
+const deleteAllGroups = async(id_token) => {
+    const res = await axios.delete('group/deleteAll', {headers: {
+        'Authorization': id_token
+    }})
+    const data = res.data;
+    console.log(data);
+}
+
+const getLocations = async(id_token) => {
+    const res = await axios.get('/location/get', {headers: {
+        'Authorization': id_token
+    }})
+    const data = res.data;
+    console.log(data);
+    return data;
+}
+
+const deleteLocation = async(_id, id_token) => {
+    const res = await axios.delete('location/delete?q=' + _id, {headers: {
+        'Authorization': id_token
+    }})
+    const data = res.data;
+    console.log(data);
+}
+
+const deleteAllLocations = async(id_token) => {
+    const res = await axios.delete('location/deleteAll', {headers: {
+        'Authorization': id_token
+    }})
+    const data = res.data;
+    console.log(data);
+}
+
+export default {getResults_mock, getPlaceLocation, getPlaceAddress, getFriends_mock, getPlaceImage, getGroups_mock, search, getSharelink, uploadSharelink, getGroups, deleteGroup, deleteAllGroups, getLocations, deleteLocation, deleteAllLocations}
+
