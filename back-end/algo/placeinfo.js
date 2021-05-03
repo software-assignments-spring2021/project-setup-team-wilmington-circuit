@@ -17,7 +17,7 @@ const makeArr = async (arr) =>{
             }
         newArr.push(obj)
        }
-       console.log(newArr)
+       //console.log(newArr)
        return(newArr)   
 }
 
@@ -41,7 +41,7 @@ const fetchInfo = async (lat, lng, radius, keyword, key) => {
 const placeInfo = async(lat, lng, averageDistance, keyword) => {
     const radius = averageDistance * 0.1;
     const result = await fetchInfo(lat, lng, radius, keyword, process.env.GMAPS_APIKEY);
-    console.log(result[0])
+    //console.log(result[0])
     if(result.length === 0) throw 'No results found!'
     return(result);
 }

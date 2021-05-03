@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser');
 const router = express.Router();
 const db = require('./db');
+const Sharelink = require('./models/Sharelink')
 const nanoid = require('nanoid')
 
 router.use(bodyParser.json())
@@ -13,7 +14,7 @@ router.post('/create', (req, res) => {
     const averageDuration = req.body.averageDuration;
     const link_id = req.body.link_id || nanoid.nanoid();
     if(origins && origins.length >= 2 && searchData && places && averageDuration){
-        db.shareLinkModel.updateOne({link_id: link_id},{
+        Sharelink.updateOne({link_id: link_id},{
             link_id: link_id,
             origins: origins,
             searchData: searchData, 
@@ -45,7 +46,7 @@ router.get('/get', (req, res) => {
         res.send('No query found');
     }
     else{
-        db.shareLinkModel.findOne({link_id: link_id}, (e, doc)=>{
+        Sharelink.findOne({link_id: link_id}, (e, doc)=>{
             if(e){
                 console.error(e);
                 res.status(500);
