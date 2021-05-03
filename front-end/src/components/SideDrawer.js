@@ -30,10 +30,10 @@ const SideDrawer = function (props) {
     const [toggle, setToggle] = useState(false);
     const [toggle2, setToggle2] = useState(false);
     const [toggle3, setToggle3] = useState(false);
-    const [show, setShow] = useState(false);
+    const [showEdit, setShowEdit] = useState(false);
 
-    const handleCloseEdit = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleCloseEdit = () => setShowEdit(false);
+    const handleShowEdit = () => setShowEdit(true);
 
     const [editGroup, setEditGroup] = useState({});
 
@@ -196,7 +196,7 @@ const SideDrawer = function (props) {
 												</li>
 											);
 										})}
-										<Modal show={show} onHide={handleCloseEdit}>
+										<Modal show={showEdit} onHide={handleCloseEdit}>
 											<Modal.Header closeButton>
 												<Modal.Title>Edit {editGroup.group_name}</Modal.Title>
 											</Modal.Header>
@@ -315,6 +315,9 @@ const SideDrawer = function (props) {
 								</div>
 							)}
 						</div>
+                        <li className="item" onClick={handleShow}>
+					        <a>About Meet Me</a>
+				        </li>
 					</ul>
 				) : (
 					<ul>
@@ -391,33 +394,50 @@ const SideDrawer = function (props) {
 								</div>
 							)}
 						</div>
+                        <li className="item" onClick={handleShow}>
+					        <a>About Meet Me</a>
+				        </li>
 					</ul>
 				)}
-        <li onClick={handleShow}> <h5>About Meet Me</h5> </li>
-                {show && (
-                   <Modal show={show} onHide={handleClose} animation={false}>
-                   <Modal.Header closeButton>
-                     <Modal.Title>About Meet Me</Modal.Title>
-                   </Modal.Header>
-                   <Modal.Body><p>Meet Me was created by Alex Hammer, Ari Khaytser, Luis Cordova, Santiago Darré, 
-                       and Maggie Pierce for their Agile Development class. Meet Me is intended for people who want to find a meeting point for them
-                       and their friends or colleagues. </p>
-                    
 
-                       <p>To use Meet Me, enter in at least two starting locations, select any filter you want, and click search. Meet me will calculate 
-                       the center point of the entered locations and return results nearby. If you wish to save groups or commonly used locations, you can do so after
-                       creating an account. You don't need an account to access Meet Me's basic functionality.</p>
-                       
-                       <p>For more information, <a href="https://github.com/agile-dev-assignments/project-setup-team-wilmington-circuit" target="_blank">visit the project GitHub</a>.</p>
-                       </Modal.Body>
-                   <Modal.Footer>
-                     <Button variant="secondary" onClick={handleClose}>
-                       Close
-                     </Button>
-                   </Modal.Footer>
-                 </Modal>
-               
-                )}
+				<Modal show={show} onHide={handleClose}>
+					<Modal.Header closeButton>
+						<Modal.Title>About Meet Me</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<p>
+							Meet Me was created by Alex Hammer, Ari Khaytser, Luis Cordova,
+							Santiago Darré, and Maggie Pierce for their Agile Development
+							class. Meet Me is intended for people who want to find a meeting
+							point for them and their friends or colleagues.{" "}
+						</p>
+
+						<p>
+							To use Meet Me, enter in at least two starting locations, select
+							any filter you want, and click search. Meet me will calculate the
+							center point of the entered locations and return results nearby.
+							If you wish to save groups or commonly used locations, you can do
+							so after creating an account. You don't need an account to access
+							Meet Me's basic functionality.
+						</p>
+
+						<p>
+							For more information,{" "}
+							<a
+								href="https://github.com/agile-dev-assignments/project-setup-team-wilmington-circuit"
+								target="_blank"
+							>
+								visit the project GitHub
+							</a>
+							.
+						</p>
+					</Modal.Body>
+					<Modal.Footer>
+						<Button variant="secondary" onClick={handleClose}>
+							Close
+						</Button>
+					</Modal.Footer>
+				</Modal>
 			</nav>
 		);
 }
