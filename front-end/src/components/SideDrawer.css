@@ -61,9 +61,11 @@
     padding-right: 0px;
 }
 
-.item li {
-    color: #4789C8;
+.item a {
+    color: #4789C8 !important;
     padding: 0px;
+    margin-top: 0;
+    margin-bottom: 1em;
     margin: 0px 20px;
 }
 
@@ -79,4 +81,8 @@ li {
 #group-select-guide{
     font-size: small;
     margin-bottom: 0;
+}
+
+#about{
+    list-style: none;
 }

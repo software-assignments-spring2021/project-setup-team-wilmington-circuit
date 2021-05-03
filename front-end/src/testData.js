@@ -66,6 +66,7 @@ const getPlaceAddress = (lat, lng) => {
 }
 
 const search = async (origins, search) => {
+    console.log("search being passed: " + JSON.stringify(search))
     const res = await axios.post('/api/search',
         {
             origins: origins,

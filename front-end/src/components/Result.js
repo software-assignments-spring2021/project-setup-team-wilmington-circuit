@@ -100,7 +100,7 @@ const Result = (props) => {
                                                 From: <br></br>
                                                 <ul>
                                                 {props.origins.map((origin, index) => {
-                                                    console.log(origin)
+                                                    //console.log(origin)
                                                     if(origin.loc){
                                                         return (
                                                             <li><a target="_blank" href={generateMapsURL(
