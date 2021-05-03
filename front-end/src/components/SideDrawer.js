@@ -125,9 +125,54 @@ const SideDrawer = function (props) {
                 </div>
             </ul>
             :
-            <div class="logged-out-text">
-                <h3>Log in to save locations, friends, and more!</h3>
-            </div>
+            <ul>
+                <li>Login to Save your data!</li>
+
+                <div>
+                    <li><a onClick={() => {
+                        setToggle2(!toggle2);
+                        setToggle3(false);
+                    }
+                    }>Groups +</a>{toggle2 && (<><Button className='edit' onClick={() => {
+                        setToggle3(!toggle3);
+                        setToggle2(true);
+                    }}>{toggle3 ? 'Done' : 'Edit'}</Button>
+                    <p id="group-select-guide">Click a group to automatically set locations in the map</p>
+                    </>
+                    )}
+                    
+                    </li>
+                    {toggle2 && (
+                        <div>
+                            <ul>
+                                {groups.map((group) => {
+                                    console.log(group)
+                                    return (
+                                        <li className="item">
+                                            <a onClick={()=>{
+                                                if(group.origins){
+                                                    props.onGroupSelect(group.origins)
+                                                }
+                                            }}>{group.group_name}</a>
+                                            {toggle3 && (
+                                                <button type='button' className='btn btn-danger float-right' onClick={() => {
+                                                    groups.splice(groups.indexOf(group), 1)
+                                                    setGroup([...groups]);
+                                                    localStorage.setItem('groups', JSON.stringify(groups))
+                                                    getTestData.deleteGroup(group._id, props.id_token).catch(e => {
+                                                        console.log('Error deleting group; ' + e);
+                                                    })
+                                                }}>Delete</button>
+                                            )}
+
+                                        </li>
+                                    )
+                                })}
+                            </ul>
+                        </div>
+                    )}
+                </div>
+            </ul>
             }
         </nav>
     )
