@@ -83,7 +83,6 @@ router.delete("/delete", (req, res) => {
   })
 })
 
-<<<<<<< HEAD
 router.delete("/deleteAll", (req, res) => {
   verifyToken(req.headers.authorization).then(payload => {
     const userId = payload['sub'];
@@ -107,7 +106,7 @@ router.delete("/deleteAll", (req, res) => {
     res.send('Unauthorized user')
   })
 })
-=======
+
 router.post('/update', (req, res) => {
   const originalGroup = req.body.originalGroup;
   const newGroup = req.body.newGroup;
@@ -133,6 +132,5 @@ router.post('/update', (req, res) => {
     res.status(500);
   });
 });
->>>>>>> master
 
 module.exports = router
