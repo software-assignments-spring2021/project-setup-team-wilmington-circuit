@@ -73,7 +73,7 @@ router.get('/photo', (req, res) => {
 router.post('/search', (req, res) => {
     let origins = req.body.origins;
     let search = req.body.search;
-    //console.log(origins, search)
+    console.log(origins, search)
     if(!origins){
         res.status(400);
         res.send('No origins found');
@@ -86,7 +86,7 @@ router.post('/search', (req, res) => {
         geocenter(origins).then(data => {
             if(data.loc){
 
-                placeInfo(data.loc.lat, data.loc.lng, data.averageDistance, search.query).then(places => {
+                placeInfo(data.loc.lat, data.loc.lng, data.averageDistance, search.query, search.type, (search.hours == 'opennow'), search.price, search.rating).then(places => {
                     if(places){
                         res.send({loc:data.loc, averageDuration: data.averageDuration, placeList: places}) 
                         //Sends both location and nearby places in one response
