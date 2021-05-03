@@ -82,4 +82,28 @@ router.delete("/delete", (req, res) => {
   })
 })
 
+router.delete("/deleteAll", (req, res) => {
+  verifyToken(req.headers.authorization).then(payload => {
+    const userId = payload['sub'];
+    try {
+      Location.deleteMany({user_id: userId}, (e, deleted) => {
+        if(e){
+          res.status(500);
+          res.send('Internal error retrieving locations from db')
+        }
+        else{
+          res.send('Deleted all locations (User: ' + userId + ')');
+        }
+
+      })
+    } catch(e) {
+      res.status(500);
+      res.send('Internal error retrieving locations from db')
+    }
+  }).catch(e => {
+    res.status(401);
+    res.send('Unauthorized user')
+  })
+})
+
 module.exports = router
