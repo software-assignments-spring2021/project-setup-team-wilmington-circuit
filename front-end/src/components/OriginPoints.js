@@ -20,7 +20,7 @@ const OriginPoints = props => {
 
     const displayOriginInputs = (numOrigins) => {
       let inputs = []
-      for (let i = 0; i < Math.max(numOrigins, props.origins.length); i++) inputs.push(<OriginInput origin={props.origins[i] || null} originNumber={i} onChange={onOriginChange}></OriginInput>)
+      for (let i = 0; i < Math.max(numOrigins, props.origins.length); i++) inputs.push(<OriginInput origin={props.origins[i] || null} user={props.user} id_token={props.id_token} originNumber={i} onChange={onOriginChange}></OriginInput>)
       return inputs;
     }
 
@@ -33,11 +33,13 @@ const OriginPoints = props => {
     }
 
     const removeOrigin = () => {
-        const newOrigins = origins;
-        newOrigins.splice(origins.length, 1)
-        origins = newOrigins;
-        props.onChange(newOrigins);
         setNumOrigins(numOrigins - 1)
+        const newOrigins = origins;
+        newOrigins.pop()
+        origins = newOrigins;
+        console.log(origins)
+        props.onChange(origins);
+        
     }
 
     const [show, setShow] = useState(false);

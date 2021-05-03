@@ -11,6 +11,7 @@
     padding: .5em;
     transform: translateX(200%);
     transition: transform 0.5s ease-out;
+    overflow-y: auto !important;
 }
 
 .side-drawer.open {
@@ -29,7 +30,7 @@
 }
 
 .side-drawer li {
-    padding: 1rem;
+    padding: 0.5rem;
 
 }
 
