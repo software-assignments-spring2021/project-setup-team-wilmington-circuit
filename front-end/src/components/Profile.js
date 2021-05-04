@@ -59,9 +59,9 @@ const Profile = (props) => {
 													className="item"
 													
 												>
-													<h5 onClick={() =>
+													<a onClick={() =>
 														props.onLocationSelect(location.origin)
-													}>{location.location_name}</h5>
+													}>{location.location_name}</a>
 													{editMode && <Button variant="danger" onClick={()=>{
                                                         locations.splice(locations.indexOf(location), 1);
                                                         setLocations(locations)
