@@ -65,7 +65,7 @@ const SearchInput = props => {
             <Dropdown.Toggle variant="light" id="dropdown-basic">
                 { type ? humanize(type) : "Type" }
             </Dropdown.Toggle>
-            <Dropdown.Menu>
+            <Dropdown.Menu id="scroll-menu">
                 {typeOptions.map((type, index) => (
                     <Dropdown.Item href="#action-" onClick={() => setType(type)}>{humanize(type)}</Dropdown.Item>
                 ))}

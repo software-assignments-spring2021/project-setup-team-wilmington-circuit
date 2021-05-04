@@ -21,11 +21,15 @@ const makeArr = async (arr) =>{
        return(newArr)   
 }
 
-const fetchInfo = async (lat, lng, radius, keyword, key) => {
+const fetchInfo = async (lat, lng, radius, keyword, type, open, price, rating, key) => {
     const url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' + querystring.stringify({
         location: lat + ',' + lng,
         radius: radius,
         keyword: keyword,
+        type: type,
+        opennow: open, 
+        maxprice: price, 
+        
         key: key
     })
 
@@ -38,9 +42,9 @@ const fetchInfo = async (lat, lng, radius, keyword, key) => {
     return list;
 }
 
-const placeInfo = async(lat, lng, averageDistance, keyword) => {
+const placeInfo = async(lat, lng, averageDistance, keyword, type, open, price, rating) => {
     const radius = averageDistance * 0.1;
-    const result = await fetchInfo(lat, lng, radius, keyword, process.env.GMAPS_APIKEY);
+    const result = await fetchInfo(lat, lng, radius, keyword, type, open, price, rating, process.env.GMAPS_APIKEY);
     //console.log(result[0])
     if(result.length === 0) throw 'No results found!'
     return(result);

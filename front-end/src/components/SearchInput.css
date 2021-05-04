@@ -6,3 +6,9 @@
 #dropdown-basic {
   border-radius: 0 !important;
 }
+
+#scroll-menu {
+  height: auto;
+  max-height: 400px;
+  overflow-y: scroll;
+}
