@@ -9,9 +9,12 @@ on:
   pull_request:
     branches: [ master ]
 
-jobs:
-  build:
+jobs: 
 
+  build:
+    environment:
+      name: ENV
+      
     runs-on: ubuntu-latest
 
     strategy:
@@ -27,6 +30,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - name: Build front-end
+      env:
+        CI: false
       run: | 
         npm install
         npm run build
