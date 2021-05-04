@@ -1,5 +1,7 @@
 # MeetMe
 
+[![Node.js CI](https://github.com/agile-dev-assignments/project-setup-team-wilmington-circuit/actions/workflows/node.js.yml/badge.svg)](https://github.com/agile-dev-assignments/project-setup-team-wilmington-circuit/actions/workflows/node.js.yml)
+
 ## What and Why?
 MeetMe allows users to find places such as bars, restaurants and parks equidistant from a set of starting points. The project will help groups plan their destinations so that each party has roughly equal travel time and can arrive at around the same time. 
 
