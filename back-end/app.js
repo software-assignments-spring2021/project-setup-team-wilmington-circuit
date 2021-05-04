@@ -5,13 +5,14 @@ const sharelink = require('./sharelink');
 const group = require('./group');
 const location = require('./location');
 const db = require('./db');
+const path = require('path')
 const bodyParser = require('body-parser')
 const Group = require("./models/Group");
 
 db.connect()
 
 app.use(express.static('public'));
-
+app.use(express.static(path.join(...[__dirname,'..', 'front-end', 'build'])))
 
 app.use('/api', api);
 
@@ -20,7 +21,7 @@ app.use('/group', group);
 app.use('/location', location)
 
 app.get('/', (req, res) => {
-  res.send('MeetMe App')
+  res.sendFile(path.join(...[__dirname,'..', 'front-end', 'build', 'index.html']));
 });
 
 
