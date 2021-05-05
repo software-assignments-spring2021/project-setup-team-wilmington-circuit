@@ -37,7 +37,6 @@ const SideDrawer = function (props) {
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 
-	const [friends, setFriend] = useState([]);
 	const [groups, setGroup] = useState([]);
 
 	const savedGroups = JSON.parse(localStorage.getItem("groups"));
@@ -64,11 +63,7 @@ const SideDrawer = function (props) {
 		}
 	}, []);
 
-	useEffect(() => {
-		getTestData.getFriends_mock().then((res) => {
-			setFriend(res);
-		});
-	}, []);
+
 
 	useEffect(() => {
 		getTestData
@@ -93,20 +88,7 @@ const SideDrawer = function (props) {
 						/>
 					</li>
 
-					<div>
-						<li>
-							<a onClick={() => setToggle(!toggle)}>Friends +</a>
-						</li>
-						{toggle && (
-							<div>
-								<ul>
-									{friends.map((friend) => {
-										return <li className="item">{friend.first_name}</li>;
-									})}
-								</ul>
-							</div>
-						)}
-					</div>
+	
 
 					<div>
 						<li>
