@@ -12,3 +12,13 @@
   max-height: 400px;
   overflow-y: scroll;
 }
+
+@media screen and (max-width: 999px) {
+  .search-input-form {
+    width: 100% !important;
+  }
+
+  .input-append {
+    float: right !important;
+  }
+}
