@@ -143,7 +143,7 @@ const SideDrawer = function (props) {
 													<a
 														onClick={() => {
 															setEditGroup(group);
-															handleShow();
+															handleShowEdit();
 														}}
 													>
 														{group.group_name}
