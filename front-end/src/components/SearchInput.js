@@ -56,12 +56,12 @@ const SearchInput = props => {
     return (
     <div class = "search-container">
     <InputGroup className="origin-input">
-    <FormControl defaultValue={props.searchData ? props.searchData.query : null} isInvalid={(props.err)} className="custom-input" placeholder="Search for" id="search-input"></FormControl>
+    <FormControl defaultValue={props.searchData ? props.searchData.query : null} isInvalid={(props.err)} className="custom-input search-input-form" placeholder="Search for" id="search-input"></FormControl>
     <FormControl.Feedback tooltip={true} type="invalid">{props.err}</FormControl.Feedback>
     <InputGroup.Append>
   
 
-            <Dropdown class="dropselect">
+            <Dropdown className="dropselect input-append">
             <Dropdown.Toggle variant="light" id="dropdown-basic">
                 { type ? humanize(type) : "Type" }
             </Dropdown.Toggle>
@@ -71,10 +71,11 @@ const SearchInput = props => {
                 ))}
             </Dropdown.Menu>
             </Dropdown>
-            
+        </InputGroup.Append>
+        <InputGroup.Append>
             <br></br>
         
-            <Dropdown class="dropselect">
+            <Dropdown className="dropselect input-append">
             <Dropdown.Toggle variant="light" id="dropdown-basic" value="elephant">
                 { rating ? rating + " stars and up" : "Rating" }
             </Dropdown.Toggle>
@@ -84,10 +85,10 @@ const SearchInput = props => {
                 ))}
             </Dropdown.Menu>
             </Dropdown>
-
+            </InputGroup.Append>
             <br></br>
-
-            <Dropdown class="dropselect">
+            <InputGroup.Append>
+            <Dropdown className="dropselect input-append">
             <Dropdown.Toggle variant="light" id="dropdown-basic">
                 { price ? cost : "Any price" }
             </Dropdown.Toggle>
@@ -98,10 +99,10 @@ const SearchInput = props => {
                 ))}
             </Dropdown.Menu>
             </Dropdown>
-
+            </InputGroup.Append>
             <br></br>
-
-            <Dropdown class="dropselect">
+            <InputGroup.Append>
+            <Dropdown className="dropselect input-append">
             <Dropdown.Toggle variant="light" id="dropdown-basic">
                 { hours ? "Open now" : "Any time" }
             </Dropdown.Toggle>
@@ -111,8 +112,10 @@ const SearchInput = props => {
                 ))}
             </Dropdown.Menu>
             </Dropdown>
+            </InputGroup.Append>
+            <InputGroup.Append>
   
-<Button onClick={()=> props.onSearch({
+<Button className="input-append" onClick={()=> props.onSearch({
     query: document.getElementById('search-input').value,
     type: type,
     hours: hours,
