@@ -2,6 +2,8 @@
 
 [![Node.js CI](https://github.com/agile-dev-assignments/project-setup-team-wilmington-circuit/actions/workflows/node.js.yml/badge.svg)](https://github.com/agile-dev-assignments/project-setup-team-wilmington-circuit/actions/workflows/node.js.yml)
 
+[Check out the project](http://meetme-agiledev.site/)
+
 ## What and Why?
 MeetMe allows users to find places such as bars, restaurants and parks equidistant from a set of starting points. The project will help groups plan their destinations so that each party has roughly equal travel time and can arrive at around the same time. 
 
@@ -41,7 +43,7 @@ Finding a "fair" place to meet has long been a source of unnessessary dispute. T
 Refer to [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ## Testing Instructions
-TBD
+Run the test scripts in the back-end folder
 
 ## Links
 This project will make use of the [Google Maps API](https://developers.google.com/maps/documentation/javascript/overview) developed by Google. It will also use [Turf.js](https://turfjs.org/) for geospatial analysis and finding optimal locations.
