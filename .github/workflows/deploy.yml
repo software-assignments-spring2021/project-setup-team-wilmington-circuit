@@ -9,14 +9,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - name: Deploy to DigitalOcean
-        uses: appleboy/ssh-action@master
+        uses: fifsky/ssh-action@master
         with:
           host: ${{ secrets.DEPLOY_IP }}
-          username: ${{ secrets.DEPLOY_USERNAME }}
-          password: ${{ secrets.DEPLOY_PASSWORD }}
-          script: |
+          user: gitdeploy
+          pass: ${{ secrets.DEPLOY_PASSWORD }}
+          command: |
             cd ~/project-setup-team-wilmington-circuit/
             git checkout master
             git pull
