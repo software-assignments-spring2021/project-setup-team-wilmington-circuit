@@ -39,7 +39,7 @@ const SideDrawer = function (props) {
 
 	const [groups, setGroup] = useState([]);
 
-	const savedGroups = JSON.parse(localStorage.getItem("groups"));
+	
 
 	const handleClickOutside = (e) => {
 		if (
@@ -56,12 +56,13 @@ const SideDrawer = function (props) {
 	};
 
 	useEffect(() => {
+		const savedGroups = JSON.parse(localStorage.getItem("groups"));
 		if (savedGroups) {
 			savedGroups.map((group) => {
 				setGroup((prev) => [...prev, group]);
 			});
 		}
-	}, []);
+	}, [props.loaded]);
 
 
 
@@ -74,14 +75,15 @@ const SideDrawer = function (props) {
 			.catch((e) => {
 				console.log("Error getting groups: " + e);
 			});
-	}, [props.id_token]);
+	}, [props.id_token, props.loaded]);
 
 	return (
-		<nav className={drawerClasses} ref={myRef} onClick={handleClickInside}>
+		<nav loaded={props.loaded} className={drawerClasses} ref={myRef} onClick={handleClickInside}>
 			{props.user ? (
 				<ul>
 					<li>
 						<Profile
+							loaded={props.loaded}
 							id_token={props.id_token}
 							user={props.user}
 							onLocationSelect={props.onLocationSelect}

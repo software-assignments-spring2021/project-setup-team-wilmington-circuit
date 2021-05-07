@@ -257,6 +257,7 @@ const OriginInput = props => {
 													}
 
 													setToggleSave(false);
+													props.onSave()
 												}}
 											>
 												Save

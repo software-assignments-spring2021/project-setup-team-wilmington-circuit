@@ -24,7 +24,7 @@ const Profile = (props) => {
 			.catch((e) => {
 				console.log("Error getting groups: " + e);
 			});
-	}, [props.id_token]);
+	}, [props.id_token, props.loaded]);
 
 	useEffect(() => {
 		console.log(props.user);
@@ -35,7 +35,7 @@ const Profile = (props) => {
 		<div>Loading</div>
 	) : (
 		<>
-			<div id="profile-container">
+			<div loaded={props.loaded} id="profile-container">
 				<div className="row profile" id="profile">
 					<div>
 						{/*<h5 class="font-weight-bold">Close</h5>*/}
@@ -64,7 +64,7 @@ const Profile = (props) => {
 													}>{location.location_name}</a>
 													{editMode && <Button variant="danger" onClick={()=>{
                                                         locations.splice(locations.indexOf(location), 1);
-                                                        setLocations(locations)
+                                                        setLocations([...locations])
 
                                                         getTestData.deleteLocation(location._id, props.id_token).catch(e => {
                                                             console.log('Error deleting location: ' + e);
@@ -89,6 +89,7 @@ const Profile = (props) => {
 										Cancel
 									</Button>
 									<Button variant="danger" onClick={() => {
+										setLocations([])
 										getTestData.deleteAllGroups(props.id_token).catch(e => {
 											console.log('Error deleting groups');
 										})
@@ -96,6 +97,7 @@ const Profile = (props) => {
 											console.log('Error deleting locations');
 										})
 										handleClose();
+										window.location.reload()
 									}}>
 										Delete Account Data
 									</Button>
