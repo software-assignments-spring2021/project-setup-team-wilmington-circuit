@@ -97,6 +97,7 @@ const SideDrawer = function (props) {
 									setToggle2(!toggle2);
 									setToggle3(false);
 									setShow(false);
+									setShowEdit(false);
 								}}
 							>
 								Groups +
