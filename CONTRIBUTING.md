@@ -3,8 +3,12 @@
 Zoom link: https://nyu.zoom.us/j/93978452728  
 Times: M - 6:30 pm, W - 4:50 pm, Sa - 11 am
 
-## What this repository is
-This is the repo 
+## How to run locally
+Request a .env file, place the .env file in the back-end directory. Then from the main directory, run the npm start script
+```bash
+npm run start
+```
+The app should now be hosted locally on port 3001. Access it at localhost:3001
 
 ## How to start contributing
 We will assign/claim tasks from our To Do at daily standups as needed, then push those changes to the repo as they are completed.
