@@ -6,6 +6,19 @@
 
 [Check out the project](http://meetme-agiledev.site/)
 
+## How to Use
+To use Meet Me, enter in at least two starting locations, select any filter you want, and click search. Meet me will calculate the center point of the entered locations and return results nearby. If you wish to save groups or commonly used locations, you can do so after creating an account. You don't need an account to access Meet Me's basic functionality.
+
+When searching, rememeber you are only require to provide input for the query box. So, you are not required to provide input for any of the dropdown filters. 
+
+Example searches include:
+
+1) ‘restaurant’ alone in the query box. 
+2)  ‘sports bar’ alone in the query box.
+3) ‘chinese’ in the query box with ‘restaurant’ as the type.
+
+Depending on your starting locations, you can try adding additional filters. However, if there are no matching results in your location, none will be returned
+
 ## What and Why?
 MeetMe allows users to find places such as bars, restaurants and parks equidistant from a set of starting points. The project will help groups plan their destinations so that each party has roughly equal travel time and can arrive at around the same time. 
 
