@@ -125,6 +125,7 @@ const OriginInput = props => {
 							onClick={() => getAddress(longitude, latitude)}
 							className="input-append"
 							variant="light"
+							disabled={haveAddress}
 						>
 							My Location
 						</Button>

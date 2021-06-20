@@ -55,8 +55,10 @@ const SearchInput = props => {
       
     return (
     <div class = "search-container">
+    <div id="search-input-guide">Find the best place to meet up with friends. Search for a place below, and results will have roughly equal travel times from each person. You can pick different travel modes for each person, and set individual travel settings.</div>
     <InputGroup className="origin-input">
-    <FormControl defaultValue={props.searchData ? props.searchData.query : null} isInvalid={(props.err)} className="custom-input search-input-form" placeholder="Search for" id="search-input"></FormControl>
+    
+    <FormControl defaultValue={props.searchData ? props.searchData.query : null} isInvalid={(props.err)} className="custom-input search-input-form" placeholder="e.g, Bars, Basketball Courts, McDonald's..." id="search-input"></FormControl>
     <FormControl.Feedback tooltip={true} type="invalid">{props.err}</FormControl.Feedback>
     <InputGroup.Append>
   

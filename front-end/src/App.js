@@ -141,6 +141,7 @@ function App() {
         <SideDrawer onGroupSelect={origins => {loadOriginMarkers(origins)}} onLocationSelect={origin => {addOrigin(origin)}}show={toggle} user={user} id_token={id_token} setShow={setToggle}/>
         <div className="content" id="main-container">
           <div id="input-container">
+          
           <SearchInput searchData={searchData} err={searchError} onSearch={onSearch}></SearchInput>
           <OriginPoints origins={origins} user={user} id_token={id_token} onChange={loadOriginMarkers}></OriginPoints>
           <div>

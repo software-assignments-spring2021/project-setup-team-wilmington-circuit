@@ -51,7 +51,7 @@ const OriginPoints = props => {
       <div className="custom-input-group">
         <div className="originpoints-container">
           <p id="origin-input-guide">
-            For best results, include ZIP code in location entries
+            Enter the starting address of each person below. For best results, include ZIP code in location entries.
           </p>
           {displayOriginInputs(numOrigins)}
           <ButtonToolbar>

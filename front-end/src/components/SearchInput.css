@@ -13,6 +13,11 @@
   overflow-y: scroll;
 }
 
+#search-input-guide {
+  font-size: small;
+  margin-bottom: 0;
+}
+
 @media screen and (max-width: 999px) {
   .search-input-form {
     width: 100% !important;
