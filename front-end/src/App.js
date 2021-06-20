@@ -10,7 +10,8 @@ import Header from './components/Header'
 import SideDrawer from './components/SideDrawer'
 import getTestData from './testData'
 import { Button, ButtonGroup, ButtonToolbar, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import copyToClipboard from './copyToClipboard'
+import copyToClipboard from './copyToClipboard';
+import { Helmet } from 'react-helmet';
 
 import SearchInput from './components/SearchInput'
 
@@ -135,13 +136,12 @@ function App() {
 
   return (
 		<>
-			<html lang="en">
-				<head>
-					<meta property="og:title" content="MeetMe" />
-					<meta property="og:description" content="Find the best place to meet up with your friends. Plan a meet up with up to 10 friends, and ensure that everyone has a fair travel time." />
-				</head>
-			</html>
+      
 			<div className="html">
+      <Helmet>
+        <title>MeetMe</title>
+        <meta name="description" content="Find the best place to meet up with your friends. Plan a meet up with up to 10 friends, and ensure that everyone has a fair travel time." />
+      </Helmet>
 				<button class="header-btn">
 					<Header
 						onAuth={(user, id_token) => {
