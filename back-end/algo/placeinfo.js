@@ -22,6 +22,7 @@ const makeArr = async (arr) =>{
 }
 
 const fetchInfo = async (lat, lng, radius, keyword, type, open, price, rating, key) => {
+    console.log(open)
     const url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' + querystring.stringify({
         location: lat + ',' + lng,
         radius: radius,

@@ -73,7 +73,6 @@ router.get('/photo', (req, res) => {
 router.post('/search', (req, res) => {
     let origins = req.body.origins;
     let search = req.body.search;
-    console.log(origins, search)
     if(!origins){
         res.status(400);
         res.send('No origins found');
