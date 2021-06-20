@@ -134,57 +134,115 @@ function App() {
   useEffect(loadSharelink, [])
 
   return (
-    <>
-      <div className="html">
-        <button class="header-btn">
-          <Header onAuth={(user, id_token) => {setUser(user); setToken(id_token);}} show ={toggle} setShow={setToggle} />
-        </button>
-        <SideDrawer loaded={sideDrawerLoaded} onGroupSelect={origins => {loadOriginMarkers(origins)}} onLocationSelect={origin => {addOrigin(origin)}}show={toggle} user={user} id_token={id_token} setShow={setToggle}/>
-        <div className="content" id="main-container">
-          <div id="input-container">
-          
-          <SearchInput searchData={searchData} err={searchError} onSearch={onSearch}></SearchInput>
-          <OriginPoints onSave={() => {setSideDrawerLoaded(!sideDrawerLoaded); console.log('reload')}} origins={origins} user={user} id_token={id_token} onChange={loadOriginMarkers}></OriginPoints>
-          <div>
-          <OverlayTrigger overlay={
-            <Tooltip>{sharelink}</Tooltip>
-          } s trigger={sharelink ? ['hover'] : null} delay={500} placement='auto-end'>
-          <a onClick={createShareLink} href={sharelinkError ? null : '#sharelink'} id="share-link">{(sharelink && sharelink.length > 0) ? sharelinkError ? 'Cannot share incomplete map' : 'Click to copy share link' : 'Share this map'}</a>
-          </OverlayTrigger>
-          
-          <p id="average-duration">{averageDuration ? 'Average Travel Time: ' + averageDuration : null}</p>
-          <p style={{display: searching ? 'block' : 'none'}} id="searching">Searching...</p>
-          
-          </div>
-          </div>
-          <div className='map-result-container'>
-            <MapDisplay
-              set={mapLoaded}
-              //doesn't update properly when passes as array...
-              originlocs = {origins.map(origin => origin.loc)}
-              origin1={(origins[0] && origins[0].loc) || null}
-              origin2={(origins[1] && origins[1].loc) || null}
-              origin3={(origins[2] && origins[2].loc) || null}
-              origin4={(origins[3] && origins[3].loc) || null}
-              origin5={(origins[4] && origins[4].loc) || null}
-              origin6={(origins[5] && origins[5].loc) || null}
-              origin7={(origins[6] && origins[6].loc) || null}
-              origin8={(origins[7] && origins[7].loc) || null}
-              origin9={(origins[8] && origins[8].loc) || null}
-              origin10={(origins[9] && origins[9].loc) || null}
+		<>
+			<html lang="en">
+				<head>
+					<meta property="og:title" content="MeetMe" />
+					<meta property="og:description" content="Find the best place to meet up with your friends. Plan a meet up with up to 10 friends, and ensure that everyone has a fair travel time." />
+				</head>
+			</html>
+			<div className="html">
+				<button class="header-btn">
+					<Header
+						onAuth={(user, id_token) => {
+							setUser(user);
+							setToken(id_token);
+						}}
+						show={toggle}
+						setShow={setToggle}
+					/>
+				</button>
+				<SideDrawer
+					loaded={sideDrawerLoaded}
+					onGroupSelect={(origins) => {
+						loadOriginMarkers(origins);
+					}}
+					onLocationSelect={(origin) => {
+						addOrigin(origin);
+					}}
+					show={toggle}
+					user={user}
+					id_token={id_token}
+					setShow={setToggle}
+				/>
+				<div className="content" id="main-container">
+					<div id="input-container">
+						<SearchInput
+							searchData={searchData}
+							err={searchError}
+							onSearch={onSearch}
+						></SearchInput>
+						<OriginPoints
+							onSave={() => {
+								setSideDrawerLoaded(!sideDrawerLoaded);
+								console.log("reload");
+							}}
+							origins={origins}
+							user={user}
+							id_token={id_token}
+							onChange={loadOriginMarkers}
+						></OriginPoints>
+						<div>
+							<OverlayTrigger
+								overlay={<Tooltip>{sharelink}</Tooltip>}
+								s
+								trigger={sharelink ? ["hover"] : null}
+								delay={500}
+								placement="auto-end"
+							>
+								<a
+									onClick={createShareLink}
+									href={sharelinkError ? null : "#sharelink"}
+									id="share-link"
+								>
+									{sharelink && sharelink.length > 0
+										? sharelinkError
+											? "Cannot share incomplete map"
+											: "Click to copy share link"
+										: "Share this map"}
+								</a>
+							</OverlayTrigger>
 
-              //centerPoint={centerPoint}
-              placeList={places}
-            ></MapDisplay>
-            
-            {places.length>0 &&
-            <ResultList results={places} origins={origins}></ResultList>
-            }
-          </div>
-        </div>
-      </div>
-    </>
-  );
+							<p id="average-duration">
+								{averageDuration
+									? "Average Travel Time: " + averageDuration
+									: null}
+							</p>
+							<p
+								style={{ display: searching ? "block" : "none" }}
+								id="searching"
+							>
+								Searching...
+							</p>
+						</div>
+					</div>
+					<div className="map-result-container">
+						<MapDisplay
+							set={mapLoaded}
+							//doesn't update properly when passes as array...
+							originlocs={origins.map((origin) => origin.loc)}
+							origin1={(origins[0] && origins[0].loc) || null}
+							origin2={(origins[1] && origins[1].loc) || null}
+							origin3={(origins[2] && origins[2].loc) || null}
+							origin4={(origins[3] && origins[3].loc) || null}
+							origin5={(origins[4] && origins[4].loc) || null}
+							origin6={(origins[5] && origins[5].loc) || null}
+							origin7={(origins[6] && origins[6].loc) || null}
+							origin8={(origins[7] && origins[7].loc) || null}
+							origin9={(origins[8] && origins[8].loc) || null}
+							origin10={(origins[9] && origins[9].loc) || null}
+							//centerPoint={centerPoint}
+							placeList={places}
+						></MapDisplay>
+
+						{places.length > 0 && (
+							<ResultList results={places} origins={origins}></ResultList>
+						)}
+					</div>
+				</div>
+			</div>
+		</>
+	);
 }
 
 export default App;
